@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Circle</string>
+    <string name="title_activity_ap">AP List</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_list_aps">Refresh</string>
+</resources>
