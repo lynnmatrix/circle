@@ -18,7 +18,7 @@ public class ApUtils {
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         String currentAPAddress = null;
         if (null != wifiInfo) {
-            currentAPAddress = wifiInfo.getMacAddress();
+            currentAPAddress = wifiInfo.getBSSID();
         }
         return currentAPAddress;
     }

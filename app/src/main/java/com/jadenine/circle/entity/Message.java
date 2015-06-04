@@ -1,6 +1,7 @@
 package com.jadenine.circle.entity;
 
-import com.google.gson.Gson;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by linym on 6/3/15.
@@ -10,6 +11,18 @@ public class Message {
     private String ap;
     private String user;
     private String content;
+
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    private long timestamp;
 
     public String getAp() {
         return ap;
@@ -45,7 +58,7 @@ public class Message {
 
     @Override
     public String toString(){
-        return new Gson().toJson(this).toString();
+        return user + "\n" +dateFormat.format(new Date(timestamp))  + "\n" + content;
     }
 
 }

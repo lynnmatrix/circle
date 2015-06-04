@@ -14,6 +14,9 @@ import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.ServiceProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -40,7 +43,8 @@ public class MessageActivity extends AppCompatActivity {
         messageFragment = (MessageFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment);
 
-        messageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<Message>(0));
+        messageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new
+                ArrayList<Message>(0));
         messageFragment.setListAdapter(messageAdapter);
 
         if(null == savedInstanceState) {
@@ -58,7 +62,14 @@ public class MessageActivity extends AppCompatActivity {
             public void success(JSONListWrapper<Message> messageJSONListWrapper, Response
                     response) {
                 messageAdapter.clear();
-                messageAdapter.addAll(messageJSONListWrapper.getAll());
+                List<Message> messages = messageJSONListWrapper.getAll();
+                Collections.sort(messages, new Comparator<Message>() {
+                    @Override
+                    public int compare(Message lhs, Message rhs) {
+                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
+                    }
+                });
+                messageAdapter.addAll(messages);
             }
 
             @Override
