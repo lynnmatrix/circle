@@ -35,6 +35,10 @@
             android:name=".ui.MessageActivity"
             android:label="@string/title_activity_message" >
         </activity>
+        <activity
+            android:name=".ui.MessageAddActivity"
+            android:label="@string/title_activity_message_add" >
+        </activity>
     </application>
 
 </manifest>

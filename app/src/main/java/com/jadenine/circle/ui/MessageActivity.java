@@ -85,7 +85,12 @@ public class MessageActivity extends AppCompatActivity {
         if (id == R.id.action_refresh) {
             loadMessages();
             return true;
+        } else if(id == R.id.action_add) {
+            Intent addIntent = MessageAddActivity.createMessageAddIntent(this, ap);
+            startActivity(addIntent);
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

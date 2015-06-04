@@ -7,4 +7,11 @@
     <string name="action_list_aps">Refresh</string>
     <string name="title_activity_message">MessageActivity</string>
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_message_add">MessageAddActivity</string>
+    <string name="message_edit_hint">new message</string>
+    <string name="action_send">Send</string>
+    <string name="message_invalid_empty">Fail to  send message which is empty!</string>
+    <string name="message_send_success">Message sent.</string>
+    <string name="message_send_fail">Fail to send message</string>
+    <string name="action_add">Add</string>
 </resources>
