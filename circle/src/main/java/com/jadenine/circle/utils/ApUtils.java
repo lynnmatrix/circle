@@ -13,13 +13,29 @@ public class ApUtils {
      * @param context
      * @return MAC address of connected AP
      */
-    public static String getConnectedAP(Context context) {
+    public static AP getConnectedAP(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        String currentAPAddress = null;
         if (null != wifiInfo) {
-            currentAPAddress = wifiInfo.getBSSID();
+            return new AP(wifiInfo.getBSSID(), wifiInfo.getSSID());
         }
-        return currentAPAddress;
+        return null;
+    }
+
+    public static class AP{
+        private final String BSSID, SSID;
+
+        private AP(String BSSID, String SSID) {
+            this.BSSID = BSSID;
+            this.SSID = SSID;
+        }
+
+        public String getBSSID() {
+            return BSSID;
+        }
+
+        public String getSSID() {
+            return SSID;
+        }
     }
 }

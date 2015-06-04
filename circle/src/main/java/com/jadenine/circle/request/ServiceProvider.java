@@ -1,5 +1,7 @@
 package com.jadenine.circle.request;
 
+import com.jadenine.circle.BuildConfig;
+
 import retrofit.RestAdapter;
 
 /**
@@ -8,9 +10,9 @@ import retrofit.RestAdapter;
 public class ServiceProvider {
     public static final RestAdapter.LogLevel LOGLEVEL = RestAdapter.LogLevel.FULL;
 
-    public static final String ENDPOINT_LOCAL = "https://localhost:8080";
+    public static final String ENDPOINT_LOCAL = "http://192.168.9.220:8080";
     public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
-    public static final String ENDPOINT = ENDPOINT_AZURE;
+    public static final String ENDPOINT = BuildConfig.DEBUG?ENDPOINT_LOCAL:ENDPOINT_AZURE;
 
     private static ServiceProvider sInstance;
 

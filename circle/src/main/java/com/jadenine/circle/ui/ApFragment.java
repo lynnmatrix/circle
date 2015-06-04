@@ -3,7 +3,6 @@ package com.jadenine.circle.ui;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -116,15 +115,15 @@ public class ApFragment extends ListFragment {
         addAPIfNot(event.getAP());
     }
 
-    private boolean alreadyAdded(String currentAp) {
+    private boolean alreadyAdded(ApUtils.AP currentAp) {
         boolean currentAPAlreadyAdded = false;
 
-        if(!TextUtils.isEmpty(currentAp)) {
             int count = userApAdapter.getCount();
             for (int i = 0; i< count; i++ ) {
                 UserAp userAp = userApAdapter.getItem(i);
                 if(null != userAp) {
-                    if(currentAp.equals(userAp.getAP())) {
+                    if(currentAp.equals(userAp.getAP()) && userAp.getSsid().equals(currentAp.getSSID()
+                    )) {
                         currentAPAlreadyAdded = true;
                         break;
                     }
@@ -132,18 +131,19 @@ public class ApFragment extends ListFragment {
                     break;
                 }
             }
-        }
         return currentAPAlreadyAdded;
     }
 
-    private void addAPIfNot(String mac){
-        if(alreadyAdded(mac)) {
+    private void addAPIfNot(ApUtils.AP ap){
+        if(alreadyAdded(ap)) {
            return;
         }
 
         ApService apService = ServiceProvider.provideApService();
 
-        apService.addAP(Device.getDeviceId(getActivity()), mac, new Callback<JSONListWrapper<UserAp>>() {
+        UserAp userAp = new UserAp(Device.getDeviceId(getActivity()), ap.getBSSID(), ap.getSSID());
+        apService.addAP(userAp, new
+                Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
                 userApAdapter.clear();
@@ -167,8 +167,8 @@ public class ApFragment extends ListFragment {
                 userApAdapter.clear();
                 userApAdapter.addAll(userAps.getAll());
 
-                String currentAp = ApUtils.getConnectedAP(getActivity());
-                addAPIfNot(currentAp);
+                ApUtils.AP ap = ApUtils.getConnectedAP(getActivity());
+                addAPIfNot(ap);
             }
 
             @Override

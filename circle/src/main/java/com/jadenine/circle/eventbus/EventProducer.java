@@ -1,22 +1,19 @@
 package com.jadenine.circle.eventbus;
 
+import com.jadenine.circle.utils.ApUtils;
+
 /**
  * Created by linym on 6/3/15.
  */
 public class EventProducer {
     public static class APConnectedEvent{
-        private String apMacAddrress;
-        public APConnectedEvent(String apMacAddrress) {
-            this.apMacAddrress = apMacAddrress;
+        private ApUtils.AP ap;
+        public APConnectedEvent(ApUtils.AP ap) {
+            this.ap = ap;
         }
 
-        public String getAP() {
-            return apMacAddrress;
+        public ApUtils.AP getAP() {
+            return ap;
         }
     }
-//
-//    @Produce
-//    public APConnectedEvent produceApConnectedEvent(){
-//        return new APConnectedEvent(WifiScanner)
-//    }
 }
