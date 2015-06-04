@@ -50,9 +50,14 @@ public class MessageActivity extends AppCompatActivity {
         if(null == savedInstanceState) {
             Intent intent = getIntent();
             ap = intent.getStringExtra(PARAM_AP);
-            loadMessages();
         }
         setTitle(R.string.title_activity_message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadMessages();
     }
 
     private void loadMessages() {
