@@ -17,7 +17,7 @@ import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.request.ApService;
 import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.ui.dummy.DummyContent;
+import com.jadenine.circle.request.ServiceProvider;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
@@ -25,7 +25,6 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -36,10 +35,7 @@ import retrofit.client.Response;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class APFragment extends ListFragment {
-    public static final String ENDPOINT_LOCAL = "https://localhost:8080";
-    public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
-    public static final String ENDPOINT = ENDPOINT_AZURE;
+public class ApFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,7 +44,7 @@ public class APFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public APFragment() {
+    public ApFragment() {
     }
 
     @Override
@@ -62,7 +58,6 @@ public class APFragment extends ListFragment {
 
         loadAPList();
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -112,9 +107,10 @@ public class APFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            UserAp userAp = userApAdapter.getItem(position);
+            if(null != userAp) {
+                mListener.onApSelected(userAp);
+            }
         }
     }
 
@@ -147,9 +143,8 @@ public class APFragment extends ListFragment {
         if(alreadyAdded(mac)) {
            return;
         }
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(ENDPOINT)
-                .build();
-        ApService apService = restAdapter.create(ApService.class);
+
+        ApService apService = ServiceProvider.provideApService();
 
         apService.addAP(Device.getDeviceId(getActivity()), mac, new Callback<JSONListWrapper<UserAp>>() {
             @Override
@@ -166,10 +161,7 @@ public class APFragment extends ListFragment {
     }
 
     private void loadAPList(){
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(ENDPOINT)
-                .build();
-        restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
-        ApService apService = restAdapter.create(ApService.class);
+        ApService apService = ServiceProvider.provideApService();
 
         apService.listAPs(Device.getDeviceId(getActivity()), new Callback<JSONListWrapper<UserAp>>() {
             @Override
@@ -199,8 +191,7 @@ public class APFragment extends ListFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        void onApSelected(UserAp userAp);
     }
 
 }
