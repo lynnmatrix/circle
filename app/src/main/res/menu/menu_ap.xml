@@ -4,13 +4,8 @@
       tools:context="com.jadenine.circle.ui.ApActivity">
 
       <item android:id="@+id/action_list_ap"
-            android:title="@string/action_list_aps"
+            android:title="@string/action_refresh"
             android:orderInCategory="100"
             app:showAsAction="ifRoom"/>
-
-      <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
 
 </menu>

@@ -48,6 +48,7 @@ public class MessageActivity extends AppCompatActivity {
             ap = intent.getStringExtra(PARAM_AP);
             loadMessages();
         }
+        setTitle(R.string.title_activity_message);
     }
 
     private void loadMessages() {

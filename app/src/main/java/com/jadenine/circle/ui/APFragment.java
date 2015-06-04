@@ -91,10 +91,7 @@ public class ApFragment extends ListFragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if(id ==R.id.action_list_ap) {
+        if(id ==R.id.action_list_ap) {
             loadAPList();
             return true;
         }
