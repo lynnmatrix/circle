@@ -2,6 +2,8 @@ package com.jadenine.circle.entity;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by linym on 6/3/15.
  */
@@ -9,6 +11,7 @@ public class UserAp {
     private final String user;
     private final String ap;
 
+    @SerializedName("ssid")
     private final String ssid;
 
     public UserAp(String user, String ap, String ssid) {
@@ -25,12 +28,12 @@ public class UserAp {
         return user;
     }
 
-    public String getSsid() {
+    public String getSSID() {
         return ssid;
     }
 
     @Override
     public String toString(){
-        return TextUtils.isEmpty(getSsid())?getAP():getSsid();
+        return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
 }

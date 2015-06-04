@@ -122,7 +122,7 @@ public class ApFragment extends ListFragment {
             for (int i = 0; i< count; i++ ) {
                 UserAp userAp = userApAdapter.getItem(i);
                 if(null != userAp) {
-                    if(currentAp.equals(userAp.getAP()) && userAp.getSsid().equals(currentAp.getSSID()
+                    if(currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID()
                     )) {
                         currentAPAlreadyAdded = true;
                         break;
