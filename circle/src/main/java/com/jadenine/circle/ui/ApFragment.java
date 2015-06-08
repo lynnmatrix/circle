@@ -11,17 +11,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.request.ApService;
 import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.request.ServiceProvider;
 import com.jadenine.circle.utils.ApUtils;
+import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,6 +38,9 @@ import retrofit.client.Response;
  * interface.
  */
 public class ApFragment extends ListFragment {
+
+    @Inject
+    ApService apService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,17 +57,20 @@ public class ApFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        DaggerService.<CircleApplication.AppComponent>getDaggerComponent(getActivity()).inject(this);
+
         userApAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<UserAp>(0));
 
         setListAdapter(userApAdapter);
 
         loadAPList();
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        BusProvider.getInstance().register(this);
+        BusProvider.register(this);
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -73,7 +82,7 @@ public class ApFragment extends ListFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        BusProvider.getInstance().unregister(this);
+        BusProvider.unregister(this);
     }
 
     @Override
@@ -81,7 +90,6 @@ public class ApFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_ap, menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,8 +147,6 @@ public class ApFragment extends ListFragment {
            return;
         }
 
-        ApService apService = ServiceProvider.provideApService();
-
         UserAp userAp = new UserAp(Device.getDeviceId(getActivity()), ap.getBSSID(), ap.getSSID());
         apService.addAP(userAp, new
                 Callback<JSONListWrapper<UserAp>>() {
@@ -158,8 +164,6 @@ public class ApFragment extends ListFragment {
     }
 
     private void loadAPList(){
-        ApService apService = ServiceProvider.provideApService();
-
         apService.listAPs(Device.getDeviceId(getActivity()), new Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {

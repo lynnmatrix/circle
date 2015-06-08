@@ -13,8 +13,7 @@ import retrofit.http.Path;
  */
 public interface MessageService {
     @GET("/message/list/{ap}")
-    void listMessages(@Path("ap") String ap,
-                                          Callback<JSONListWrapper<Message>> callback);
+    void listMessages(@Path("ap") String ap, Callback<JSONListWrapper<Message>> callback);
 
     @POST("/message/add")
     void addMessage(@Body Message message, Callback<Message> callback);

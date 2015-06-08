@@ -12,9 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.entity.Message;
-import com.jadenine.circle.request.ServiceProvider;
+import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.request.MessageService;
 import com.jadenine.circle.utils.Device;
+
+import javax.inject.Inject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -27,6 +31,9 @@ public class MessageAddActivity extends AppCompatActivity {
     private EditText editTextView;
     private String ap;
 
+    @Inject
+    MessageService messageService;
+
     public static Intent createMessageAddIntent(Context context, String ap) {
         Intent intent = new Intent(context, MessageAddActivity.class);
         intent.putExtra(PARAM_AP, ap);
@@ -37,6 +44,9 @@ public class MessageAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_add);
+
+        DaggerService.<CircleApplication.AppComponent>getDaggerComponent(this).inject(this);
+
         editTextView = (EditText) findViewById(R.id.message_edit);
 
         if(null == savedInstanceState) {
@@ -79,7 +89,7 @@ public class MessageAddActivity extends AppCompatActivity {
         message.setUser(Device.getDeviceId(this));
         message.setContent(content);
 
-        ServiceProvider.provideMessageService().addMessage(message, new Callback<Message>() {
+        messageService.addMessage(message, new Callback<Message>() {
             @Override
             public void success(Message message, Response response) {
                 Toast.makeText(MessageAddActivity.this, R.string.message_send_success, Toast

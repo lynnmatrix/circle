@@ -1,4 +1,4 @@
-package com.jadenine.circle;
+package com.jadenine.circle.app;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +27,7 @@ public class ConnectedApReceiver extends BroadcastReceiver {
 
             ApUtils.AP ap = ApUtils.getConnectedAP(context);
             if(null != ap) {
-                BusProvider.getInstance().post(new EventProducer.APConnectedEvent(ap));
+                BusProvider.post(new EventProducer.APConnectedEvent(ap));
             }
         }
     }

@@ -9,14 +9,18 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.entity.Message;
 import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.request.ServiceProvider;
+import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.request.MessageService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -29,6 +33,10 @@ public class MessageActivity extends AppCompatActivity {
     private MessageFragment messageFragment;
     private ArrayAdapter<Message> messageAdapter;
     private String ap;
+
+    @Inject
+    MessageService messageService;
+
     public static Intent createMessageIntent(Context context, String ap) {
         Intent intent = new Intent(context, MessageActivity.class);
         intent.putExtra(PARAM_AP, ap);
@@ -39,6 +47,8 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        DaggerService.<CircleApplication.AppComponent>getDaggerComponent(this).inject(this);
 
         messageFragment = (MessageFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment);
@@ -61,7 +71,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        ServiceProvider.provideMessageService().listMessages(ap, new Callback<JSONListWrapper<Message>>() {
+        messageService.listMessages(ap, new Callback<JSONListWrapper<Message>>() {
 
             @Override
             public void success(JSONListWrapper<Message> messageJSONListWrapper, Response
