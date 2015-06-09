@@ -25,7 +25,7 @@ public class CircleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppComponent appComponent = DaggerAppComponent.builder().restAdapterModule(new
+        AppComponent appComponent = DaggerCircleApplication_AppComponent.builder().restAdapterModule(new
                 RestAdapterModule()).build();
 
         MortarScope.Builder builder = MortarScope.buildRootScope();

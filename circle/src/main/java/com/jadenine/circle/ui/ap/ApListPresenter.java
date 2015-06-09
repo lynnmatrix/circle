@@ -25,6 +25,7 @@ import retrofit.client.Response;
  * Created by linym on 6/9/15.
  */
 public class ApListPresenter extends ViewPresenter<ApListView> {
+
     ApService apService;
 
     private ArrayAdapter<UserAp> userApAdapter;
@@ -43,10 +44,11 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
+
         if (null == userApAdapter) {
             userApAdapter = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, new ArrayList<UserAp>(0));
 
-            getView().setAdapter(userApAdapter);
+            getView().apListView.setAdapter(userApAdapter);
         }
 
         loadAPList();
@@ -60,7 +62,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     public void onApSelected(int position) {
         UserAp userAp = userApAdapter.getItem(position);
-//            Flow.get(getView()).set(new MessagePath(userAp));
+//        Flow.get(getView()).set(new MessagePath(userAp));
     }
 
     @Subscribe
@@ -110,7 +112,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         });
     }
 
-    private void loadAPList() {
+    void loadAPList() {
         apService.listAPs(Device.getDeviceId(getContext()), new Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
