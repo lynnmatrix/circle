@@ -6,11 +6,13 @@ import com.jadenine.circle.entity.Message;
 import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.MessageService;
+import com.jadenine.circle.ui.message.composer.MessageAddPath;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import flow.Flow;
 import mortar.ViewPresenter;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -59,6 +61,6 @@ public class MessagePresenter extends ViewPresenter<MessagePathView>{
     }
 
     public void addMessage() {
-
+        Flow.get(getView().getContext()).set(new MessageAddPath(userAp));
     }
 }

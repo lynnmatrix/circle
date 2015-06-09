@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.message;
+package com.jadenine.circle.ui.message.composer;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
@@ -13,40 +13,41 @@ import flow.path.Path;
 import retrofit.RestAdapter;
 
 /**
- * Created by linym on 6/8/15.
+ * Created by linym on 6/9/15.
  */
-@DaggerScope(MessagePresenter.class)
-@Layout(R.layout.screen_message_list)
-public class MessagePath extends Path implements ScreenComponentFactory{
+@DaggerScope(MessageComposerPresenter.class)
+@Layout(R.layout.screen_message_composer)
+public class MessageAddPath extends Path implements ScreenComponentFactory {
     private final UserAp userAp;
-    public MessagePath(UserAp userAp) {
+    public MessageAddPath(UserAp userAp) {
         this.userAp = userAp;
     }
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerMessagePath_Component.builder().appComponent((CircleApplication
-                .AppComponent) dependencies[0]).module(new Module()).build();
+        return DaggerMessageAddPath_Component.builder().appComponent((CircleApplication.AppComponent)
+                dependencies[0]).module(new Module()).build();
     }
 
-    @DaggerScope(MessagePresenter.class)
+    @DaggerScope(MessageComposerPresenter.class)
     @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
-    public interface Component{
-        void inject(MessagePathView pathView);
+    interface Component{
+        void inject(ComposerView composer);
     }
 
-    @dagger.Module()
+    @dagger.Module
     class Module{
+
         @Provides
-        @DaggerScope(MessagePresenter.class)
+        @DaggerScope(MessageComposerPresenter.class)
         MessageService provideMessageService(RestAdapter restAdapter) {
             return restAdapter.create(MessageService.class);
         }
 
+        @DaggerScope(MessageComposerPresenter.class)
         @Provides
-        @DaggerScope(MessagePresenter.class)
-        MessagePresenter providePresenter(MessageService messageService){
-            return new MessagePresenter(messageService, userAp);
+        MessageComposerPresenter providePresenter(MessageService messageService) {
+            return new MessageComposerPresenter(messageService, userAp);
         }
     }
 }

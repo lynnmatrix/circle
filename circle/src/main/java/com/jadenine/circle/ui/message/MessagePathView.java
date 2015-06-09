@@ -1,8 +1,11 @@
 package com.jadenine.circle.ui.message;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -72,6 +75,16 @@ public class MessagePathView extends CoordinatorLayout {
                         return true;
                 }
                 return false;
+            }
+        });
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.header);
+
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                int mutedColor = palette.getMutedColor(R.attr.colorPrimary);
+                collapsingToolbarLayout.setContentScrimColor(mutedColor);
             }
         });
     }
