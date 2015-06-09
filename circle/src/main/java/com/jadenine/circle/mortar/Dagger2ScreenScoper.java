@@ -1,6 +1,7 @@
 package com.jadenine.circle.mortar;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.jadenine.com.jadenine.common.mortar.BasicScreenScoper;
 
@@ -12,10 +13,13 @@ import mortar.MortarScope;
  */
 public class Dagger2ScreenScoper extends BasicScreenScoper {
 
+    public static final String TAG = "ScreenScoper";
+
     @Override
     protected void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
         if (!(path instanceof ScreenComponentFactory)) {
-            throw new IllegalStateException("Path must imlement ComponentFactory");
+            Log.w(TAG, "Path must imlement ComponentFactory");
+            return;
         }
 
         ScreenComponentFactory screenComponentFactory = (ScreenComponentFactory) path;

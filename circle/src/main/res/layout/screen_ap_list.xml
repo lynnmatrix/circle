@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<!--<RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
+              <!--android:layout_width="match_parent"-->
+              <!--android:layout_height="match_parent">-->
 
-</RecyclerView>
+<!--</RecyclerView>-->
+
+<com.jadenine.circle.ui.ap.ApListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ap_list_view"
+    />
+    <!-- Give view ID so that it can save it's state. -->
