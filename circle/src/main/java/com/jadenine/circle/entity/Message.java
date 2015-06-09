@@ -11,6 +11,7 @@ public class Message {
     private String ap;
     private String user;
     private String content;
+    private long timestamp;
 
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
 
@@ -21,8 +22,6 @@ public class Message {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-
-    private long timestamp;
 
     public String getAp() {
         return ap;
@@ -54,6 +53,10 @@ public class Message {
 
     public void setMessageId(String messageId) {
         this.messageId = messageId;
+    }
+
+    public String getFormattedTime(){
+        return dateFormat.format(new Date(timestamp));
     }
 
     @Override

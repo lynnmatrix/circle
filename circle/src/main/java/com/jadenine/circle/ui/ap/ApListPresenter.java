@@ -9,12 +9,14 @@ import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.request.ApService;
 import com.jadenine.circle.request.JSONListWrapper;
+import com.jadenine.circle.ui.message.MessagePath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
+import flow.Flow;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import retrofit.Callback;
@@ -41,6 +43,12 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     }
 
     @Override
+    protected void onExitScope() {
+        super.onExitScope();
+        BusProvider.unregister(this);
+    }
+
+    @Override
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
@@ -54,15 +62,9 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         loadAPList();
     }
 
-    @Override
-    protected void onExitScope() {
-        super.onExitScope();
-        BusProvider.unregister(this);
-    }
-
     public void onApSelected(int position) {
         UserAp userAp = userApAdapter.getItem(position);
-//        Flow.get(getView()).set(new MessagePath(userAp));
+        Flow.get(getView()).set(new MessagePath(userAp));
     }
 
     @Subscribe
