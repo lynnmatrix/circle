@@ -15,21 +15,21 @@ import retrofit.RestAdapter;
 /**
  * Created by linym on 6/9/15.
  */
-@DaggerScope(MessageComposerPresenter.class)
+@DaggerScope(ComposerPresenter.class)
 @Layout(R.layout.screen_message_composer)
-public class MessageAddPath extends Path implements ScreenComponentFactory {
+public class ComposerPath extends Path implements ScreenComponentFactory {
     private final UserAp userAp;
-    public MessageAddPath(UserAp userAp) {
+    public ComposerPath(UserAp userAp) {
         this.userAp = userAp;
     }
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerMessageAddPath_Component.builder().appComponent((CircleApplication.AppComponent)
+        return DaggerComposerPath_Component.builder().appComponent((CircleApplication.AppComponent)
                 dependencies[0]).module(new Module()).build();
     }
 
-    @DaggerScope(MessageComposerPresenter.class)
+    @DaggerScope(ComposerPresenter.class)
     @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
     interface Component{
         void inject(ComposerView composer);
@@ -39,15 +39,15 @@ public class MessageAddPath extends Path implements ScreenComponentFactory {
     class Module{
 
         @Provides
-        @DaggerScope(MessageComposerPresenter.class)
+        @DaggerScope(ComposerPresenter.class)
         MessageService provideMessageService(RestAdapter restAdapter) {
             return restAdapter.create(MessageService.class);
         }
 
-        @DaggerScope(MessageComposerPresenter.class)
+        @DaggerScope(ComposerPresenter.class)
         @Provides
-        MessageComposerPresenter providePresenter(MessageService messageService) {
-            return new MessageComposerPresenter(messageService, userAp);
+        ComposerPresenter providePresenter(MessageService messageService) {
+            return new ComposerPresenter(messageService, userAp);
         }
     }
 }

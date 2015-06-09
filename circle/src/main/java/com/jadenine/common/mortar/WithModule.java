@@ -1,4 +1,4 @@
-package com.jadenine.com.jadenine.common.mortar;
+package com.jadenine.common.mortar;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

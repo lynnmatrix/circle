@@ -6,7 +6,7 @@ import com.jadenine.circle.entity.Message;
 import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.MessageService;
-import com.jadenine.circle.ui.message.composer.MessageAddPath;
+import com.jadenine.circle.ui.message.composer.ComposerPath;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +21,7 @@ import retrofit.client.Response;
 /**
  * Created by linym on 6/9/15.
  */
-public class MessagePresenter extends ViewPresenter<MessagePathView>{
+public class MessagePresenter extends ViewPresenter<MessageListView>{
     private final UserAp userAp;
     private final MessageService messageService;
 
@@ -61,6 +61,6 @@ public class MessagePresenter extends ViewPresenter<MessagePathView>{
     }
 
     public void addMessage() {
-        Flow.get(getView().getContext()).set(new MessageAddPath(userAp));
+        Flow.get(getView().getContext()).set(new ComposerPath(userAp));
     }
 }

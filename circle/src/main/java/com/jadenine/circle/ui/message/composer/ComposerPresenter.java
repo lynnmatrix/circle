@@ -19,13 +19,13 @@ import retrofit.client.Response;
 /**
  * Created by linym on 6/9/15.
  */
-public class MessageComposerPresenter extends ViewPresenter<ComposerView>{
+public class ComposerPresenter extends ViewPresenter<ComposerView>{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
     final MessageService messageService;
     final UserAp userAp;
 
-    public MessageComposerPresenter(MessageService messageService, UserAp userAp) {
+    public ComposerPresenter(MessageService messageService, UserAp userAp) {
         this.messageService = messageService;
         this.userAp = userAp;
     }

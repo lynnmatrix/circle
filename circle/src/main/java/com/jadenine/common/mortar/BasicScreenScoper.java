@@ -1,4 +1,4 @@
-package com.jadenine.com.jadenine.common.mortar;
+package com.jadenine.common.mortar;
 
 import android.content.Context;
 import android.util.Log;

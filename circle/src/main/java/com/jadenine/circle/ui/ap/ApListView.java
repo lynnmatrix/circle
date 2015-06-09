@@ -6,11 +6,16 @@ import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -20,6 +25,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 6/8/15.
  */
+@DaggerScope(ApListPresenter.class)
 public class ApListView extends RelativeLayout {
 
     @InjectView(R.id.toolbar)
@@ -68,5 +74,15 @@ public class ApListView extends RelativeLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+    }
+
+    ArrayAdapter<UserAp> getApAdapter() {
+        ArrayAdapter<UserAp> apListViewAdapter = (ArrayAdapter<UserAp>) apListView.getAdapter();
+        if (null == apListViewAdapter) {
+            apListViewAdapter = new ArrayAdapter<>(getContext(), android.R.layout
+                    .simple_list_item_1, new ArrayList<UserAp>(0));
+            apListView.setAdapter(apListViewAdapter);
+        }
+        return apListViewAdapter;
     }
 }

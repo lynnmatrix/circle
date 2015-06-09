@@ -13,7 +13,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 6/9/15.
  */
-public class MessageViewHolder extends RecyclerView.ViewHolder {
+public class MessageItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.from)
     TextView fromView;
 
@@ -23,7 +23,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.content)
     TextView contentView;
 
-    public MessageViewHolder(View itemView) {
+    public MessageItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
     }

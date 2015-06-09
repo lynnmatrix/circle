@@ -14,20 +14,20 @@ import java.util.List;
 /**
  * Created by linym on 6/9/15.
  */
-public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemViewHolder> {
 
     private List<Message> messages = Collections.emptyList();
 
     @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_list_item,
                 parent, false);
-        MessageViewHolder viewHolder = new MessageViewHolder(view);
+        MessageItemViewHolder viewHolder = new MessageItemViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
+    public void onBindViewHolder(MessageItemViewHolder holder, int position) {
         holder.bind(messages.get(position));
     }
 

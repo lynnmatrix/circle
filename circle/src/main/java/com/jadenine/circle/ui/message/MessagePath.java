@@ -32,7 +32,7 @@ public class MessagePath extends Path implements ScreenComponentFactory{
     @DaggerScope(MessagePresenter.class)
     @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
     public interface Component{
-        void inject(MessagePathView pathView);
+        void inject(MessageListView pathView);
     }
 
     @dagger.Module()

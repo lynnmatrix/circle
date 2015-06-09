@@ -3,7 +3,7 @@ package com.jadenine.circle.mortar;
 import android.content.Context;
 import android.util.Log;
 
-import com.jadenine.com.jadenine.common.mortar.BasicScreenScoper;
+import com.jadenine.common.mortar.BasicScreenScoper;
 
 import flow.path.Path;
 import mortar.MortarScope;

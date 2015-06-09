@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
-import com.jadenine.com.jadenine.common.mortar.BasicMortarContextFactory;
+import com.jadenine.common.mortar.BasicMortarContextFactory;
 import com.jadenine.common.flow.FramePathContainerView;
 import com.jadenine.common.flow.SimplePathContainer;
 

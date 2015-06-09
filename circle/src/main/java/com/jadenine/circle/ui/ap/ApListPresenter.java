@@ -14,8 +14,6 @@ import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-
 import flow.Flow;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
@@ -29,8 +27,6 @@ import retrofit.client.Response;
 public class ApListPresenter extends ViewPresenter<ApListView> {
 
     ApService apService;
-
-    private ArrayAdapter<UserAp> userApAdapter;
 
     ApListPresenter(ApService apService) {
         this.apService = apService;
@@ -52,18 +48,11 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
-
-        if (null == userApAdapter) {
-            userApAdapter = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, new ArrayList<UserAp>(0));
-
-            getView().apListView.setAdapter(userApAdapter);
-        }
-
         loadAPList();
     }
 
     public void onApSelected(int position) {
-        UserAp userAp = userApAdapter.getItem(position);
+        UserAp userAp = getAdapter().getItem(position);
         Flow.get(getView()).set(new MessagePath(userAp));
     }
 
@@ -76,12 +65,16 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         return getView().getContext();
     }
 
+    private ArrayAdapter<UserAp> getAdapter(){
+        return getView().getApAdapter();
+    }
+
     private boolean alreadyAdded(ApUtils.AP currentAp) {
         boolean currentAPAlreadyAdded = false;
 
-        int count = userApAdapter.getCount();
+        int count = getAdapter().getCount();
         for (int i = 0; i < count; i++) {
-            UserAp userAp = userApAdapter.getItem(i);
+            UserAp userAp = getAdapter().getItem(i);
             if (null != userAp) {
                 if (currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
                     currentAPAlreadyAdded = true;
@@ -103,8 +96,8 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         apService.addAP(userAp, new Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
-                userApAdapter.clear();
-                userApAdapter.addAll(userAps.getAll());
+                getAdapter().clear();
+                getAdapter().addAll(userAps.getAll());
             }
 
             @Override
@@ -119,8 +112,8 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
 
-                userApAdapter.clear();
-                userApAdapter.addAll(userAps.getAll());
+                getAdapter().clear();
+                getAdapter().addAll(userAps.getAll());
 
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);

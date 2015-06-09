@@ -6,8 +6,6 @@ import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.request.MessageService;
-import com.jadenine.circle.ui.MessageActivity;
-import com.jadenine.circle.ui.MessageAddActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,8 +23,7 @@ public class CircleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppComponent appComponent = DaggerCircleApplication_AppComponent.builder().restAdapterModule(new
-                RestAdapterModule()).build();
+        AppComponent appComponent = DaggerCircleApplication_AppComponent.builder().restAdapterModule(new RestAdapterModule()).build();
 
         MortarScope.Builder builder = MortarScope.buildRootScope();
         builder.withService(DaggerService.SERVICE_NAME, appComponent);
@@ -46,13 +43,7 @@ public class CircleApplication extends Application {
     @DaggerScope(CircleApplication.class)
     @dagger.Component(modules = {RestAdapterModule.class})
     public interface AppComponent {
-
-        void inject(MessageActivity messageActivity);
-
-        void inject(MessageAddActivity messageAddActivity);
-
         RestAdapter restAdapter();
-
     }
 
     @Module

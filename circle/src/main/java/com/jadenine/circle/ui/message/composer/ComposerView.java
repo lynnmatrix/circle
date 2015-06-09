@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -15,11 +16,12 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import flow.Flow;
 
 /**
  * Created by linym on 6/9/15.
  */
-@DaggerScope(MessageComposerPresenter.class)
+@DaggerScope(ComposerPresenter.class)
 public class ComposerView extends RelativeLayout {
     @InjectView(R.id.message_edit)
     EditText editor;
@@ -28,11 +30,11 @@ public class ComposerView extends RelativeLayout {
     Toolbar toolbar;
 
     @Inject
-    MessageComposerPresenter presenter;
+    ComposerPresenter presenter;
 
     public ComposerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<MessageAddPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<ComposerPath.Component>getDaggerComponent(context).inject(this);
     }
 
     @Override
@@ -41,7 +43,16 @@ public class ComposerView extends RelativeLayout {
         ButterKnife.inject(this);
         presenter.takeView(this);
 
+        toolbar.setTitle(R.string.title_activity_message_add);
+
         toolbar.inflateMenu(R.menu.menu_message_add);
+        toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_dark);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Flow.get(getContext()).goBack();
+            }
+        });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -52,6 +63,7 @@ public class ComposerView extends RelativeLayout {
                 return false;
             }
         });
+
     }
 
     @Override

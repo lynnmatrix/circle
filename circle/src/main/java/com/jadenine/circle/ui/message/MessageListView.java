@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 
 import javax.inject.Inject;
@@ -20,11 +22,13 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import flow.Flow;
 
 /**
  * Created by linym on 6/9/15.
  */
-public class MessagePathView extends CoordinatorLayout {
+@DaggerScope(MessagePresenter.class)
+public class MessageListView extends CoordinatorLayout {
     @InjectView(R.id.scrollableview)
     RecyclerView messageRecyclerView;
 
@@ -37,7 +41,7 @@ public class MessagePathView extends CoordinatorLayout {
     @Inject
     MessagePresenter presenter;
 
-    public MessagePathView(Context context, AttributeSet attrs) {
+    public MessageListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         DaggerService.<MessagePath.Component>getDaggerComponent(context).inject(this);
     }
@@ -75,6 +79,14 @@ public class MessagePathView extends CoordinatorLayout {
                         return true;
                 }
                 return false;
+            }
+        });
+
+        toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Flow.get(getContext()).goBack();
             }
         });
 
