@@ -1,34 +1,29 @@
 package com.jadenine.circle.entity;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by linym on 6/3/15.
  */
 public class Message {
+    private String topicId;
     private String messageId;
-    private String ap;
+
     private String user;
     private String content;
     private long timestamp;
 
-    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
-
-    public long getTimestamp() {
-        return timestamp;
+    public String getTopicId() {
+        return topicId;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
+    }
+    public String getMessageId() {
+        return messageId;
     }
 
-    public String getAp() {
-        return ap;
-    }
-
-    public void setAp(String ap) {
-        this.ap = ap;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getUser() {
@@ -47,21 +42,11 @@ public class Message {
         this.content = content;
     }
 
-    public String getMessageId() {
-        return messageId;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
-
-    public String getFormattedTime(){
-        return dateFormat.format(new Date(timestamp));
-    }
-
-    @Override
-    public String toString(){
-        return user + "\n" +dateFormat.format(new Date(timestamp))  + "\n" + content;
-    }
-
 }

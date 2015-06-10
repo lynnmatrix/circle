@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.message;
+package com.jadenine.circle.ui.topic;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,24 +25,26 @@ import butterknife.OnClick;
 import flow.Flow;
 
 /**
- * Created by linym on 6/9/15.
+ * Created by linym on 6/10/15.
  */
-@DaggerScope(MessagePresenter.class)
-public class MessageListView extends CoordinatorLayout{
+@DaggerScope(TopicPresenter.class)
+public class TopicView extends CoordinatorLayout{
+
     @InjectView(R.id.scrollableview)
-    RecyclerView messageRecyclerView;
+    RecyclerView recyclerView;
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @InjectView(R.id.anim_toolbar)
     Toolbar toolbar;
 
     @Inject
-    MessagePresenter presenter;
+    TopicPresenter presenter;
 
-    public MessageListView(Context context, AttributeSet attrs) {
+    public TopicView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<MessagePath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<TopicPath.Component>getDaggerComponent(context).inject(this);
     }
+
 
     @Override
     public void onAttachedToWindow() {
@@ -50,10 +52,18 @@ public class MessageListView extends CoordinatorLayout{
         ButterKnife.inject(this);
         presenter.takeView(this);
 
-        messageRecyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        messageRecyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
+                RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                presenter.onOpenTopic(position);
+            }
+        }));
+        getTopicAdapter();
         configToolbar();
     }
 
@@ -87,7 +97,7 @@ public class MessageListView extends CoordinatorLayout{
 
     private void customToolbar() {
         collapsingToolbarLayout.setTitle(getContext().getString(R.string
-                .title_activity_message));
+                .title_activity_topic));
 
         toolbar.inflateMenu(R.menu.menu_message);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -95,7 +105,7 @@ public class MessageListView extends CoordinatorLayout{
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_refresh:
-                        presenter.loadMessages();
+                        presenter.loadTopics();
                         return true;
                 }
                 return false;
@@ -108,13 +118,12 @@ public class MessageListView extends CoordinatorLayout{
         presenter.addMessage();
     }
 
-    MessageRecyclerAdapter getMessageAdapter() {
-        MessageRecyclerAdapter messageAdapter = (MessageRecyclerAdapter) messageRecyclerView.getAdapter();
-        if(null == messageAdapter) {
-            messageAdapter = new MessageRecyclerAdapter();
-            messageRecyclerView.setAdapter(messageAdapter);
+    TopicRecyclerAdapter getTopicAdapter() {
+        TopicRecyclerAdapter topicRecyclerAdapter = (TopicRecyclerAdapter) recyclerView.getAdapter();
+        if(null == topicRecyclerAdapter) {
+            topicRecyclerAdapter = new TopicRecyclerAdapter();
+            recyclerView.setAdapter(topicRecyclerAdapter);
         }
-
-        return messageAdapter;
+        return topicRecyclerAdapter;
     }
 }

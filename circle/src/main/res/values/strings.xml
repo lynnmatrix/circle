@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Circle</string>
     <string name="title_activity_ap">Circle</string>
+    <string name="title_activity_topic">Topics</string>
     <string name="title_activity_message">Message</string>
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_message_add">Message Composer</string>

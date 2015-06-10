@@ -9,7 +9,7 @@ import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.request.ApService;
 import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.ui.message.MessagePath;
+import com.jadenine.circle.ui.topic.TopicPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
@@ -53,7 +53,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     public void onApSelected(int position) {
         UserAp userAp = getAdapter().getItem(position);
-        Flow.get(getView()).set(new MessagePath(userAp));
+        Flow.get(getView()).set(new TopicPath(userAp));
     }
 
     @Subscribe

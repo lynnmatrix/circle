@@ -3,7 +3,7 @@ package com.jadenine.circle.ui.message;
 import android.os.Bundle;
 
 import com.jadenine.circle.entity.Message;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.MessageService;
 import com.jadenine.circle.ui.message.composer.ComposerPath;
@@ -22,12 +22,12 @@ import retrofit.client.Response;
  * Created by linym on 6/9/15.
  */
 public class MessagePresenter extends ViewPresenter<MessageListView>{
-    private final UserAp userAp;
+    private final Topic topic;
     private final MessageService messageService;
 
-    public MessagePresenter(MessageService messageService, UserAp userAp) {
+    public MessagePresenter(MessageService messageService, final Topic topic) {
         this.messageService = messageService;
-        this.userAp = userAp;
+        this.topic = topic;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     }
 
     void loadMessages() {
-        messageService.listMessages(userAp.getAP(), new Callback<JSONListWrapper<Message>>() {
+        messageService.listMessages(topic.getTopicId(), new Callback<JSONListWrapper<Message>>() {
 
             @Override
             public void success(JSONListWrapper<Message> messageJSONListWrapper, Response
@@ -61,6 +61,6 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     }
 
     public void addMessage() {
-        Flow.get(getView().getContext()).set(new ComposerPath(userAp));
+        Flow.get(getView().getContext()).set(new ComposerPath(topic));
     }
 }

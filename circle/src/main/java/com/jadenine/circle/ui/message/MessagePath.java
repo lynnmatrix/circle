@@ -2,7 +2,7 @@ package com.jadenine.circle.ui.message;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.MessageService;
@@ -18,9 +18,9 @@ import retrofit.RestAdapter;
 @DaggerScope(MessagePresenter.class)
 @Layout(R.layout.screen_message_list)
 public class MessagePath extends Path implements ScreenComponentFactory{
-    private final UserAp userAp;
-    public MessagePath(UserAp userAp) {
-        this.userAp = userAp;
+    private final Topic topic;
+    public MessagePath(Topic topic) {
+        this.topic = topic;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class MessagePath extends Path implements ScreenComponentFactory{
         @Provides
         @DaggerScope(MessagePresenter.class)
         MessagePresenter providePresenter(MessageService messageService){
-            return new MessagePresenter(messageService, userAp);
+            return new MessagePresenter(messageService, topic);
         }
     }
 }

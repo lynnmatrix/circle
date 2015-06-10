@@ -2,7 +2,7 @@ package com.jadenine.circle.ui.message.composer;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.MessageService;
@@ -18,9 +18,14 @@ import retrofit.RestAdapter;
 @DaggerScope(ComposerPresenter.class)
 @Layout(R.layout.screen_message_composer)
 public class ComposerPath extends Path implements ScreenComponentFactory {
-    private final UserAp userAp;
-    public ComposerPath(UserAp userAp) {
-        this.userAp = userAp;
+    private final Topic topic;
+
+    public ComposerPath() {
+        this(null);
+    }
+
+    public ComposerPath(Topic topic) {
+        this.topic = topic;
     }
 
     @Override
@@ -47,7 +52,7 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
         @DaggerScope(ComposerPresenter.class)
         @Provides
         ComposerPresenter providePresenter(MessageService messageService) {
-            return new ComposerPresenter(messageService, userAp);
+            return new ComposerPresenter(messageService, topic);
         }
     }
 }

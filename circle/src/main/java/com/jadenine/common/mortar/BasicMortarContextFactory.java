@@ -19,7 +19,12 @@ public class BasicMortarContextFactory implements PathContextFactory {
 
     @Override
     public Context setUpContext(Path path, Context parentContext) {
+
         MortarScope scope = screenScoper.getScreenScope(parentContext, path.getClass().getName(), path);
+
+        Log.d(BasicMortarContextFactory.class.getCanonicalName(), "MortarContextFactory - " +
+                "set up scope " + scope.getName());
+
         return new TearDownContext(parentContext, scope);
     }
 

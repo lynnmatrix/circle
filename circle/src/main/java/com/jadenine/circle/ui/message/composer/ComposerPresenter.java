@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.entity.Message;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.request.MessageService;
 import com.jadenine.circle.utils.Device;
 
@@ -22,12 +22,12 @@ import retrofit.client.Response;
 public class ComposerPresenter extends ViewPresenter<ComposerView>{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
-    final MessageService messageService;
-    final UserAp userAp;
+    private final MessageService messageService;
+    private final Topic topic;
 
-    public ComposerPresenter(MessageService messageService, UserAp userAp) {
+    public ComposerPresenter(MessageService messageService, Topic topic) {
         this.messageService = messageService;
-        this.userAp = userAp;
+        this.topic = topic;
     }
 
     @Override
@@ -58,11 +58,13 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
             return;
         }
         Message message = new Message();
-        message.setAp(userAp.getAP());
+        if(null != topic) {
+            message.setTopicId(topic.getTopicId());
+        }
         message.setUser(Device.getDeviceId(getView().getContext()));
         message.setContent(content);
 
-        messageService.addMessage(message, new Callback<Message>() {
+        messageService.addMessage(topic.getAp(), message, new Callback<Message>() {
             @Override
             public void success(Message message, Response response) {
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
