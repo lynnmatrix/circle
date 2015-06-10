@@ -1,9 +1,10 @@
 package com.jadenine.circle.ui.ap;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,9 @@ public class ApListView extends RelativeLayout {
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
+    @InjectView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @InjectView(R.id.ap_list_view)
     ListView apListView;
 
@@ -49,23 +53,20 @@ public class ApListView extends RelativeLayout {
         presenter.takeView(this);
 
         toolbar.setTitle(R.string.title_activity_ap);
-        toolbar.inflateMenu(R.menu.menu_ap);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.action_list_ap:
-                        presenter.loadAPList();
-                        return true;
-                }
-                return false;
-            }
-        });
 
         apListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 presenter.onApSelected(position);
+            }
+        });
+
+        swipeRefreshLayout.setColorSchemeColors(Color.GRAY, Color.CYAN, Color.MAGENTA);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.loadAPList();
             }
         });
     }

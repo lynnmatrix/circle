@@ -117,11 +117,13 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);
+
+                getView().swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                getView().swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
