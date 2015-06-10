@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.message.composer;
+package com.jadenine.circle.ui.composer;
 
 import android.os.Bundle;
 import android.text.TextUtils;

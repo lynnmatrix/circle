@@ -6,7 +6,7 @@ import com.jadenine.circle.entity.Message;
 import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.MessageService;
-import com.jadenine.circle.ui.message.composer.ComposerPath;
+import com.jadenine.circle.ui.composer.ComposerPath;
 
 import java.util.Collections;
 import java.util.Comparator;

@@ -7,7 +7,7 @@ import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.TopicService;
 import com.jadenine.circle.ui.message.MessagePath;
-import com.jadenine.circle.ui.message.composer.ComposerPath;
+import com.jadenine.circle.ui.composer.ComposerPath;
 
 import flow.Flow;
 import mortar.ViewPresenter;

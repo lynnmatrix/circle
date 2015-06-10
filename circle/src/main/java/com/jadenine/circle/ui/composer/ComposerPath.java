@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.message.composer;
+package com.jadenine.circle.ui.composer;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
@@ -16,7 +16,7 @@ import retrofit.RestAdapter;
  * Created by linym on 6/9/15.
  */
 @DaggerScope(ComposerPresenter.class)
-@Layout(R.layout.screen_message_composer)
+@Layout(R.layout.screen_composer)
 public class ComposerPath extends Path implements ScreenComponentFactory {
     private final Topic topic;
 
