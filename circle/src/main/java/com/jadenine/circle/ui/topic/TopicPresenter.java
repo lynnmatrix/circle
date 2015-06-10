@@ -71,7 +71,7 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
     }
 
     void addMessage() {
-        Flow.get(getView().getContext()).set(new ComposerPath());
+        Flow.get(getView().getContext()).set(new ComposerPath(userAp));
     }
 
     void onOpenTopic(int position) {

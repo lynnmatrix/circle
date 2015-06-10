@@ -24,10 +24,18 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
 
     private final MessageService messageService;
     private final Topic topic;
+    private final String ap;
 
     public ComposerPresenter(MessageService messageService, Topic topic) {
         this.messageService = messageService;
         this.topic = topic;
+        this.ap = topic.getAp();
+    }
+
+    public ComposerPresenter(MessageService messageService, String ap) {
+        this.messageService = messageService;
+        this.ap = ap;
+        this.topic = null;
     }
 
     @Override
@@ -64,7 +72,8 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
         message.setUser(Device.getDeviceId(getView().getContext()));
         message.setContent(content);
 
-        messageService.addMessage(topic.getAp(), message, new Callback<Message>() {
+        messageService.addMessage(ap, message, new Callback<Message>
+                () {
             @Override
             public void success(Message message, Response response) {
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
