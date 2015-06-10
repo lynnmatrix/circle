@@ -92,7 +92,7 @@ public class MessageListView extends CoordinatorLayout{
     MessageRecyclerAdapter getMessageAdapter() {
         MessageRecyclerAdapter messageAdapter = (MessageRecyclerAdapter) messageRecyclerView.getAdapter();
         if(null == messageAdapter) {
-            messageAdapter = new MessageRecyclerAdapter();
+            messageAdapter = new MessageRecyclerAdapter(presenter.getTopic());
             messageRecyclerView.setAdapter(messageAdapter);
         }
 

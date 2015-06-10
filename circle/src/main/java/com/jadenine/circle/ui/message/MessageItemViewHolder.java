@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.entity.Message;
+import com.jadenine.circle.entity.Topic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,10 +36,12 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    public void bind(Message message, int position) {
-        fromView.setText(String.format("%d•User%d", position + 1, (message.getUser() + message
-                .getTopicId())
-                .hashCode()));
+    public void bind(Topic topic, Message message, int position) {
+        boolean isOwner = topic.getUser().equals(message.getUser());
+
+        fromView.setText(String.format("%d•%s", position + 1, isOwner ? fromView.getContext()
+                .getString(R.string.topic_owner) : "User" + (message.getUser() + message
+                .getTopicId()).hashCode()));
         dateView.setText(getFormattedTime(message.getTimestamp()));
         contentView.setText(message.getContent());
     }

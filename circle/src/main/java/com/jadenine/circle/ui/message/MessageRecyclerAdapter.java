@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.entity.Message;
+import com.jadenine.circle.entity.Topic;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,12 @@ import java.util.List;
  */
 public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemViewHolder> {
 
+    private final Topic topic;
     private List<Message> messages = Collections.emptyList();
+
+    public MessageRecyclerAdapter(Topic topic) {
+        this.topic = topic;
+    }
 
     @Override
     public MessageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,7 +34,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemView
 
     @Override
     public void onBindViewHolder(MessageItemViewHolder holder, int position) {
-        holder.bind(messages.get(position), position);
+        holder.bind(topic, messages.get(position), position);
     }
 
     @Override

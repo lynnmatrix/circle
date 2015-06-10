@@ -80,7 +80,11 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         });
     }
 
-    public void addMessage() {
+    void addMessage() {
         Flow.get(getView().getContext()).set(new ComposerPath(topic));
+    }
+
+    Topic getTopic() {
+        return topic;
     }
 }
