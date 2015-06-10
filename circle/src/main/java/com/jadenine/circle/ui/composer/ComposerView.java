@@ -43,8 +43,6 @@ public class ComposerView extends RelativeLayout {
         ButterKnife.inject(this);
         presenter.takeView(this);
 
-        toolbar.setTitle(R.string.title_activity_message_add);
-
         toolbar.inflateMenu(R.menu.menu_message_add);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_dark);
         toolbar.setNavigationOnClickListener(new OnClickListener() {

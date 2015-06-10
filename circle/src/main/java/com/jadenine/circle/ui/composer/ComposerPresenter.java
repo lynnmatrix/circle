@@ -45,6 +45,11 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
             return;
         }
 
+        if(null != topic) {
+            getView().toolbar.setTitle(topic.getTopic());
+        }else {
+            getView().toolbar.setTitle(R.string.title_activity_message_add);
+        }
         if(null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().editor.setText(content);
