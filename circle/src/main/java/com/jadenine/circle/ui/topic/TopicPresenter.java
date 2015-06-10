@@ -6,8 +6,12 @@ import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.request.JSONListWrapper;
 import com.jadenine.circle.request.TopicService;
-import com.jadenine.circle.ui.message.MessagePath;
 import com.jadenine.circle.ui.composer.ComposerPath;
+import com.jadenine.circle.ui.message.MessagePath;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import flow.Flow;
 import mortar.ViewPresenter;
@@ -65,7 +69,15 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
             @Override
             public void onNext(JSONListWrapper<Topic> topicJSONListWrapper) {
                 if (!hasView()) return;
-                getView().getTopicAdapter().setTopics(topicJSONListWrapper.getAll());
+                List<Topic> topics = topicJSONListWrapper.getAll();
+
+                Collections.sort(topics, new Comparator<Topic>() {
+                    @Override
+                    public int compare(Topic lhs, Topic rhs) {
+                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
+                    }
+                });
+                getView().getTopicAdapter().setTopics(topics);
             }
         });
     }
