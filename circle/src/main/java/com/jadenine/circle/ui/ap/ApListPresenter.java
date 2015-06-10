@@ -58,6 +58,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     @Subscribe
     public void onApConnected(EventProducer.APConnectedEvent event) {
+        if(!hasView()) return;
         addAPIfNot(event.getAP());
     }
 
@@ -96,6 +97,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         apService.addAP(userAp, new Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
+                if(!hasView()) return;
                 getAdapter().clear();
                 getAdapter().addAll(userAps.getAll());
             }
@@ -111,7 +113,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         apService.listAPs(Device.getDeviceId(getContext()), new Callback<JSONListWrapper<UserAp>>() {
             @Override
             public void success(JSONListWrapper<UserAp> userAps, Response response) {
-
+                if(!hasView()) return;
                 getAdapter().clear();
                 getAdapter().addAll(userAps.getAll());
 
@@ -123,6 +125,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
             @Override
             public void failure(RetrofitError error) {
+                if(!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
             }
         });

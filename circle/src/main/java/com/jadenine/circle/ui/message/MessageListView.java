@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.EditText;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerScope;
@@ -34,6 +35,12 @@ public class MessageListView extends CoordinatorLayout{
     CollapsingToolbarLayout collapsingToolbarLayout;
     @InjectView(R.id.anim_toolbar)
     Toolbar toolbar;
+
+    @InjectView(R.id.reply_toolbar)
+    Toolbar replyToolbar;
+
+    @InjectView(R.id.message_edit)
+    EditText replyEditor;
 
     @Inject
     MessagePresenter presenter;
@@ -72,6 +79,17 @@ public class MessageListView extends CoordinatorLayout{
             }
         });
 
+//        replyToolbar.inflateMenu(R.menu.menu_reply);
+//        replyToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                if(R.id.action_send == item.getItemId()) {
+//                    presenter.send();
+//                }
+//                return false;
+//            }
+//        });
+
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.starry_night);
 
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
@@ -85,8 +103,8 @@ public class MessageListView extends CoordinatorLayout{
     }
 
     @OnClick(R.id.fab_add_message)
-    public void onAddMessage(){
-        presenter.addMessage();
+    public void onSend(){
+        presenter.send();
     }
 
     MessageRecyclerAdapter getMessageAdapter() {
