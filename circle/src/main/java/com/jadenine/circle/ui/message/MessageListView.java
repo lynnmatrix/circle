@@ -55,6 +55,7 @@ public class MessageListView extends CoordinatorLayout{
         messageRecyclerView.setLayoutManager(linearLayoutManager);
 
         configToolbar();
+        getMessageAdapter();
     }
 
     @Override

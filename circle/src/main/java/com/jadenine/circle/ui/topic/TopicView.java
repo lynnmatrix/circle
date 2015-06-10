@@ -63,8 +63,9 @@ public class TopicView extends CoordinatorLayout{
                 presenter.onOpenTopic(position);
             }
         }));
-        getTopicAdapter();
         configToolbar();
+
+        getTopicAdapter();
     }
 
     @Override

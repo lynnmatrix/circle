@@ -48,9 +48,9 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     }
 
     void loadMessages() {
-        Observable<JSONListWrapper<Message>> messageObservable = messageService.listMessages(topic.getTopicId());
-
-        messageObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        Observable<JSONListWrapper<Message>> messageObservable = messageService.listMessages
+                (topic.getTopicId()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers
+                .mainThread());
 
         running = messageObservable.subscribe(new Observer<JSONListWrapper<Message>>() {
             @Override
