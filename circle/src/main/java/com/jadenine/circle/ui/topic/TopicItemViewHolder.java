@@ -18,8 +18,6 @@ import butterknife.InjectView;
  */
 public class TopicItemViewHolder extends RecyclerView.ViewHolder {
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
-    @InjectView(R.id.from)
-    TextView fromView;
 
     @InjectView(R.id.date)
     TextView dateView;
@@ -27,16 +25,12 @@ public class TopicItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.content)
     TextView contentView;
 
-    private Topic topic;
-
     public TopicItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
     }
 
     public void bind(Topic topic) {
-        this.topic = topic;
-        fromView.setText(topic.getUser());
         dateView.setText(getFormattedTime(topic.getTimestamp()));
         contentView.setText(topic.getTopic());
     }

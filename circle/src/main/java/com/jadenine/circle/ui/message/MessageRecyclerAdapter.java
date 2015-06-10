@@ -20,7 +20,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemView
 
     @Override
     public MessageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_list_item,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message,
                 parent, false);
         MessageItemViewHolder viewHolder = new MessageItemViewHolder(view);
         return viewHolder;
@@ -28,7 +28,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemView
 
     @Override
     public void onBindViewHolder(MessageItemViewHolder holder, int position) {
-        holder.bind(messages.get(position));
+        holder.bind(messages.get(position), position);
     }
 
     @Override

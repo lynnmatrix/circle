@@ -35,8 +35,10 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    public void bind(Message message) {
-        fromView.setText(message.getUser());
+    public void bind(Message message, int position) {
+        fromView.setText(String.format("%d•User%d", position + 1, (message.getUser() + message
+                .getTopicId())
+                .hashCode()));
         dateView.setText(getFormattedTime(message.getTimestamp()));
         contentView.setText(message.getContent());
     }
