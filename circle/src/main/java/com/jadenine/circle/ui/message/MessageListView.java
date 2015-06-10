@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.jadenine.circle.R;
@@ -73,7 +72,7 @@ public class MessageListView extends CoordinatorLayout{
             }
         });
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.header);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.starry_night);
 
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
@@ -83,25 +82,6 @@ public class MessageListView extends CoordinatorLayout{
             }
         });
 
-        customToolbar();
-    }
-
-    private void customToolbar() {
-        collapsingToolbarLayout.setTitle(getContext().getString(R.string
-                .title_activity_message));
-
-        toolbar.inflateMenu(R.menu.menu_message);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_refresh:
-                        presenter.loadMessages();
-                        return true;
-                }
-                return false;
-            }
-        });
     }
 
     @OnClick(R.id.fab_add_message)

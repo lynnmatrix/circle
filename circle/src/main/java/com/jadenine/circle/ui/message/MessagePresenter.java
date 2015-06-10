@@ -38,6 +38,8 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
+        getView().collapsingToolbarLayout.setTitle(topic.getTopic());
+
         loadMessages();
     }
 

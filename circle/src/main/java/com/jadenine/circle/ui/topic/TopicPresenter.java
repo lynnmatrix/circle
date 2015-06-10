@@ -41,6 +41,8 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
         super.onLoad(savedInstanceState);
         if(!hasView()) return;
 
+        getView().collapsingToolbarLayout.setTitle(userAp.getSSID());
+
         loadTopics();
     }
 

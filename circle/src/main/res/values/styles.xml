@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <color name="pink">#D70073</color>
+    <color name="orange">#FF9900</color>
+    <color name="green">#009900</color>
+
 </resources>

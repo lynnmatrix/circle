@@ -1,7 +1,6 @@
 package com.jadenine.circle.ui.ap;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -61,7 +60,7 @@ public class ApListView extends RelativeLayout {
             }
         });
 
-        swipeRefreshLayout.setColorSchemeColors(Color.GRAY, Color.CYAN, Color.MAGENTA);
+        swipeRefreshLayout.setColorSchemeResources(R.color.pink, R.color.orange, R.color.green);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

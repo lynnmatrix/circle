@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.jadenine.circle.R;
@@ -90,26 +89,6 @@ public class TopicView extends CoordinatorLayout{
             public void onGenerated(Palette palette) {
                 int mutedColor = palette.getMutedColor(R.attr.colorPrimary);
                 collapsingToolbarLayout.setContentScrimColor(mutedColor);
-            }
-        });
-
-        customToolbar();
-    }
-
-    private void customToolbar() {
-        collapsingToolbarLayout.setTitle(getContext().getString(R.string
-                .title_activity_topic));
-
-        toolbar.inflateMenu(R.menu.menu_message);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_refresh:
-                        presenter.loadTopics();
-                        return true;
-                }
-                return false;
             }
         });
     }
