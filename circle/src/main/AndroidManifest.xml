@@ -10,20 +10,20 @@
     //needed by ument update
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <meta-data
-        android:name="UMENG_APPKEY"
-        android:value="50d1def2527015792500008c" />
-    <meta-data
-        android:name="UMENG_CHANNEL"
-        android:value="@string/umeng_channel" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:name=".app.CircleApplication"
-        android:theme="@style/AppTheme"
-        >
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:name=".app.CircleApplication"
+    android:theme="@style/AppTheme"
+    >
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="557a4f3f67e58e45f2000660" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="@string/umeng_channel" />
         <activity
             android:name=".ui.HomeActivity"
             android:label="@string/title_activity_ap" >
@@ -43,6 +43,17 @@
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
+
+
+        <!--umeng-->
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
     </application>
 

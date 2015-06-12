@@ -13,4 +13,8 @@
     <string name="message_send_fail">Fail to send message</string>
     <string name="action_add">Add</string>
     <string name="topic_owner">Owner</string>
+    <string name="share">Share</string>
+    <string name="wifi_scan">Wifi Scanner</string>
+    <string name="share_message_description">df</string>
+    <string name="share_link">www.jadenine.com/app/circle.apk</string>
 </resources>

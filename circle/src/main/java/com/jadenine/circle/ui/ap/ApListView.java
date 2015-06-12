@@ -1,9 +1,15 @@
 package com.jadenine.circle.ui.ap;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,7 +57,7 @@ public class ApListView extends RelativeLayout {
         ButterKnife.inject(this);
         presenter.takeView(this);
 
-        toolbar.setTitle(R.string.title_activity_ap);
+        setUpToolbar();
 
         apListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +74,52 @@ public class ApListView extends RelativeLayout {
                 presenter.loadAPList();
             }
         });
+    }
+
+    private void setUpToolbar() {
+        toolbar.inflateMenu(R.menu.drawer);
+        toolbar.setTitle(R.string.title_activity_ap);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_share:
+                        share();
+                        return true;
+                    case R.id.item_wifi_scan:
+                        scanWifi();
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void scanWifi() {
+        //TODO
+    }
+
+    private void share() {
+        Context context = getContext();
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+
+        Bitmap bt= BitmapFactory.decodeResource(context.getResources(), R
+                .drawable.starry_night);
+        final Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContext()
+                        .getContentResolver(),
+                bt, null,null));
+
+        String shareDescription = context.getString(R.string.share_message_description, context
+                .getString(R.string.app_name), context.getString(R.string.share_link));
+
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareDescription);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        context.startActivity(shareIntent);
     }
 
     @Override
