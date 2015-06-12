@@ -1,8 +1,11 @@
 package com.jadenine.circle.ui;
 
+import android.os.Bundle;
+
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.MortarPathContainerView;
 import com.jadenine.circle.ui.ap.ApListPath;
+import com.umeng.update.UmengUpdateAgent;
 
 import butterknife.InjectView;
 import flow.Flow;
@@ -12,6 +15,12 @@ public class HomeActivity extends MortarActivity {
 
     @InjectView(R.id.container)
     MortarPathContainerView pathContainerView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        UmengUpdateAgent.update(this);
+    }
 
     @Override
     protected Object buildDaggerService() {
