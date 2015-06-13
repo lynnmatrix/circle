@@ -49,13 +49,17 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
         @InjectView(R.id.ap_ssid)
         TextView ssidView;
 
+        @InjectView(R.id.ap_bssid)
+        TextView bssidView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
 
         public void bind(Pair<String, String> ap) {
-            ssidView.setText(ap.first );
+            ssidView.setText(ap.first);
+            bssidView.setText(ap.second);
         }
     }
 }

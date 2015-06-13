@@ -29,7 +29,7 @@ public class WifiView extends RecyclerView {
         super.onAttachedToWindow();
 
         setHasFixedSize(false);
-        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getContext(), 3);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getContext(), 2);
         setLayoutManager(linearLayoutManager);
 
         setAdapter(new WifiAdapter());
