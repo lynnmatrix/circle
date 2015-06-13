@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="share">告诉小伙伴这货</string>
     <string name="wifi_scan">周边Wifi</string>
-    <string name="share_message_description">街头巷议
-        坊间流传，尽在<xliff:g id="APPNAME">%s</xliff:g>。<xliff:g id="WEBSITE">%s</xliff:g></string>
+    <string name="share_message_description">街头巷议、坊间流传，尽在<xliff:g id="APPNAME">%s</xliff:g>。\n
+        <xliff:g id="WEBSITE">%s</xliff:g></string>
     <string name="share_link">www.jadenine.cn/app/circle.apk</string>
 
 </resources>

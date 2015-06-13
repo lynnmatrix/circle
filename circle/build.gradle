@@ -30,11 +30,11 @@ def userName() {
     return System.properties["user.name"]
 }
 
-def getVersionName(){
+def genVersionName(){
     return VERSION_NAME +"-" + buildInfo()
 }
 
-def getVersionCode(){
+def genVersionCode(){
     return VERSION_CODE.toInteger()
 }
 
@@ -44,8 +44,8 @@ android {
 
     defaultConfig {
         applicationId "com.jadenine.circle"
-        versionCode getVersionCode()
-        versionName getVersionName()
+        versionCode genVersionCode()
+        versionName genVersionName()
 
         minSdkVersion 17
         targetSdkVersion 22
