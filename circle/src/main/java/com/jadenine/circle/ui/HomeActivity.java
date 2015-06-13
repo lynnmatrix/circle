@@ -17,6 +17,7 @@ import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
 import com.jadenine.circle.ui.ap.ApListPath;
+import com.jadenine.circle.ui.scanner.WifiPath;
 import com.umeng.update.UmengUpdateAgent;
 
 import butterknife.InjectView;
@@ -100,7 +101,7 @@ public class HomeActivity extends MortarActivity {
 
 
     private void scanWifi() {
-        //TODO
+        Flow.get(this).set(new WifiPath());
     }
 
     private void share() {

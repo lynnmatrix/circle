@@ -44,7 +44,6 @@ public class TopicView extends CoordinatorLayout{
         DaggerService.<TopicPath.Component>getDaggerComponent(context).inject(this);
     }
 
-
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();

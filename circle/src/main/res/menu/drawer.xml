@@ -8,6 +8,5 @@
     <item
         android:id="@+id/item_wifi_scan"
         android:title="@string/wifi_scan"
-        android:icon="@drawable/ic_wifi"
-        android:showAsAction="never"/>
+        android:icon="@drawable/ic_wifi"/>
 </menu>
