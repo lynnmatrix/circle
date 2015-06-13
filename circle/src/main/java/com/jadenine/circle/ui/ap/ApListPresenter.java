@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui.ap;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
@@ -13,6 +14,7 @@ import com.jadenine.circle.ui.topic.TopicPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
+import com.umeng.message.PushAgent;
 
 import flow.Flow;
 import mortar.MortarScope;
@@ -25,6 +27,8 @@ import retrofit.client.Response;
  * Created by linym on 6/9/15.
  */
 public class ApListPresenter extends ViewPresenter<ApListView> {
+
+    public static final String ALIAS_TYPE_AP = "AP";
 
     ApService apService;
 
@@ -117,6 +121,8 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
                 getAdapter().clear();
                 getAdapter().addAll(userAps.getAll());
 
+                addAlias(userAps);
+
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);
 
@@ -129,5 +135,26 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
                 getView().swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+
+
+    private void addAlias(final JSONListWrapper<UserAp> userAps) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for(UserAp ap : userAps.getAll()) {
+                    addAlias(ap.getAP());
+                }
+            }
+        });
+    }
+
+    private void addAlias(String ap) {
+        try {
+            PushAgent.getInstance(getContext()).addAlias(ap, ALIAS_TYPE_AP);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

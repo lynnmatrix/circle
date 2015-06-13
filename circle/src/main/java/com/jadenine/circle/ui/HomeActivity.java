@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.jadenine.circle.BuildConfig;
@@ -21,7 +20,6 @@ import com.jadenine.circle.mortar.MortarPathContainerView;
 import com.jadenine.circle.ui.ap.ApListPath;
 import com.jadenine.circle.ui.scanner.WifiPath;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengRegistrar;
 import com.umeng.update.UmengUpdateAgent;
 
 import butterknife.InjectView;
