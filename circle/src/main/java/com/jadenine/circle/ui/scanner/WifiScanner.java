@@ -28,7 +28,6 @@ public class WifiScanner {
 
     public static void scanner(Context context, final ScanCallback callback) {
         final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        Log.d("linym", "scanning... ");
         context.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
@@ -37,7 +36,6 @@ public class WifiScanner {
                 for (ScanResult ap : results) {
                     Pair pair = new Pair(ap.SSID, ap.BSSID);
                     wifiInfoResults.add(pair);
-                    Log.d("linym", "scanned " + ap.SSID);
                 }
                 if(null != callback) {
                     callback.onWifiScanned(wifiInfoResults);
