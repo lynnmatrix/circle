@@ -1,0 +1,15 @@
+android {
+
+    signingConfigs {
+        debug {
+            storeFile file(getRootDir().absolutePath + "/debug.keystore")
+        }
+
+        release{
+            storeFile file(getRootDir().absolutePath + "/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+}

@@ -13,6 +13,11 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply from: "default_signingconfigs.gradle"
+
+if (new File(getRootDir(), "signing.gradle").exists()) {
+    apply from: getRootDir().absolutePath + "/signing.gradle"
+}
 
 def buildInfo() {
     if ('git status --short'.execute().text.trim().length() == 0)
@@ -44,19 +49,6 @@ android {
 
         minSdkVersion 17
         targetSdkVersion 22
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file(getRootDir().absolutePath + "/debug.keystore")
-        }
-
-        release{
-            storeFile file(getRootDir().absolutePath + "/debug.keystore")
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
-        }
     }
 
     buildTypes {
@@ -126,9 +118,4 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
-}
-
-
-if (new File(getRootDir(), "signing.gradle").exists()) {
-    apply from: getRootDir().absolutePath + "/signing.gradle"
 }
