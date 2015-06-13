@@ -40,8 +40,8 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     @Override
     protected void onExitScope() {
-        super.onExitScope();
         BusProvider.unregister(this);
+        super.onExitScope();
     }
 
     @Override

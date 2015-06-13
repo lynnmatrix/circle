@@ -49,7 +49,6 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
         getView().collapsingToolbarLayout.setTitle(topic.getTopic());
-
         if(null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().replyEditor.setText(content);

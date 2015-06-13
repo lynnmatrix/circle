@@ -1,10 +1,10 @@
 package com.jadenine.circle.ui.ap;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.ApService;
+import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -20,12 +20,12 @@ public class ApListPath extends Path implements ScreenComponentFactory{
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerApListPath_Component.builder().appComponent((CircleApplication.AppComponent)
+        return DaggerApListPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0]).module(new ApListPath.Module()).build();
     }
 
     @DaggerScope(ApListPresenter.class)
-    @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
+    @dagger.Component(dependencies = {HomeComponent.class}, modules = Module.class)
     public interface Component{
         void inject(ApListView apListView);
     }

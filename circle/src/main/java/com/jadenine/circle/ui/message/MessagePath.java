@@ -1,11 +1,11 @@
 package com.jadenine.circle.ui.message;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.MessageService;
+import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -25,12 +25,12 @@ public class MessagePath extends Path implements ScreenComponentFactory{
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerMessagePath_Component.builder().appComponent((CircleApplication
-                .AppComponent) dependencies[0]).module(new Module()).build();
+        return DaggerMessagePath_Component.builder().homeComponent((HomeComponent)
+                dependencies[0]).module(new Module()).build();
     }
 
     @DaggerScope(MessagePresenter.class)
-    @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
+    @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     public interface Component{
         void inject(MessageListView pathView);
     }

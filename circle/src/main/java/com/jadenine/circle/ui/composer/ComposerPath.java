@@ -1,12 +1,12 @@
 package com.jadenine.circle.ui.composer;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.entity.Topic;
 import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.MessageService;
+import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -34,12 +34,12 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerComposerPath_Component.builder().appComponent((CircleApplication.AppComponent)
+        return DaggerComposerPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0]).module(new Module()).build();
     }
 
     @DaggerScope(ComposerPresenter.class)
-    @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
+    @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component{
         void inject(ComposerView composer);
     }

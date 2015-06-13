@@ -6,6 +6,7 @@ import com.jadenine.circle.entity.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.request.TopicService;
+import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -25,14 +26,14 @@ public class TopicPath extends Path implements ScreenComponentFactory {
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerTopicPath_Component.builder().appComponent((CircleApplication.AppComponent)
+        return DaggerTopicPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
                 .module(new Module())
                 .build();
     }
 
     @DaggerScope(TopicPresenter.class)
-    @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules = Module.class)
+    @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component{
         void inject(TopicView topicView);
     }
