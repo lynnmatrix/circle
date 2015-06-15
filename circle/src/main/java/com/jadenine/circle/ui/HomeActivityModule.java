@@ -21,4 +21,10 @@ class HomeActivityModule {
     DrawerLayout provideDrawerLayout(){
         return homeActivity.drawerLayout;
     }
+
+    @DaggerScope(HomeActivity.class)
+    @Provides
+    HomePresenter providePresenter(){
+        return new HomePresenter();
+    }
 }

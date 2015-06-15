@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="share">告诉小伙伴这货</string>
+    <string name="share_wechat">分享到朋友圈</string>
     <string name="wifi_scan">周边Wifi</string>
     <string name="share_message_description">街头巷议、坊间流传，尽在<xliff:g id="APPNAME">%s</xliff:g>。\n
         <xliff:g id="WEBSITE">%s</xliff:g></string>

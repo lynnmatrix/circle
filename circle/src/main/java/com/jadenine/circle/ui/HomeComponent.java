@@ -16,4 +16,5 @@ import retrofit.RestAdapter;
 public interface HomeComponent {
     DrawerLayout getDrawerLayout();
     RestAdapter restAdapter();
+    void inject(HomeActivity homeActivity);
 }
