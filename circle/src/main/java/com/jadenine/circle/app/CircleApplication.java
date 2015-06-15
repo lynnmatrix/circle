@@ -1,11 +1,20 @@
 package com.jadenine.circle.app;
 
 import android.app.Application;
+import android.app.Notification;
+import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.jadenine.circle.BuildConfig;
+import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.request.MessageService;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.entity.UMessage;
 
 import dagger.Module;
 import dagger.Provides;
@@ -29,6 +38,36 @@ public class CircleApplication extends Application {
         builder.withService(DaggerService.SERVICE_NAME, appComponent);
 
         rootScope = builder.build(ROOT_SCOPE_NAME);
+
+        registerUmengMessageHandler();
+    }
+
+    private void registerUmengMessageHandler() {
+        UmengMessageHandler messageHandler = new UmengMessageHandler(){
+            @Override
+            public Notification getNotification(Context context, UMessage uMessage) {
+                Log.i("PUSH", uMessage.custom);
+                Toast.makeText(context, uMessage.custom, Toast.LENGTH_LONG).show();
+                uMessage.title = getString(R.string.notification_title_new_topic);
+                return super.getNotification(context, uMessage);
+            }
+
+            @Override
+            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+                new Handler(getMainLooper()).post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Log.i("PUSH", msg.custom);
+                        Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        };
+
+        PushAgent pushAgent = PushAgent.getInstance(this);
+        pushAgent.setNotificaitonOnForeground(true);
+        pushAgent.setMessageHandler(messageHandler);
     }
 
     @Override
@@ -53,8 +92,10 @@ public class CircleApplication extends Application {
                 .FULL : RestAdapter.LogLevel.NONE;
         public static final String ENDPOINT_LOCAL = "http://192.168.9.220:8080";
         public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
+        public static final boolean FORE_AZURE = false;
 
-        public static final String ENDPOINT = BuildConfig.DEBUG ? ENDPOINT_LOCAL : ENDPOINT_AZURE;
+        public static final String ENDPOINT = BuildConfig.DEBUG && !FORE_AZURE ? ENDPOINT_LOCAL :
+                ENDPOINT_AZURE;
 
         @Provides
         @DaggerScope(CircleApplication.class)
@@ -71,22 +112,4 @@ public class CircleApplication extends Application {
         }
 
     }
-
-    //    @Module(
-//            includes = {RestAdapterModule.class}
-//    )
-//    public static class ServiceModule {
-//
-//        @Provides
-//        @DaggerScope(CircleApplication.class)
-//        public ApService provideApService(RestAdapter restAdapter) {
-//            return restAdapter.create(ApService.class);
-//        }
-//
-//        @Provides
-//        @DaggerScope(CircleApplication.class)
-//        public MessageService provideMessageService(RestAdapter restAdapter) {
-//            return restAdapter.create(MessageService.class);
-//        }
-//    }
 }

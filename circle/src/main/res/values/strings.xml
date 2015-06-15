@@ -18,4 +18,5 @@
     <string name="wifi_scan">Wifi Scanner</string>
     <string name="share_message_description">df</string>
     <string name="share_link">www.jadenine.com/app/circle.apk</string>
+    <string name="notification_title_new_topic">New topic</string>
 </resources>

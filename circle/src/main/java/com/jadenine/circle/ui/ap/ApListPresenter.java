@@ -3,6 +3,7 @@ package com.jadenine.circle.ui.ap;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.jadenine.circle.entity.UserAp;
@@ -28,9 +29,7 @@ import retrofit.client.Response;
  */
 public class ApListPresenter extends ViewPresenter<ApListView> {
 
-    public static final String ALIAS_TYPE_AP = "AP";
-
-    ApService apService;
+    private final ApService apService;
 
     ApListPresenter(ApService apService) {
         this.apService = apService;
@@ -121,7 +120,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
                 getAdapter().clear();
                 getAdapter().addAll(userAps.getAll());
 
-                addAlias(userAps);
+                addTag(userAps);
 
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);
@@ -137,24 +136,25 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         });
     }
 
-
-
-    private void addAlias(final JSONListWrapper<UserAp> userAps) {
+    private void addTag(final JSONListWrapper<UserAp> userAps) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 for(UserAp ap : userAps.getAll()) {
-                    addAlias(ap.getAP());
+                    addTag(ap.getAP());
                 }
             }
         });
     }
 
-    private void addAlias(String ap) {
+    private void addTag(String ap) {
         try {
-            PushAgent.getInstance(getContext()).addAlias(ap, ALIAS_TYPE_AP);
+            Log.e("PUSH", "Try to add tag " + ap);
+            PushAgent.getInstance(getContext()).getTagManager().add(ap);
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("PUSH", "Fail to add tag", e);
         }
     }
+
 }

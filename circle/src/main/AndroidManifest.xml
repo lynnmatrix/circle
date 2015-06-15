@@ -39,7 +39,8 @@
 
         <activity
             android:name=".ui.HomeActivity"
-            android:label="@string/title_activity_ap" >
+            android:label="@string/title_activity_ap"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
