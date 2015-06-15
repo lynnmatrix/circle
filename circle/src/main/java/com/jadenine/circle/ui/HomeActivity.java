@@ -19,8 +19,15 @@ import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
 import com.jadenine.circle.ui.ap.ApListPath;
 import com.jadenine.circle.ui.scanner.WifiPath;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
+
+import java.io.ByteArrayOutputStream;
 
 import butterknife.InjectView;
 import flow.Flow;
@@ -52,6 +59,10 @@ public class HomeActivity extends MortarActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.item_share_wechat:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        shareToWeChat(SendMessageToWX.Req.WXSceneSession);
+                        return true;
                     case R.id.item_share:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         share();
@@ -64,6 +75,16 @@ public class HomeActivity extends MortarActivity {
                 return false;
             }
         });
+
+        if(null == sWXApi) {
+            sWXApi = WXAPIFactory.createWXAPI(this, WX_APP_ID);
+        }
+        // WXAppSupportAPI为0表示没有安装微信
+        if(!sWXApi.registerApp(WX_APP_ID) || sWXApi.getWXAppSupportAPI() == 0) {
+            sWXApi = null;
+            return;
+        }
+
     }
 
     @Override
@@ -106,9 +127,62 @@ public class HomeActivity extends MortarActivity {
         super.onBackPressed();
     }
 
-
     private void scanWifi() {
         Flow.get(this).set(new WifiPath());
+    }
+
+
+    private static final String WX_APP_ID = "wx4f4bf98ef21aba6b";
+    private static IWXAPI sWXApi = null;
+
+    private SendMessageToWX.Req mReq = null;
+
+    private void shareToWeChat(int scene) {
+
+            initializeWXData();
+
+        mReq.transaction = buildTransaction("wechat");
+        mReq.scene = scene;
+        sWXApi.sendReq(mReq);
+
+//        sWXApi.unregisterApp();
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    public void initializeWXData() {
+        WXWebpageObject webPage = new WXWebpageObject();
+        webPage.webpageUrl = getString(R.string.share_link);
+        WXMediaMessage weChatMessage = new WXMediaMessage(webPage);
+        weChatMessage.title = getString(R.string.app_name);
+        weChatMessage.description = getString(R.string.share_message_description, getString(R
+                .string.app_name), getString(R.string.share_link));
+
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_launcher);
+        weChatMessage.thumbData = bmpToByteArray(thumb, true);
+
+        mReq = new SendMessageToWX.Req();
+        mReq.message = weChatMessage;
+    }
+
+    public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
+        if (needRecycle) {
+            bmp.recycle();
+        }
+
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     private void share() {
