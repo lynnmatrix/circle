@@ -29,7 +29,7 @@ import mortar.bundler.BundleService;
  */
 public class HomePresenter extends Presenter<HomeActivity> {
 
-    private static final String WX_APP_ID = "wx4f4bf98ef21aba6b";
+    private static final String WX_APP_ID = "wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
     private IWXAPI wechatApi = null;
 
     @Override
@@ -42,7 +42,7 @@ public class HomePresenter extends Presenter<HomeActivity> {
         super.onLoad(savedInstanceState);
 
         if (null == wechatApi) {
-            wechatApi = WXAPIFactory.createWXAPI(getContext(), WX_APP_ID);
+            wechatApi = WXAPIFactory.createWXAPI(getContext(), WX_APP_ID, false);
         }
         // WXAppSupportAPI为0表示没有安装微信
         if (!wechatApi.registerApp(WX_APP_ID) || wechatApi.getWXAppSupportAPI() == 0) {
@@ -97,8 +97,6 @@ public class HomePresenter extends Presenter<HomeActivity> {
         }
         SendMessageToWX.Req req = buildWXMessage();
 
-        req.transaction = buildTransaction("wechat");
-        req.scene = scene;
         wechatApi.sendReq(req);
     }
 
@@ -124,6 +122,9 @@ public class HomePresenter extends Presenter<HomeActivity> {
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.message = weChatMessage;
+        req.transaction = buildTransaction("circle");
+        req.scene = SendMessageToWX.Req.WXSceneSession;
+
         return req;
     }
 
@@ -156,4 +157,5 @@ public class HomePresenter extends Presenter<HomeActivity> {
 
         return result;
     }
+
 }

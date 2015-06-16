@@ -48,8 +48,7 @@ public class HomeActivity extends MortarActivity {
 
         DaggerService.<HomeComponent>getDaggerComponent(this).inject(this);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView
-                .OnNavigationItemSelectedListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -70,26 +69,18 @@ public class HomeActivity extends MortarActivity {
                 return false;
             }
         });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         presenter.takeView(this);
     }
 
     @Override
-    protected void onPause() {
+    protected void onDestroy() {
         presenter.dropView(this);
-        super.onPause();
+        super.onDestroy();
     }
 
     @Override
     protected Object buildDaggerService() {
-        return DaggerHomeComponent.builder().appComponent((CircleApplication.AppComponent)
-                DaggerService.getDaggerComponent(getApplicationContext())).homeActivityModule(new
-                HomeActivityModule(this)).build();
+        return DaggerHomeComponent.builder().appComponent((CircleApplication.AppComponent) DaggerService.getDaggerComponent(getApplicationContext())).homeActivityModule(new HomeActivityModule(this)).build();
     }
 
     @Override
@@ -124,4 +115,5 @@ public class HomeActivity extends MortarActivity {
 
         super.onBackPressed();
     }
+
 }
