@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.jadenine.circle.R;
+import com.jadenine.common.R;
 
 import flow.Flow;
 import flow.path.Path;

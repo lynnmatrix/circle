@@ -13,11 +13,7 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply from: "default_signingconfigs.gradle"
-
-if (new File(getRootDir(), "signing.gradle").exists()) {
-    apply from: getRootDir().absolutePath + "/signing.gradle"
-}
+apply from: '../android.gradle'
 
 def buildInfo() {
     if ('git status --short'.execute().text.trim().length() == 0)
@@ -39,39 +35,20 @@ def genVersionCode(){
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
-
     defaultConfig {
         applicationId "com.jadenine.circle"
         versionCode genVersionCode()
         versionName genVersionName()
-
-        minSdkVersion 17
-        targetSdkVersion 22
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            signingConfig signingConfigs.release
-        }
     }
 
     def CHANNELS = ["Jadenine"]
 
     productFlavors {
-        CHANNELS.each {name ->
+        CHANNELS.each { name ->
             "$name" {
                 resValue "string", "umeng_channel", name
             }
         }
-    }
-
-    lintOptions {
-        abortOnError false
     }
 
     applicationVariants.all { variant ->
@@ -82,12 +59,12 @@ android {
         }
     }
 
-    packagingOptions {
-        exclude 'LICENSE.txt'
-    }
 }
 
 dependencies {
+    compile project(':domain')
+    compile project(':common')
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
@@ -99,14 +76,7 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.mortar:mortar:0.17'
-    compile 'com.squareup.flow:flow:0.10'
-    compile 'com.squareup.flow:flow-path:0.10'
-
     compile 'com.squareup:otto:1.3.7'
-    compile 'io.reactivex:rxjava:1.0.11'
-    compile 'io.reactivex:rxandroid:0.24.0'
 
     compile 'com.jakewharton:butterknife:6.1.0'
 

@@ -1,4 +1,4 @@
-package com.jadenine.circle.entity;
+package com.jadenine.circle.domain;
 
 import android.text.TextUtils;
 

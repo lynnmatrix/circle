@@ -1,11 +1,10 @@
 package com.jadenine.circle.ui.topic;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.app.CircleApplication;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.model.entity.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.request.TopicService;
+import com.jadenine.circle.model.rest.TopicService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.entity.Topic;
+import com.jadenine.circle.model.entity.Topic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

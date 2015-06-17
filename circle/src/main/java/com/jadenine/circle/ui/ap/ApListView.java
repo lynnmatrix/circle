@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.model.entity.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.common.flow.HandlesBack;

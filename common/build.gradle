@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+apply from: '../android.gradle'
+
+android {
+    defaultConfig {
+        versionCode 1
+        versionName "1.0"
+    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.squareup.mortar:mortar:0.17'
+    compile 'com.squareup.flow:flow:0.10'
+    compile 'com.squareup.flow:flow-path:0.10'
+    compile 'com.google.code.gson:gson:2.3.1'
+}

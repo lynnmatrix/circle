@@ -1,6 +1,6 @@
-package com.jadenine.circle.request;
+package com.jadenine.circle.model.rest;
 
-import com.jadenine.circle.entity.Message;
+import com.jadenine.circle.model.entity.Message;
 
 import retrofit.Callback;
 import retrofit.http.Body;

@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.jadenine.circle.entity.UserAp;
+import com.jadenine.circle.model.entity.UserAp;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
-import com.jadenine.circle.request.ApService;
-import com.jadenine.circle.request.JSONListWrapper;
+import com.jadenine.circle.model.rest.ApService;
+import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.ui.topic.TopicPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;

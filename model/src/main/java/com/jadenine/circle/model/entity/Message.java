@@ -1,4 +1,4 @@
-package com.jadenine.circle.entity;
+package com.jadenine.circle.model.entity;
 
 /**
  * Created by linym on 6/3/15.

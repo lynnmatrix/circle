@@ -1,6 +1,6 @@
-package com.jadenine.circle.request;
+package com.jadenine.circle.model.rest;
 
-import com.jadenine.circle.entity.Topic;
+import com.jadenine.circle.model.entity.Topic;
 
 import retrofit.http.GET;
 import retrofit.http.Path;

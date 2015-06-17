@@ -3,7 +3,7 @@ package com.jadenine.circle.ui.ap;
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.request.ApService;
+import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 

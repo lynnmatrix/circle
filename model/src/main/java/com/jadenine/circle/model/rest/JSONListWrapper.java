@@ -1,4 +1,4 @@
-package com.jadenine.circle.request;
+package com.jadenine.circle.model.rest;
 
 import java.util.List;
 

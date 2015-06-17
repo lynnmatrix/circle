@@ -8,10 +8,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.entity.Message;
-import com.jadenine.circle.entity.Topic;
-import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.request.MessageService;
+import com.jadenine.circle.model.entity.Message;
+import com.jadenine.circle.model.entity.Topic;
+import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.MessageService;
 import com.jadenine.circle.utils.Device;
 
 import java.util.Collections;

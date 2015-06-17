@@ -2,10 +2,10 @@ package com.jadenine.circle.ui.topic;
 
 import android.os.Bundle;
 
-import com.jadenine.circle.entity.Topic;
-import com.jadenine.circle.entity.UserAp;
-import com.jadenine.circle.request.JSONListWrapper;
-import com.jadenine.circle.request.TopicService;
+import com.jadenine.circle.model.entity.Topic;
+import com.jadenine.circle.model.entity.UserAp;
+import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TopicService;
 import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.message.MessagePath;
 
