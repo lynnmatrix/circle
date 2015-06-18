@@ -3,7 +3,7 @@ package com.jadenine.circle.model.entity;
 /**
  * Created by linym on 6/3/15.
  */
-public class Message {
+public class Message implements Savable{
     private String topicId;
     private String messageId;
 
@@ -48,5 +48,10 @@ public class Message {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public void save() {
+        //TODO
     }
 }

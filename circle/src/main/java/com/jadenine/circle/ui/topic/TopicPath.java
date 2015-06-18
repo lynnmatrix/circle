@@ -1,16 +1,14 @@
 package com.jadenine.circle.ui.topic;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.model.entity.UserAp;
+import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.model.rest.TopicService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
 import flow.path.Path;
-import retrofit.RestAdapter;
 
 /**
  * Created by linym on 6/10/15.
@@ -41,16 +39,9 @@ public class TopicPath extends Path implements ScreenComponentFactory {
     class Module{
         @DaggerScope(TopicPresenter.class)
         @Provides
-        TopicService provideTopicService(RestAdapter restAdapter) {
-            return restAdapter.create(TopicService.class);
+        TopicPresenter providePresenter() {
+            return new TopicPresenter(userAp);
         }
-
-        @DaggerScope(TopicPresenter.class)
-        @Provides
-        TopicPresenter providePresenter(TopicService topicService) {
-            return new TopicPresenter(topicService, userAp);
-        }
-
     }
 
 

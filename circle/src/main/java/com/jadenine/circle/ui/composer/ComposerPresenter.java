@@ -5,16 +5,13 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.model.entity.Message;
-import com.jadenine.circle.model.entity.Topic;
-import com.jadenine.circle.model.rest.MessageService;
-import com.jadenine.circle.utils.Device;
+import com.jadenine.circle.domain.Topic;
+import com.jadenine.circle.domain.UserAp;
 
 import flow.Flow;
 import mortar.ViewPresenter;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by linym on 6/9/15.
@@ -22,20 +19,10 @@ import retrofit.client.Response;
 public class ComposerPresenter extends ViewPresenter<ComposerView>{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
-    private final MessageService messageService;
-    private final Topic topic;
-    private final String ap;
+    private final UserAp userAp;
 
-    public ComposerPresenter(MessageService messageService, Topic topic) {
-        this.messageService = messageService;
-        this.topic = topic;
-        this.ap = topic.getAp();
-    }
-
-    public ComposerPresenter(MessageService messageService, String ap) {
-        this.messageService = messageService;
-        this.ap = ap;
-        this.topic = null;
+    public ComposerPresenter(UserAp userAp) {
+        this.userAp = userAp;
     }
 
     @Override
@@ -45,11 +32,8 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
             return;
         }
 
-        if(null != topic) {
-            getView().toolbar.setTitle(topic.getTopic());
-        }else {
-            getView().toolbar.setTitle(R.string.title_activity_message_add);
-        }
+        getView().toolbar.setTitle(R.string.title_activity_topic_composer);
+
         if(null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().editor.setText(content);
@@ -67,29 +51,29 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
         if(TextUtils.isEmpty(content)){
             Toast.makeText(getView().getContext(), R.string.message_invalid_empty, Toast
                     .LENGTH_SHORT).show();
-//            Snackbar.make(getView().editor, R.string.message_invalid_empty, Snackbar.LENGTH_LONG);
             return;
         }
-        Message message = new Message();
-        if(null != topic) {
-            message.setTopicId(topic.getTopicId());
-        }
-        message.setUser(Device.getDeviceId(getView().getContext()));
-        message.setContent(content);
 
-        messageService.addMessage(ap, message, new Callback<Message>
-                () {
+        Topic topic = new Topic(userAp, content);
+
+        topic.publish(userAp).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Topic>() {
+
             @Override
-            public void success(Message message, Response response) {
+            public void onCompleted() {
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
                 Flow.get(getView().getContext()).goBack();
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onError(Throwable e) {
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNext(Topic topic1) {
+
             }
         });
     }

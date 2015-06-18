@@ -7,12 +7,15 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by linym on 6/3/15.
  */
-public class UserAp {
+public class UserAp implements Savable{
     private final String user;
     private final String ap;
 
     @SerializedName("ssid")
-    private final String ssid;
+    private String ssid;
+
+    //TODO Date
+    private long timestamp;
 
     public UserAp(String user, String ap, String ssid) {
         this.user = user;
@@ -35,5 +38,22 @@ public class UserAp {
     @Override
     public String toString(){
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
+    }
+
+    @Override
+    public void save() {
+        //TODO
+    }
+
+    public void setSSID(String SSID) {
+        this.ssid = SSID;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

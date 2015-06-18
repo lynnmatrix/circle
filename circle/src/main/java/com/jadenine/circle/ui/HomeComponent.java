@@ -3,6 +3,7 @@ package com.jadenine.circle.ui;
 import android.support.v4.widget.DrawerLayout;
 
 import com.jadenine.circle.app.CircleApplication;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 
 import retrofit.RestAdapter;
@@ -16,5 +17,6 @@ import retrofit.RestAdapter;
 public interface HomeComponent {
     DrawerLayout getDrawerLayout();
     RestAdapter restAdapter();
+    Account account();
     void inject(HomeActivity homeActivity);
 }

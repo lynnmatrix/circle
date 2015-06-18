@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.model.entity.Message;
-import com.jadenine.circle.model.entity.Topic;
+import com.jadenine.circle.domain.Message;
+import com.jadenine.circle.domain.Topic;
 
 import java.util.Collections;
 import java.util.List;

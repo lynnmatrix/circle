@@ -3,7 +3,7 @@ package com.jadenine.circle.model.entity;
 /**
  * Created by linym on 6/10/15.
  */
-public class Topic {
+public class Topic implements Savable{
     private String topicId;
     private String ap;
 
@@ -14,6 +14,14 @@ public class Topic {
 
     private long timestamp;
 
+    public Topic(){}
+
+    public Topic(String ap, String user, String topic) {
+        this.ap = ap;
+        this.user = user;
+        this.topic = topic;
+    }
+
     public String getTopicId() {
         return topicId;
     }
@@ -22,12 +30,24 @@ public class Topic {
         return ap;
     }
 
+    public void setAp(String ap) {
+        this.ap = ap;
+    }
+
     public String getUser() {
         return user;
     }
 
+    public void setUser(String deviceId) {
+        this.user = deviceId;
+    }
+
     public String getTopic() {
         return topic;
+    }
+
+    public void setTopic(String content) {
+        this.topic = content;
     }
 
     public String getLatestMessageId() {
@@ -36,5 +56,18 @@ public class Topic {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void setLatestMessageId(String lastMessageId) {
+        this.latestMessageId = lastMessageId;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public void save() {
+        //TODO
     }
 }

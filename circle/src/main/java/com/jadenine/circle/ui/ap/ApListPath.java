@@ -1,15 +1,14 @@
 package com.jadenine.circle.ui.ap;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
 import flow.path.Path;
-import retrofit.RestAdapter;
 
 /**
  * Created by linym on 6/8/15.
@@ -34,13 +33,8 @@ public class ApListPath extends Path implements ScreenComponentFactory{
     public static class Module {
         @Provides
         @DaggerScope(ApListPresenter.class)
-        public ApListPresenter providePresenter(ApService apService) {
-            return new ApListPresenter(apService);
-        }
-        @Provides
-        @DaggerScope(ApListPresenter.class)
-        public ApService provideApService(RestAdapter restAdapter) {
-            return restAdapter.create(ApService.class);
+        public ApListPresenter providePresenter(Account account) {
+            return new ApListPresenter(account);
         }
     }
 

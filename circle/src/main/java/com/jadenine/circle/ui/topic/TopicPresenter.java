@@ -2,10 +2,8 @@ package com.jadenine.circle.ui.topic;
 
 import android.os.Bundle;
 
-import com.jadenine.circle.model.entity.Topic;
-import com.jadenine.circle.model.entity.UserAp;
-import com.jadenine.circle.model.rest.JSONListWrapper;
-import com.jadenine.circle.model.rest.TopicService;
+import com.jadenine.circle.domain.Topic;
+import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.message.MessagePath;
 
@@ -26,13 +24,11 @@ import rx.subscriptions.Subscriptions;
  * Created by linym on 6/10/15.
  */
 public class TopicPresenter extends ViewPresenter<TopicView> {
-    private final TopicService topicService;
     private final UserAp userAp;
 
     private Subscription running = Subscriptions.empty();
 
-    public TopicPresenter(TopicService topicService, UserAp userAp) {
-        this.topicService = topicService;
+    public TopicPresenter(UserAp userAp) {
         this.userAp = userAp;
     }
 
@@ -53,11 +49,11 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
     }
 
     void loadTopics() {
-        Observable<JSONListWrapper<Topic>> topicsObservable = topicService.listTopics
-                (userAp.getAP())
+        Observable<List<Topic>> topicsObservable = userAp.listTopic()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        running = topicsObservable.subscribe(new Observer<JSONListWrapper<Topic>>() {
+
+        running = topicsObservable.subscribe(new Observer<List<Topic>>() {
             @Override
             public void onCompleted() {
                 running = Subscriptions.empty();
@@ -69,9 +65,8 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
             }
 
             @Override
-            public void onNext(JSONListWrapper<Topic> topicJSONListWrapper) {
+            public void onNext(List<Topic> topics) {
                 if (!hasView()) return;
-                List<Topic> topics = topicJSONListWrapper.getAll();
 
                 Collections.sort(topics, new Comparator<Topic>() {
                     @Override
@@ -84,7 +79,7 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
         });
     }
 
-    void addMessage() {
+    void addTopic() {
         Flow.get(getView().getContext()).set(new ComposerPath(userAp));
     }
 

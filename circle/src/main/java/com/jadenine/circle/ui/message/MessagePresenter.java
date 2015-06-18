@@ -8,10 +8,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.model.entity.Message;
-import com.jadenine.circle.model.entity.Topic;
-import com.jadenine.circle.model.rest.JSONListWrapper;
-import com.jadenine.circle.model.rest.MessageService;
+import com.jadenine.circle.domain.Message;
+import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.utils.Device;
 
 import java.util.Collections;
@@ -19,12 +17,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import mortar.ViewPresenter;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.internal.Preconditions;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
@@ -36,11 +32,10 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
     private final Topic topic;
-    private final MessageService messageService;
     private Subscription running = Subscriptions.empty();
 
-    public MessagePresenter(MessageService messageService, final Topic topic) {
-        this.messageService = messageService;
+    public MessagePresenter(final Topic topic) {
+        Preconditions.checkNotNull(topic, "Null topic");
         this.topic = topic;
     }
 
@@ -71,11 +66,9 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     }
 
     void loadMessages() {
-        Observable<JSONListWrapper<Message>> messageObservable = messageService.listMessages
-                (topic.getTopicId()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers
-                .mainThread());
+        Observable<List<Message>> messageObservable = topic.listMessage().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
-        running = messageObservable.subscribe(new Observer<JSONListWrapper<Message>>() {
+        running = messageObservable.subscribe(new Observer<List<Message>>() {
             @Override
             public void onCompleted() {
                 running = Subscriptions.empty();
@@ -87,9 +80,8 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
             }
 
             @Override
-            public void onNext(JSONListWrapper<Message> messageJSONListWrapper) {
+            public void onNext(List<Message> messages) {
                 if(!hasView()) return;
-                List<Message> messages = messageJSONListWrapper.getAll();
                 Collections.sort(messages, new Comparator<Message>() {
                     @Override
                     public int compare(Message lhs, Message rhs) {
@@ -130,17 +122,15 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         }
         hideInputMethod();
         Message message = new Message();
-        if(null != topic) {
-            message.setTopicId(topic.getTopicId());
-        }
+        message.setTopicId(topic.getTopicId());
         message.setUser(Device.getDeviceId(getView().getContext()));
         message.setContent(content);
 
-        messageService.addMessage(topic.getAp(), message, new Callback<Message>
-                () {
+        message.reply(topic).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Message>() {
+
             @Override
-            public void success(Message message, Response response) {
-                if(!hasView()) return;
+            public void onCompleted() {
+                if (!hasView()) return;
                 getView().replyEditor.setText("");
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
@@ -148,9 +138,15 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onError(Throwable e) {
+                if (!hasView()) return;
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNext(Message message) {
+
             }
         });
     }

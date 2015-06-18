@@ -94,7 +94,7 @@ public class TopicView extends CoordinatorLayout{
 
     @OnClick(R.id.fab_add_message)
     public void onAddMessage(){
-        presenter.addMessage();
+        presenter.addTopic();
     }
 
     TopicRecyclerAdapter getTopicAdapter() {

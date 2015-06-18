@@ -6,33 +6,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.jadenine.circle.model.entity.UserAp;
+import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
-import com.jadenine.circle.model.rest.ApService;
-import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.ui.topic.TopicPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 import com.umeng.message.PushAgent;
 
+import java.util.List;
+
 import flow.Flow;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by linym on 6/9/15.
  */
 public class ApListPresenter extends ViewPresenter<ApListView> {
 
-    private final ApService apService;
-
-    ApListPresenter(ApService apService) {
-        this.apService = apService;
+    private final Account account;
+    ApListPresenter(Account account) {
+        this.account = account;
     }
 
     @Override
@@ -96,51 +95,64 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
             return;
         }
 
-        UserAp userAp = new UserAp(Device.getDeviceId(getContext()), ap.getBSSID(), ap.getSSID());
-        apService.addAP(userAp, new Callback<JSONListWrapper<UserAp>>() {
+        UserAp userAp = UserAp.build(new com.jadenine.circle.model.entity.UserAp(Device
+                .getDeviceId(getContext()), ap.getBSSID(), ap.getSSID()));
+
+        userAp.save(account).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
             @Override
-            public void success(JSONListWrapper<UserAp> userAps, Response response) {
-                if(!hasView()) return;
-                getAdapter().clear();
-                getAdapter().addAll(userAps.getAll());
+            public void onCompleted() {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onError(Throwable e) {
+            }
 
+            @Override
+            public void onNext(List<UserAp> userAps) {
+                if (!hasView()) return;
+                getAdapter().clear();
+                getAdapter().addAll(userAps);
+
+                addTag(userAps);
             }
         });
     }
 
     void loadAPList() {
-        apService.listAPs(Device.getDeviceId(getContext()), new Callback<JSONListWrapper<UserAp>>() {
+        account.listAPs().observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
+
             @Override
-            public void success(JSONListWrapper<UserAp> userAps, Response response) {
-                if(!hasView()) return;
-                getAdapter().clear();
-                getAdapter().addAll(userAps.getAll());
-
-                addTag(userAps);
-
-                ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
-                addAPIfNot(ap);
-
+            public void onCompleted() {
+                if (!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                if(!hasView()) return;
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                if (!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onNext(List<UserAp> userApList) {
+                if (!hasView()) return;
+                getAdapter().clear();
+                getAdapter().addAll(userApList);
+
+                addTag(userApList);
+
+                ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
+                addAPIfNot(ap);
             }
         });
     }
 
-    private void addTag(final JSONListWrapper<UserAp> userAps) {
+    private void addTag(final List<UserAp> userAps) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for(UserAp ap : userAps.getAll()) {
+                for(UserAp ap : userAps) {
                     addTag(ap.getAP());
                 }
             }
