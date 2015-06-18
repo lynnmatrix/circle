@@ -3,7 +3,6 @@ package com.jadenine.circle.ui.ap;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.jadenine.circle.domain.Account;
@@ -161,11 +160,9 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     private void addTag(String ap) {
         try {
-            Log.e("PUSH", "Try to add tag " + ap);
             PushAgent.getInstance(getContext()).getTagManager().add(ap);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("PUSH", "Fail to add tag", e);
         }
     }
 

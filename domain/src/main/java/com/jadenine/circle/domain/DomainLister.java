@@ -37,6 +37,11 @@ class DomainLister<D> {
                     delegate.onDBLoaded();
                     return topics;
                 }
+            }).flatMap(new Func1<List<D>, Observable<List<D>>>() {
+                @Override
+                public Observable<List<D>> call(List<D> ds) {
+                    return delegate.createRestObservable().startWith(ds);
+                }
             });
         } else {
             observable = delegate.createRestObservable().startWith(delegate.getRestStartSource());

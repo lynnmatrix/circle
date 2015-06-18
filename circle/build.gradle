@@ -46,15 +46,17 @@ android {
                     output.outputFile.name.replace(".apk", "-"+getVersionName()+".apk"))
         }
     }
-
+    publishNonDefault false
 }
 
 dependencies {
     apt 'com.google.dagger:dagger-compiler:2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
-    compile project(':domain')
-    compile project(':common')
+    releaseCompile project(path: ':domain', configuration: 'release')
+    debugCompile project(path: ':domain', configuration: 'debug')
+    releaseCompile project(path: ':common', configuration: 'release')
+    debugCompile project(path: ':common', configuration: 'debug')
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'

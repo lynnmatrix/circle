@@ -6,8 +6,6 @@ import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 
-import retrofit.RestAdapter;
-
 /**
  * Created by linym on 6/13/15.
  */
@@ -16,7 +14,6 @@ import retrofit.RestAdapter;
         HomeActivityModule.class)
 public interface HomeComponent {
     DrawerLayout getDrawerLayout();
-    RestAdapter restAdapter();
     Account account();
     void inject(HomeActivity homeActivity);
 }

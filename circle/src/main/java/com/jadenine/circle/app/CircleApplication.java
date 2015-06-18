@@ -7,12 +7,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
-import com.jadenine.circle.model.rest.MessageService;
 import com.jadenine.circle.utils.Device;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
@@ -21,7 +19,6 @@ import com.umeng.message.entity.UMessage;
 import dagger.Module;
 import dagger.Provides;
 import mortar.MortarScope;
-import retrofit.RestAdapter;
 
 /**
  * Created by linym on 6/6/15.
@@ -35,7 +32,7 @@ public class CircleApplication extends Application {
     public void onCreate() {
         super.onCreate();
         AppComponent appComponent = DaggerCircleApplication_AppComponent.builder()
-                .restAdapterModule(new RestAdapterModule(this)).build();
+                .appModule(new AppModule(this)).build();
 
         MortarScope.Builder builder = MortarScope.buildRootScope();
         builder.withService(DaggerService.SERVICE_NAME, appComponent);
@@ -83,40 +80,17 @@ public class CircleApplication extends Application {
     }
 
     @DaggerScope(CircleApplication.class)
-    @dagger.Component(modules = {RestAdapterModule.class})
+    @dagger.Component(modules = {AppModule.class})
     public interface AppComponent {
-        RestAdapter restAdapter();
         Account account();
     }
 
     @Module
-    public static class RestAdapterModule {
+    public static class AppModule {
 
-        public static final RestAdapter.LogLevel LOGLEVEL = BuildConfig.DEBUG ? RestAdapter.LogLevel
-                .FULL : RestAdapter.LogLevel.NONE;
-        public static final String ENDPOINT_LOCAL = "http://192.168.9.220:8080";
-        public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
-        public static final boolean FORE_AZURE = false;
-
-        public static final String ENDPOINT = BuildConfig.DEBUG && !FORE_AZURE ? ENDPOINT_LOCAL :
-                ENDPOINT_AZURE;
         private final Context appContext;
-        public RestAdapterModule(Application application){
+        public AppModule(Application application){
             this.appContext = application;
-        }
-
-        @Provides
-        @DaggerScope(CircleApplication.class)
-        public RestAdapter provideRestAdapter(){
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(ENDPOINT).build();
-            restAdapter.setLogLevel(LOGLEVEL);
-            return restAdapter;
-        }
-
-        @Provides
-        @DaggerScope(CircleApplication.class)
-        public MessageService provideMessageService(RestAdapter restAdapter) {
-            return restAdapter.create(MessageService.class);
         }
 
         @Provides

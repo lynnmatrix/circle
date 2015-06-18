@@ -94,7 +94,6 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
         observable.subscribe(null, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                throwable.printStackTrace();
                 messages.remove(message);
             }
         });

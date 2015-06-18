@@ -67,6 +67,7 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
 
             @Override
             public void onError(Throwable e) {
+                e.printStackTrace();
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
             }
