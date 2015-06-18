@@ -109,6 +109,7 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
         @Override
         public Message find(com.jadenine.circle.model.entity.Message messageEntity) {
             for(Message message : messages) {
+                //FIXME null messageId
                 if(message.getMessageId().equals(messageEntity.getMessageId())){
                     return message;
                 }

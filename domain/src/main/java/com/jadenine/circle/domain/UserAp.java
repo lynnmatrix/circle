@@ -105,6 +105,7 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         @Override
         public Topic find(com.jadenine.circle.model.entity.Topic topic) {
             for (Topic domainEntity : topics) {
+                //FIXME null topicId
                 if (domainEntity.getTopicId().equals(topic.getTopicId())) {
                     return domainEntity;
                 }
