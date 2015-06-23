@@ -8,7 +8,7 @@ import rx.Observable;
 public class Message implements Updatable<com.jadenine.circle.model.entity.Message>{
     private final com.jadenine.circle.model.entity.Message entity;
 
-    public static Message bind(com.jadenine.circle.model.entity.Message entity) {
+    public static Message build(com.jadenine.circle.model.entity.Message entity) {
         return new Message(entity);
     }
 
@@ -35,10 +35,6 @@ public class Message implements Updatable<com.jadenine.circle.model.entity.Messa
         return entity.getMessageId();
     }
 
-    public void setMessageId(String messageId) {
-        entity.setMessageId(messageId);
-    }
-
     public String getUser() {
         return entity.getUser();
     }
@@ -57,10 +53,6 @@ public class Message implements Updatable<com.jadenine.circle.model.entity.Messa
 
     public long getTimestamp() {
         return entity.getTimestamp();
-    }
-
-    public void setTimestamp(long timestamp) {
-        entity.setTimestamp(timestamp);
     }
 
     @Override

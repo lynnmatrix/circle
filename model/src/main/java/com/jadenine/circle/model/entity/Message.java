@@ -9,6 +9,7 @@ public class Message implements Savable{
 
     private String user;
     private String content;
+
     private long timestamp;
 
     public String getTopicId() {

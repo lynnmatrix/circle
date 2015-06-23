@@ -24,7 +24,7 @@ class RestMapper<E extends Savable, D extends Updatable>  implements Func1<E, D>
         if (null != domainModel) {
             domainModel.merge(e);
         } else {
-            domainModel = finder.bind(e);
+            domainModel = finder.build(e);
             origin.add(domainModel);
             e.save();
         }

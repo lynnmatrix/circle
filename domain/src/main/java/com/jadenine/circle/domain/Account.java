@@ -26,6 +26,7 @@ public class Account {
 
     private boolean loaded = false;
 
+    private  final UserApFinder finder = new UserApFinder();
     private final DomainLister<UserAp> userApLister = new DomainLister<>(new UserApListerDelegate());
 
     public Account(String deviceId) {
@@ -76,12 +77,11 @@ public class Account {
         }
 
         @Override
-        public UserAp bind(com.jadenine.circle.model.entity.UserAp userAp) {
+        public UserAp build(com.jadenine.circle.model.entity.UserAp userAp) {
             return UserAp.build(userAp);
         }
     }
 
-    private  final UserApFinder finder = new UserApFinder();
     private class UserApListerDelegate implements DomainLister.Delegate<UserAp> {
         @Override
         public boolean isDBLoaded() {

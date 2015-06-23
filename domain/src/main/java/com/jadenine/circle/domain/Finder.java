@@ -6,5 +6,5 @@ package com.jadenine.circle.domain;
 interface Finder<E, D> {
     D find(E e);
 
-    D bind(E e);
+    D build(E e);
 }

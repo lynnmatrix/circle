@@ -97,7 +97,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
         UserAp userAp = UserAp.build(new com.jadenine.circle.model.entity.UserAp(Device
                 .getDeviceId(getContext()), ap.getBSSID(), ap.getSSID()));
 
-        userAp.save(account).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
+        userAp.connect(account).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
             @Override
             public void onCompleted() {
             }

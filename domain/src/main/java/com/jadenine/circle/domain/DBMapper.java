@@ -28,7 +28,7 @@ class DBMapper<E extends Savable, D extends Updatable> implements Func1<List<E>,
             if (null != domainModel) {
                 domainModel.merge(entity);
             } else {
-                domainModel = finder.bind(entity);
+                domainModel = finder.build(entity);
                 origin.add(domainModel);
                 entity.save();
             }

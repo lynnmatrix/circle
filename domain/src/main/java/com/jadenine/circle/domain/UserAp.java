@@ -12,7 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Observer;
 
 /**
  * Created by linym on 6/3/15.
@@ -38,6 +37,10 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
     public UserAp(com.jadenine.circle.model.entity.UserAp entity) {
         this.entity = entity;
         DaggerService.getDomainComponent().inject(this);
+    }
+
+    com.jadenine.circle.model.entity.UserAp getEntity() {
+        return entity;
     }
 
     public String getAP() {
@@ -69,35 +72,14 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         return topicLister.list();
     }
 
-    public Observable<List<UserAp>> save(Account account) {
+    public Observable<List<UserAp>> connect(Account account) {
         return account.addUserAp(this);
     }
 
-    public com.jadenine.circle.model.entity.UserAp getEntity() {
-        return entity;
-    }
-
     Observable<Topic> publish(final Topic topic) {
-        if(null == finder.find(topic.getEntity())) {
-            topics.add(topic);
-        }
         Observable<Topic> observable = restService.addTopic(topic.getEntity()).map(new
                 RestMapper<>(finder, topics));
 
-        observable.subscribe(new Observer<Topic>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                topics.remove(topic);
-            }
-
-            @Override
-            public void onNext(Topic topic1) {
-            }
-        });
         return observable;
     }
 
@@ -105,7 +87,6 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         @Override
         public Topic find(com.jadenine.circle.model.entity.Topic topic) {
             for (Topic domainEntity : topics) {
-                //FIXME null topicId
                 if (domainEntity.getTopicId().equals(topic.getTopicId())) {
                     return domainEntity;
                 }
@@ -114,8 +95,8 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         }
 
         @Override
-        public Topic bind(com.jadenine.circle.model.entity.Topic topic) {
-            return Topic.bind(topic);
+        public Topic build(com.jadenine.circle.model.entity.Topic topic) {
+            return Topic.build(topic);
         }
     }
 
