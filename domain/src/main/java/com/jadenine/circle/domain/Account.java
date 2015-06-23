@@ -35,7 +35,7 @@ public class Account {
         DaggerService.getDomainComponent().inject(this);
     }
 
-    public String getDevcieId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
@@ -101,7 +101,7 @@ public class Account {
 
         @Override
         public Observable<List<UserAp>> createRestObservable() {
-            return apService.listAPs(getDevcieId()).map(new RestListMapper<>(finder, aps));
+            return apService.listAPs(getDeviceId()).map(new RestListMapper<>(finder, aps));
         }
 
         @Override
