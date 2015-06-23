@@ -1,5 +1,9 @@
 package com.jadenine.circle.domain.dagger;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jadenine.circle.domain.BuildConfig;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
@@ -10,11 +14,13 @@ import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.MessageService;
 import com.jadenine.circle.model.rest.TopicService;
+import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import javax.inject.Singleton;
 
 import dagger.Provides;
 import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 /**
  * Created by linym on 6/18/15.
@@ -34,8 +40,23 @@ public class DomainModule {
     @Provides
     @Singleton
     public RestAdapter provideRestAdapter(){
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(ENDPOINT).build();
-        restAdapter.setLogLevel(LOGLEVEL);
+        Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getDeclaredClass().equals(ModelAdapter.class);
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(LOGLEVEL)
+                .setEndpoint(ENDPOINT)
+                .setConverter(new GsonConverter(gson))
+                .build();
         return restAdapter;
     }
 

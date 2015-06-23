@@ -2,20 +2,25 @@ package com.jadenine.circle.model.entity;
 
 import android.text.TextUtils;
 
-import com.google.gson.annotations.SerializedName;
+import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * Created by linym on 6/3/15.
  */
-public class UserApEntity implements Savable{
-    private String user;
-    private String ap;
+@Table(databaseName = CircleDatabase.NAME, allFields = true)
+public class UserApEntity extends BaseModel implements Savable{
+    @PrimaryKey
+    String ap;
 
-    @SerializedName("ssid")
-    private String ssid;
+    String user;
+
+    String ssid;
 
     //TODO Date
-    private long timestamp;
+    long timestamp;
 
     public UserApEntity(){}
 
@@ -50,8 +55,4 @@ public class UserApEntity implements Savable{
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
 
-    @Override
-    public void save() {
-        //TODO
-    }
 }

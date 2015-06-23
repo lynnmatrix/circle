@@ -12,6 +12,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.utils.Device;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
@@ -40,6 +41,8 @@ public class CircleApplication extends Application {
         rootScope = builder.build(ROOT_SCOPE_NAME);
 
         registerUmengMessageHandler();
+
+        FlowManager.init(this);
     }
 
     private void registerUmengMessageHandler() {
