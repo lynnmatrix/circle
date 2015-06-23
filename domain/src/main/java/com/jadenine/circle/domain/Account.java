@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Observer;
 
 /**
  * Created by linym on 6/17/15.
@@ -44,25 +43,8 @@ public class Account {
     }
 
     Observable<List<UserAp>> addUserAp(final UserAp userAp) {
-        if(null == finder.find(userAp.getEntity())) {
-            aps.add(userAp);
-        }
         Observable<List<UserAp>> observable = apService.addAP(userAp.getEntity()).map(new RestListMapper<>
                 (finder, aps));
-        observable.subscribe(new Observer<List<UserAp>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                aps.remove(userAp);
-            }
-
-            @Override
-            public void onNext(List<UserAp> userAps) {
-            }
-        });
         return observable;
     }
 

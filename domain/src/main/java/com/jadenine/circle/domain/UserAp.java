@@ -88,9 +88,9 @@ public class UserAp implements Updatable<UserApEntity>{
     private class TopicFinder implements Finder<TopicEntity, Topic>{
         @Override
         public Topic find(TopicEntity topicEntity) {
-            for (Topic domainEntity : topics) {
-                if (domainEntity.getTopicId().equals(topicEntity.getTopicId())) {
-                    return domainEntity;
+            for (Topic topic : topics) {
+                if (topic.getTopicId().equals(topicEntity.getTopicId())) {
+                    return topic;
                 }
             }
             return null;
