@@ -1,7 +1,7 @@
 package com.jadenine.circle.model.db.impl;
 
 import com.jadenine.circle.model.db.ApDBService;
-import com.jadenine.circle.model.entity.UserAp;
+import com.jadenine.circle.model.entity.UserApEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ import rx.Observable;
  */
 public class ApDBServiceImpl implements ApDBService{
     @Override
-    public Observable<List<UserAp>> listAps() {
-        return Observable.just(Collections.<UserAp>emptyList());
+    public Observable<List<UserApEntity>> listAps() {
+        return Observable.just(Collections.<UserApEntity>emptyList());
     }
 }

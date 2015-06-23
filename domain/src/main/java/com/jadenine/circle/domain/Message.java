@@ -1,26 +1,28 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.model.entity.MessageEntity;
+
 import rx.Observable;
 
 /**
  * Created by linym on 6/3/15.
  */
-public class Message implements Updatable<com.jadenine.circle.model.entity.Message>{
-    private final com.jadenine.circle.model.entity.Message entity;
+public class Message implements Updatable<MessageEntity>{
+    private final MessageEntity entity;
 
-    public static Message build(com.jadenine.circle.model.entity.Message entity) {
+    public static Message build(MessageEntity entity) {
         return new Message(entity);
     }
 
     public Message(){
-        this(new com.jadenine.circle.model.entity.Message());
+        this(new MessageEntity());
     }
 
-    public Message(com.jadenine.circle.model.entity.Message entity) {
+    public Message(MessageEntity entity) {
         this.entity = entity;
     }
 
-    com.jadenine.circle.model.entity.Message getEntity() {
+    MessageEntity getEntity() {
         return entity;
     }
 
@@ -56,7 +58,7 @@ public class Message implements Updatable<com.jadenine.circle.model.entity.Messa
     }
 
     @Override
-    public void merge(com.jadenine.circle.model.entity.Message entity) {
+    public void merge(MessageEntity entity) {
         if(entity.getTimestamp() - this.entity.getTimestamp() > 0) {
             this.entity.setTimestamp(entity.getTimestamp());
             this.entity.save();

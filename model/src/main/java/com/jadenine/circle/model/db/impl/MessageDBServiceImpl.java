@@ -1,7 +1,7 @@
 package com.jadenine.circle.model.db.impl;
 
 import com.jadenine.circle.model.db.MessageDBService;
-import com.jadenine.circle.model.entity.Message;
+import com.jadenine.circle.model.entity.MessageEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ import rx.Observable;
  */
 public class MessageDBServiceImpl implements MessageDBService {
     @Override
-    public Observable<List<Message>> listMessages(String topic) {
-        return Observable.just(Collections.<Message>emptyList());
+    public Observable<List<MessageEntity>> listMessages(String topic) {
+        return Observable.just(Collections.<MessageEntity>emptyList());
     }
 }

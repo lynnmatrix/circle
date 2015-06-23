@@ -2,6 +2,8 @@ package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.MessageDBService;
+import com.jadenine.circle.model.entity.MessageEntity;
+import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.rest.MessageService;
 
 import java.util.ArrayList;
@@ -14,8 +16,8 @@ import rx.Observable;
 /**
  * Created by linym on 6/10/15.
  */
-public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
-    private final com.jadenine.circle.model.entity.Topic entity;
+public class Topic implements Updatable<TopicEntity>{
+    private final TopicEntity entity;
     private final List<Message> messages = new ArrayList<>();
 
     @Inject
@@ -28,20 +30,20 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
     private final DomainLister<Message> messageLister = new DomainLister<>(new
             MessageListerDelegate());
 
-    public static Topic build(com.jadenine.circle.model.entity.Topic entity) {
+    public static Topic build(TopicEntity entity) {
         return new Topic(entity);
     }
 
     public Topic(UserAp userAp, String content) {
-        this(new com.jadenine.circle.model.entity.Topic(userAp.getAP(), userAp.getUser(), content));
+        this(new TopicEntity(userAp.getAP(), userAp.getUser(), content));
     }
 
-    public Topic(com.jadenine.circle.model.entity.Topic entity) {
+    public Topic(TopicEntity entity) {
         this.entity = entity;
         DaggerService.getDomainComponent().inject(this);
     }
 
-    com.jadenine.circle.model.entity.Topic getEntity() {
+    TopicEntity getEntity() {
         return entity;
     }
 
@@ -70,7 +72,7 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
     }
 
     @Override
-    public void merge(com.jadenine.circle.model.entity.Topic entity) {
+    public void merge(TopicEntity entity) {
         if(entity.getTimestamp() - this.entity.getTimestamp() > 0) {
             this.entity.setLatestMessageId(entity.getLatestMessageId());
             this.entity.setTimestamp(entity.getTimestamp());
@@ -94,10 +96,10 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
         return userAp.publish(this);
     }
 
-    private class MessageFinder implements Finder<com.jadenine.circle.model.entity.Message,
+    private class MessageFinder implements Finder<MessageEntity,
             Message> {
         @Override
-        public Message find(com.jadenine.circle.model.entity.Message messageEntity) {
+        public Message find(MessageEntity messageEntity) {
             for(Message message : messages) {
                 if(message.getMessageId().equals(messageEntity.getMessageId())){
                     return message;
@@ -107,8 +109,8 @@ public class Topic implements Updatable<com.jadenine.circle.model.entity.Topic>{
         }
 
         @Override
-        public Message build(com.jadenine.circle.model.entity.Message message) {
-            return Message.build(message);
+        public Message build(MessageEntity messageEntity) {
+            return Message.build(messageEntity);
         }
     }
 

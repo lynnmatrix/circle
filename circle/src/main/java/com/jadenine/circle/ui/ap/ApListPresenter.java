@@ -9,6 +9,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
+import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.ui.topic.TopicPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
@@ -94,7 +95,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
             return;
         }
 
-        UserAp userAp = UserAp.build(new com.jadenine.circle.model.entity.UserAp(Device
+        UserAp userAp = UserAp.build(new UserApEntity(Device
                 .getDeviceId(getContext()), ap.getBSSID(), ap.getSSID()));
 
         userAp.connect(account).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {

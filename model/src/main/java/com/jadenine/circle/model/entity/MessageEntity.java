@@ -3,7 +3,7 @@ package com.jadenine.circle.model.entity;
 /**
  * Created by linym on 6/3/15.
  */
-public class Message implements Savable{
+public class MessageEntity implements Savable{
     private String topicId;
     private String messageId;
 
@@ -21,10 +21,6 @@ public class Message implements Savable{
     }
     public String getMessageId() {
         return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
     }
 
     public String getUser() {

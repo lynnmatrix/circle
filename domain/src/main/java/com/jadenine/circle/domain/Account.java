@@ -2,6 +2,7 @@ package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.ApDBService;
+import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.ApService;
 
 import java.util.ArrayList;
@@ -65,9 +66,9 @@ public class Account {
         return observable;
     }
 
-    private class UserApFinder implements Finder<com.jadenine.circle.model.entity.UserAp, UserAp>{
+    private class UserApFinder implements Finder<UserApEntity, UserAp>{
         @Override
-        public UserAp find(com.jadenine.circle.model.entity.UserAp userApEntity) {
+        public UserAp find(UserApEntity userApEntity) {
             for(UserAp userAp : aps) {
                 if (userAp.getAP().equals(userApEntity.getAP())) {
                     return userAp;
@@ -77,8 +78,8 @@ public class Account {
         }
 
         @Override
-        public UserAp build(com.jadenine.circle.model.entity.UserAp userAp) {
-            return UserAp.build(userAp);
+        public UserAp build(UserApEntity userApEntity) {
+            return UserAp.build(userApEntity);
         }
     }
 

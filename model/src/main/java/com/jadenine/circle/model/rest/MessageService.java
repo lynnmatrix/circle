@@ -1,6 +1,6 @@
 package com.jadenine.circle.model.rest;
 
-import com.jadenine.circle.model.entity.Message;
+import com.jadenine.circle.model.entity.MessageEntity;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -14,8 +14,8 @@ import rx.Observable;
  */
 public interface MessageService {
     @GET("/message/list/{topic}")
-    Observable<JSONListWrapper<Message>> listMessages(@Path("topic") String topic);
+    Observable<JSONListWrapper<MessageEntity>> listMessages(@Path("topic") String topic);
 
     @POST("/message/add")
-    Observable<Message> addMessage(@Query("ap")String ap, @Body Message message);
+    Observable<MessageEntity> addMessage(@Query("ap")String ap, @Body MessageEntity messageEntity);
 }

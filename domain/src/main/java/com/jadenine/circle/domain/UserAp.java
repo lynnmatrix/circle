@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.TopicDBService;
+import com.jadenine.circle.model.entity.TopicEntity;
+import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.TopicService;
 
 import java.util.ArrayList;
@@ -16,9 +18,9 @@ import rx.Observable;
 /**
  * Created by linym on 6/3/15.
  */
-public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp>{
+public class UserAp implements Updatable<UserApEntity>{
 
-    private final com.jadenine.circle.model.entity.UserAp entity;
+    private final UserApEntity entity;
     private final List<Topic> topics = new ArrayList<>();
 
     @Inject
@@ -30,16 +32,16 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
     private final TopicFinder finder = new TopicFinder();
     private final DomainLister<Topic> topicLister = new DomainLister<>(new TopicListerDelegate());
 
-    public static UserAp build(com.jadenine.circle.model.entity.UserAp userApEntity) {
+    public static UserAp build(UserApEntity userApEntity) {
         return new UserAp(userApEntity);
     }
 
-    public UserAp(com.jadenine.circle.model.entity.UserAp entity) {
+    public UserAp(UserApEntity entity) {
         this.entity = entity;
         DaggerService.getDomainComponent().inject(this);
     }
 
-    com.jadenine.circle.model.entity.UserAp getEntity() {
+    UserApEntity getEntity() {
         return entity;
     }
 
@@ -56,7 +58,7 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
     }
 
     @Override
-    public void merge(com.jadenine.circle.model.entity.UserAp userApEntity) {
+    public void merge(UserApEntity userApEntity) {
         if(userApEntity.getTimestamp() - entity.getTimestamp() > 0) {
             entity.setSSID(userApEntity.getSSID());
             entity.save();
@@ -83,11 +85,11 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         return observable;
     }
 
-    private class TopicFinder implements Finder<com.jadenine.circle.model.entity.Topic, Topic>{
+    private class TopicFinder implements Finder<TopicEntity, Topic>{
         @Override
-        public Topic find(com.jadenine.circle.model.entity.Topic topic) {
+        public Topic find(TopicEntity topicEntity) {
             for (Topic domainEntity : topics) {
-                if (domainEntity.getTopicId().equals(topic.getTopicId())) {
+                if (domainEntity.getTopicId().equals(topicEntity.getTopicId())) {
                     return domainEntity;
                 }
             }
@@ -95,8 +97,8 @@ public class UserAp implements Updatable<com.jadenine.circle.model.entity.UserAp
         }
 
         @Override
-        public Topic build(com.jadenine.circle.model.entity.Topic topic) {
-            return Topic.build(topic);
+        public Topic build(TopicEntity topicEntity) {
+            return Topic.build(topicEntity);
         }
     }
 
