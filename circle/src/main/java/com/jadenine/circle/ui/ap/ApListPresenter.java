@@ -129,7 +129,6 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
                 if (!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
             }

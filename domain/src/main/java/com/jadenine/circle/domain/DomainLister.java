@@ -11,11 +11,13 @@ import rx.schedulers.Schedulers;
  * Created by linym on 6/18/15.
  */
 class DomainLister<D> {
-    public interface Delegate<D>{
+    public interface Delegate<D> {
         boolean isDBLoaded();
+
         void onDBLoaded();
 
         Observable<List<D>> createDBObservable();
+
         Observable<List<D>> createRestObservable();
 
         List<D> getRestStartSource();
@@ -23,28 +25,27 @@ class DomainLister<D> {
 
     private final Delegate<D> delegate;
 
-    public DomainLister(Delegate delegate){
+    public DomainLister(Delegate delegate) {
         Preconditions.checkNotNull(delegate, "Null Delegate");
         this.delegate = delegate;
     }
 
-    public Observable<List<D>> list(){
+    public Observable<List<D>> list() {
         Observable<List<D>> observable;
         if (!delegate.isDBLoaded()) {
-            observable = delegate.createDBObservable().subscribeOn(Schedulers.io()).map(new Func1<List<D>, List<D>>() {
+            observable = delegate.createRestObservable().startWith(delegate.createDBObservable())
+                    .map(new Func1<List<D>, List<D>>() {
                 @Override
                 public List<D> call(List<D> topics) {
                     delegate.onDBLoaded();
                     return topics;
                 }
-            }).flatMap(new Func1<List<D>, Observable<List<D>>>() {
-                @Override
-                public Observable<List<D>> call(List<D> ds) {
-                    return delegate.createRestObservable().startWith(ds);
-                }
-            });
+            }).subscribeOn(Schedulers.io());
         } else {
-            observable = delegate.createRestObservable().startWith(delegate.getRestStartSource());
+            List[] lists = {delegate.getRestStartSource()};
+            Observable restObservable = delegate.createRestObservable();
+            observable = restObservable.startWith(Observable.from(lists)).subscribeOn(Schedulers
+                    .io());
         }
         return observable;
     }

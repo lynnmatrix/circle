@@ -4,15 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.common.flow.GsonParceler;
-import com.raizlabs.android.dbflow.structure.ModelAdapter;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import flow.Flow;
@@ -66,20 +60,7 @@ public abstract class MortarActivity extends Activity {
 
         BundleServiceRunner.getBundleServiceRunner(this).onCreate(savedInstanceState);
 
-        Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes f) {
-                return f.getDeclaredClass().equals(ModelAdapter.class) ||
-                        null != f.getAnnotation(Inject.class) ;
-            }
-
-            @Override
-            public boolean shouldSkipClass(Class<?> clazz) {
-                return false;
-            }
-        }).create();
-
-        GsonParceler parceler = new GsonParceler(gson);
+        GsonParceler parceler = new GsonParceler(new Gson());
         @SuppressWarnings("deprecation") FlowDelegate.NonConfigurationInstance nonConfig =
                 (FlowDelegate.NonConfigurationInstance) getLastNonConfigurationInstance();
         flowDelegate = FlowDelegate.onCreate(nonConfig, getIntent(), savedInstanceState,
