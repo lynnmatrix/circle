@@ -48,15 +48,19 @@ public class Account {
         return observable;
     }
 
+    public UserAp getUserAp(String ap) {
+        for(UserAp userAp : aps) {
+            if (userAp.getAP().equals(ap)) {
+                return userAp;
+            }
+        }
+        return null;
+    }
+
     private class UserApFinder implements Finder<UserApEntity, UserAp>{
         @Override
         public UserAp find(UserApEntity userApEntity) {
-            for(UserAp userAp : aps) {
-                if (userAp.getAP().equals(userApEntity.getAP())) {
-                    return userAp;
-                }
-            }
-            return null;
+            return getUserAp(userApEntity.getAP());
         }
 
         @Override

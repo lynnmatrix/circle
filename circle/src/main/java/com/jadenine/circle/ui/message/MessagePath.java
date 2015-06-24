@@ -1,7 +1,9 @@
 package com.jadenine.circle.ui.message;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Topic;
+import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
@@ -16,9 +18,12 @@ import flow.path.Path;
 @DaggerScope(MessagePresenter.class)
 @Layout(R.layout.screen_message_list)
 public class MessagePath extends Path implements ScreenComponentFactory{
-    private final Topic topic;
-    public MessagePath(Topic topic) {
-        this.topic = topic;
+    private final String ap;
+    private final String topicId;
+
+    public MessagePath(String ap, String topicId) {
+        this.ap = ap;
+        this.topicId = topicId;
     }
 
     @Override
@@ -37,7 +42,17 @@ public class MessagePath extends Path implements ScreenComponentFactory{
     class Module{
         @Provides
         @DaggerScope(MessagePresenter.class)
-        MessagePresenter providePresenter(){
+        Topic provieTopic(Account account){
+            Topic topic = null;
+            UserAp userAp = account.getUserAp(ap);
+            if(null != userAp) {
+                topic = userAp.getTopic(topicId);
+            }
+            return topic;
+        }
+        @Provides
+        @DaggerScope(MessagePresenter.class)
+        MessagePresenter providePresenter(Topic topic){
             return new MessagePresenter(topic);
         }
     }

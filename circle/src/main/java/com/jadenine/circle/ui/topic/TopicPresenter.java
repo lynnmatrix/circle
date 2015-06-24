@@ -85,6 +85,6 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
 
     void onOpenTopic(int position) {
         Topic topic = getView().getTopicAdapter().getTopic(position);
-        Flow.get(getView().getContext()).set(new MessagePath(topic));
+        Flow.get(getView().getContext()).set(new MessagePath(topic.getAp(), topic.getTopicId()));
     }
 }

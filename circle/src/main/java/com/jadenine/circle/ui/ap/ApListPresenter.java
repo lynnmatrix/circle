@@ -55,7 +55,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     public void onApSelected(int position) {
         UserAp userAp = getAdapter().getItem(position);
-        Flow.get(getView()).set(new TopicPath(userAp));
+        Flow.get(getView()).set(new TopicPath(userAp.getAP()));
     }
 
     @Subscribe

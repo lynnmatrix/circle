@@ -85,15 +85,19 @@ public class UserAp implements Updatable<UserApEntity>{
         return observable;
     }
 
+    public Topic getTopic(String topicId) {
+        for (Topic topic : topics) {
+            if (topic.getTopicId().equals(topicId)) {
+                return topic;
+            }
+        }
+        return null;
+    }
+
     private class TopicFinder implements Finder<TopicEntity, Topic>{
         @Override
         public Topic find(TopicEntity topicEntity) {
-            for (Topic topic : topics) {
-                if (topic.getTopicId().equals(topicEntity.getTopicId())) {
-                    return topic;
-                }
-            }
-            return null;
+            return getTopic(topicEntity.getTopicId());
         }
 
         @Override

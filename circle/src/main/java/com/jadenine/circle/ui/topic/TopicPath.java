@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui.topic;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
@@ -16,9 +17,10 @@ import flow.path.Path;
 @DaggerScope(TopicPresenter.class)
 @Layout(R.layout.screen_topic_list)
 public class TopicPath extends Path implements ScreenComponentFactory {
-    private final UserAp userAp;
-    public TopicPath(UserAp userAp) {
-        this.userAp = userAp;
+    private final String ap;
+
+    public TopicPath(String ap) {
+        this.ap = ap;
     }
 
     @Override
@@ -39,7 +41,13 @@ public class TopicPath extends Path implements ScreenComponentFactory {
     class Module{
         @DaggerScope(TopicPresenter.class)
         @Provides
-        TopicPresenter providePresenter() {
+        UserAp provideUserAp(Account account) {
+            return account.getUserAp(ap);
+        }
+
+        @DaggerScope(TopicPresenter.class)
+        @Provides
+        TopicPresenter providePresenter(UserAp userAp) {
             return new TopicPresenter(userAp);
         }
     }
