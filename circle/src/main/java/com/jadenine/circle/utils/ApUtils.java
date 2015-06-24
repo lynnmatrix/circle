@@ -16,7 +16,7 @@ public class ApUtils {
     public static AP getConnectedAP(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        if (null != wifiInfo) {
+        if (null != wifiInfo && null != wifiInfo.getBSSID()) {
             return new AP(wifiInfo.getBSSID(), wifiInfo.getSSID());
         }
         return null;
