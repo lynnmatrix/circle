@@ -119,7 +119,8 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     }
 
     void loadAPList() {
-        account.listAPs().observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
+        account.listAPs().observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List
+                <UserAp>>() {
 
             @Override
             public void onCompleted() {

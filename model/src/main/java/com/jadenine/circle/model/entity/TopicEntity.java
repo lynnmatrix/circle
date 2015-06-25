@@ -18,6 +18,8 @@ public class TopicEntity extends CircleBaseModel {
 
     String latestMessageId;
 
+    long createdTimestamp;
+
     public TopicEntity(){}
 
     public TopicEntity(String ap, String user, String topic) {
@@ -56,6 +58,10 @@ public class TopicEntity extends CircleBaseModel {
 
     public void setLatestMessageId(String lastMessageId) {
         this.latestMessageId = lastMessageId;
+    }
+
+    public long getCreatedTimestamp() {
+        return createdTimestamp;
     }
 
 }

@@ -132,9 +132,14 @@ public class Topic implements Updatable<TopicEntity>{
         }
 
         @Override
-        public Observable<List<Message>> createRestObservable() {
+        public Observable<List<Message>> createRefreshRestObservable() {
             return messageRestService.listMessages
                     (getTopicId()).map(getRestMapper());
+        }
+
+        @Override
+        public Observable<List<Message>> createLoadMoreRestObservable() {
+            return null;
         }
 
         @Override

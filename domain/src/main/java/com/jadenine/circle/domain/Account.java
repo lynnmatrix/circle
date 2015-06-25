@@ -86,8 +86,13 @@ public class Account {
         }
 
         @Override
-        public Observable<List<UserAp>> createRestObservable() {
+        public Observable<List<UserAp>> createRefreshRestObservable() {
             return apService.listAPs(getDeviceId()).map(new RestListMapper<>(finder, aps));
+        }
+
+        @Override
+        public Observable<List<UserAp>> createLoadMoreRestObservable() {
+            return null;
         }
 
         @Override

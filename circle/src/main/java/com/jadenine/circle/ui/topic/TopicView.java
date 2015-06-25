@@ -51,7 +51,7 @@ public class TopicView extends CoordinatorLayout{
         presenter.takeView(this);
 
         recyclerView.setHasFixedSize(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
@@ -61,6 +61,13 @@ public class TopicView extends CoordinatorLayout{
                 presenter.onOpenTopic(position);
             }
         }));
+
+        recyclerView.addOnScrollListener(new AutoLoadMoreListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore() {
+                presenter.loadMore();
+            }
+        });
         configToolbar();
 
         getTopicAdapter();

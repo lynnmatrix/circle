@@ -19,16 +19,18 @@ import rx.Observable;
  * Created by linym on 6/3/15.
  */
 public class UserAp implements Updatable<UserApEntity>{
+    private static final Integer PAGE_SIZE = 20;
 
     private final UserApEntity entity;
     private final List<Topic> topics = new ArrayList<>();
+    private boolean hasMore = true;
 
     @Inject
     TopicService restService;
     @Inject
     TopicDBService dbService;
-    private boolean loaded = false;
 
+    private boolean loaded = false;
     private final TopicFinder finder = new TopicFinder();
     private final DomainLister<Topic> topicLister = new DomainLister<>(new TopicListerDelegate());
 
@@ -70,8 +72,12 @@ public class UserAp implements Updatable<UserApEntity>{
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
 
-    public Observable<List<Topic>> listTopic(){
+    public Observable<List<Topic>> refreshTopic(){
         return topicLister.list();
+    }
+
+    public Observable<List<Topic>> loadMore(){
+        return topicLister.loadMore();
     }
 
     public Observable<List<UserAp>> connect(Account account) {
@@ -92,6 +98,10 @@ public class UserAp implements Updatable<UserApEntity>{
             }
         }
         return null;
+    }
+
+    public boolean hasMoreTopic(){
+        return hasMore;
     }
 
     private class TopicFinder implements Finder<TopicEntity, Topic>{
@@ -124,13 +134,31 @@ public class UserAp implements Updatable<UserApEntity>{
         }
 
         @Override
-        public Observable<List<Topic>> createRestObservable() {
-            return restService.listTopics(getAP()).map(new RestListMapper<>(finder, topics));
+        public Observable<List<Topic>> createRefreshRestObservable() {
+            return restService.listTopics(getAP(), PAGE_SIZE, null, null).map(new
+                    RestListMapper<>(finder, topics));
+        }
+
+        @Override
+        public Observable<List<Topic>> createLoadMoreRestObservable() {
+            return restService.listTopics(getAP(), PAGE_SIZE, null, getOldestTopicId()).map(new
+                    RestListMapper<>(finder,
+                    topics));
         }
 
         @Override
         public List<Topic> getRestStartSource() {
             return topics;
+        }
+
+        private String getOldestTopicId(){
+            String oldestTopicId = null;
+            for(Topic topic : topics) {
+                if(null == oldestTopicId ||topic.getTopicId().compareTo(oldestTopicId) > 0) {
+                    oldestTopicId = topic.getTopicId();
+                }
+            }
+            return oldestTopicId;
         }
     }
 }

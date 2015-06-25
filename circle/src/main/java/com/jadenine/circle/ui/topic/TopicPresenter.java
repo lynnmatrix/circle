@@ -27,6 +27,7 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
     private final UserAp userAp;
 
     private Subscription running = Subscriptions.empty();
+    private Subscription loadingMore = Subscriptions.empty();
 
     public TopicPresenter(UserAp userAp) {
         this.userAp = userAp;
@@ -46,10 +47,11 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
     protected void onExitScope() {
         super.onExitScope();
         running.unsubscribe();
+        loadingMore.unsubscribe();
     }
 
     void loadTopics() {
-        Observable<List<Topic>> topicsObservable = userAp.listTopic()
+        Observable<List<Topic>> topicsObservable = userAp.refreshTopic()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -62,6 +64,41 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
             @Override
             public void onError(Throwable e) {
                 running = Subscriptions.empty();
+            }
+
+            @Override
+            public void onNext(List<Topic> topics) {
+                if (!hasView()) return;
+
+                Collections.sort(topics, new Comparator<Topic>() {
+                    @Override
+                    public int compare(Topic lhs, Topic rhs) {
+                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
+                    }
+                });
+                getView().getTopicAdapter().setTopics(topics);
+            }
+        });
+    }
+
+    void loadMore() {
+        if(!userAp.hasMoreTopic()) {
+            return;
+        }
+
+        Observable<List<Topic>> topicsObservable = userAp.loadMore()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        loadingMore = topicsObservable.subscribe(new Observer<List<Topic>>() {
+            @Override
+            public void onCompleted() {
+                loadingMore = Subscriptions.empty();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                loadingMore = Subscriptions.empty();
             }
 
             @Override
