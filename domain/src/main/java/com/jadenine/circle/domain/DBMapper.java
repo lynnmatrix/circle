@@ -12,11 +12,11 @@ import rx.functions.Func1;
 class DBMapper<E extends Savable, D extends Updatable> implements Func1<List<E>,
         List<D>> {
 
-    private final Finder<E, D> finder;
+    private final MapperDelegate<E, D> mapperDelegate;
     private final List<D> origin;
 
-    public DBMapper(Finder<E, D> finder, List<D> origin){
-        this.finder = finder;
+    public DBMapper(MapperDelegate<E, D> mapperDelegate, List<D> origin){
+        this.mapperDelegate = mapperDelegate;
         this.origin = origin;
     }
 
@@ -24,11 +24,11 @@ class DBMapper<E extends Savable, D extends Updatable> implements Func1<List<E>,
     public List<D> call(List<E> userAps) {
 
         for (E entity : userAps) {
-            D domainModel = finder.find(entity);
+            D domainModel = mapperDelegate.find(entity);
             if (null != domainModel) {
                 domainModel.merge(entity);
             } else {
-                domainModel = finder.build(entity);
+                domainModel = mapperDelegate.build(entity);
                 origin.add(domainModel);
                 entity.save();
             }

@@ -10,21 +10,21 @@ import rx.functions.Func1;
  * Created by linym on 6/18/15.
  */
 class RestMapper<E extends Savable, D extends Updatable>  implements Func1<E, D> {
-    private final Finder<E, D> finder;
+    final MapperDelegate<E, D> mapperDelegate;
     private final List<D> origin;
 
-    public RestMapper(Finder<E, D> finder, List<D> origin){
-        this.finder = finder;
+    public RestMapper(MapperDelegate<E, D> mapperDelegate, List<D> origin){
+        this.mapperDelegate = mapperDelegate;
         this.origin = origin;
     }
 
     @Override
     public D call(E e) {
-        D domainModel = finder.find(e);
+        D domainModel = mapperDelegate.find(e);
         if (null != domainModel) {
             domainModel.merge(e);
         } else {
-            domainModel = finder.build(e);
+            domainModel = mapperDelegate.build(e);
             origin.add(domainModel);
             e.save();
         }
@@ -33,5 +33,9 @@ class RestMapper<E extends Savable, D extends Updatable>  implements Func1<E, D>
 
     List<D> getOrigin() {
         return origin;
+    }
+
+    MapperDelegate<E, D> getMapperDelegate() {
+        return mapperDelegate;
     }
 }

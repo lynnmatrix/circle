@@ -3,8 +3,10 @@ package com.jadenine.circle.domain;
 /**
  * Created by linym on 6/18/15.
  */
-interface Finder<E, D> {
+interface MapperDelegate<E, D> {
     D find(E e);
 
     D build(E e);
+
+    void setHasMore(boolean hasMore);
 }

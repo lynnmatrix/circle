@@ -25,8 +25,9 @@ public class Topic implements Updatable<TopicEntity>{
     @Inject
     MessageDBService messageDBService;
     private boolean loaded = false;
+    private boolean hasMore = true;
 
-    private final MessageFinder finder = new MessageFinder();
+    private final MessageMapperDelegate mapperDelegate = new MessageMapperDelegate();
     private final DomainLister<Message> messageLister = new DomainLister<>(new
             MessageListerDelegate());
 
@@ -87,7 +88,7 @@ public class Topic implements Updatable<TopicEntity>{
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
         Observable<Message> observable = messageRestService.addMessage(getAp(), message.getEntity
-                ()).map(new RestMapper<>(finder, messages));
+                ()).map(new RestMapper<>(mapperDelegate, messages));
 
         return observable;
     }
@@ -96,8 +97,8 @@ public class Topic implements Updatable<TopicEntity>{
         return userAp.publish(this);
     }
 
-    private class MessageFinder implements Finder<MessageEntity,
-            Message> {
+    private class MessageMapperDelegate implements MapperDelegate<MessageEntity,
+                Message> {
         @Override
         public Message find(MessageEntity messageEntity) {
             for(Message message : messages) {
@@ -112,6 +113,12 @@ public class Topic implements Updatable<TopicEntity>{
         public Message build(MessageEntity messageEntity) {
             return Message.build(messageEntity);
         }
+
+        @Override
+        public void setHasMore(boolean hasMore) {
+            Topic.this.hasMore = hasMore;
+        }
+
     }
 
     private class MessageListerDelegate implements DomainLister.Delegate<Message> {
@@ -148,11 +155,11 @@ public class Topic implements Updatable<TopicEntity>{
         }
 
         private DBMapper getDBMapper() {
-            return new DBMapper(finder, messages);
+            return new DBMapper(mapperDelegate, messages);
         }
 
         private RestListMapper getRestMapper() {
-            return new RestListMapper(finder, messages);
+            return new RestListMapper(mapperDelegate, messages);
         }
     }
 }

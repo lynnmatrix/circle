@@ -13,7 +13,7 @@ public class JSONListWrapper<T> {
         return itemList;
     }
 
-    private boolean hasMore(){
+    public boolean hasMore(){
         return hasMore;
     }
 }

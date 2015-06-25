@@ -14,8 +14,8 @@ class RestListMapper<E extends Savable, D extends Updatable>  implements
         Func1<JSONListWrapper<E>, List<D>>{
     private final RestMapper restMapper;
 
-    public RestListMapper(Finder<E, D> finder, List<D> origin){
-        restMapper = new RestMapper(finder, origin);
+    public RestListMapper(MapperDelegate<E, D> mapperDelegate, List<D> origin){
+        restMapper = new RestMapper(mapperDelegate, origin);
     }
 
     @Override
@@ -23,6 +23,8 @@ class RestListMapper<E extends Savable, D extends Updatable>  implements
         for (E entity : entities.getAll()) {
             restMapper.call(entity);
         }
+        restMapper.getMapperDelegate().setHasMore(entities.hasMore());
+
         return restMapper.getOrigin();
     }
 }

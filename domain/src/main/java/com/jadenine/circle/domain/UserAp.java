@@ -23,7 +23,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
     private final UserApEntity entity;
     private final List<Topic> topics = new ArrayList<>();
-    private boolean hasMore = true;
+    private boolean hasMoreTopic = true;
 
     @Inject
     TopicService restService;
@@ -31,7 +31,7 @@ public class UserAp implements Updatable<UserApEntity>{
     TopicDBService dbService;
 
     private boolean loaded = false;
-    private final TopicFinder finder = new TopicFinder();
+    private final TopicMapperDelegate mapperDelegate = new TopicMapperDelegate();
     private final DomainLister<Topic> topicLister = new DomainLister<>(new TopicListerDelegate());
 
     public static UserAp build(UserApEntity userApEntity) {
@@ -86,7 +86,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
     Observable<Topic> publish(final Topic topic) {
         Observable<Topic> observable = restService.addTopic(topic.getEntity()).map(new
-                RestMapper<>(finder, topics));
+                RestMapper<>(mapperDelegate, topics));
 
         return observable;
     }
@@ -101,10 +101,10 @@ public class UserAp implements Updatable<UserApEntity>{
     }
 
     public boolean hasMoreTopic(){
-        return hasMore;
+        return hasMoreTopic;
     }
 
-    private class TopicFinder implements Finder<TopicEntity, Topic>{
+    private class TopicMapperDelegate implements MapperDelegate<TopicEntity, Topic> {
         @Override
         public Topic find(TopicEntity topicEntity) {
             return getTopic(topicEntity.getTopicId());
@@ -113,6 +113,11 @@ public class UserAp implements Updatable<UserApEntity>{
         @Override
         public Topic build(TopicEntity topicEntity) {
             return Topic.build(topicEntity);
+        }
+
+        @Override
+        public void setHasMore(boolean hasMore) {
+            UserAp.this.hasMoreTopic = hasMore;
         }
     }
 
@@ -130,19 +135,19 @@ public class UserAp implements Updatable<UserApEntity>{
 
         @Override
         public Observable<List<Topic>> createDBObservable() {
-            return dbService.listTopics(getAP()).map(new DBMapper<>(finder, topics));
+            return dbService.listTopics(getAP()).map(new DBMapper<>(mapperDelegate, topics));
         }
 
         @Override
         public Observable<List<Topic>> createRefreshRestObservable() {
             return restService.listTopics(getAP(), PAGE_SIZE, null, null).map(new
-                    RestListMapper<>(finder, topics));
+                    RestListMapper<>(mapperDelegate, topics));
         }
 
         @Override
         public Observable<List<Topic>> createLoadMoreRestObservable() {
             return restService.listTopics(getAP(), PAGE_SIZE, null, getOldestTopicId()).map(new
-                    RestListMapper<>(finder,
+                    RestListMapper<>(mapperDelegate,
                     topics));
         }
 

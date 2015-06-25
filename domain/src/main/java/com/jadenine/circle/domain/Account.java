@@ -25,8 +25,9 @@ public class Account {
     ApDBService apDBService;
 
     private boolean loaded = false;
+    private boolean hasMore = true;
 
-    private  final UserApFinder finder = new UserApFinder();
+    private  final UserApMapperDelegate finder = new UserApMapperDelegate();
     private final DomainLister<UserAp> userApLister = new DomainLister<>(new UserApListerDelegate());
 
     public Account(String deviceId) {
@@ -57,7 +58,7 @@ public class Account {
         return null;
     }
 
-    private class UserApFinder implements Finder<UserApEntity, UserAp>{
+    private class UserApMapperDelegate implements MapperDelegate<UserApEntity, UserAp> {
         @Override
         public UserAp find(UserApEntity userApEntity) {
             return getUserAp(userApEntity.getAP());
@@ -66,6 +67,11 @@ public class Account {
         @Override
         public UserAp build(UserApEntity userApEntity) {
             return UserAp.build(userApEntity);
+        }
+
+        @Override
+        public void setHasMore(boolean hasMore) {
+            Account.this.hasMore = hasMore;
         }
     }
 
@@ -79,6 +85,7 @@ public class Account {
         public void onDBLoaded() {
             loaded = true;
         }
+
 
         @Override
         public Observable<List<UserAp>> createDBObservable() {
