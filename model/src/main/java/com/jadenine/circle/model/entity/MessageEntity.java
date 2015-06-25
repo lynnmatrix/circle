@@ -3,21 +3,18 @@ package com.jadenine.circle.model.entity;
 import com.jadenine.circle.model.db.CircleDatabase;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * Created by linym on 6/3/15.
  */
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
-public class MessageEntity extends BaseModel implements Savable{
+public class MessageEntity extends CircleBaseModel{
     @PrimaryKey
     String messageId;
     String topicId;
 
     String user;
     String content;
-
-    long timestamp;
 
     public String getTopicId() {
         return topicId;
@@ -46,11 +43,4 @@ public class MessageEntity extends BaseModel implements Savable{
         this.content = content;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 }

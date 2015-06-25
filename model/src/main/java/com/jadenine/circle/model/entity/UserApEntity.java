@@ -5,22 +5,18 @@ import android.text.TextUtils;
 import com.jadenine.circle.model.db.CircleDatabase;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * Created by linym on 6/3/15.
  */
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
-public class UserApEntity extends BaseModel implements Savable{
+public class UserApEntity extends CircleBaseModel {
     @PrimaryKey
     String ap;
 
     String user;
 
     String ssid;
-
-    //TODO Date
-    long timestamp;
 
     public UserApEntity(){}
 
@@ -44,10 +40,6 @@ public class UserApEntity extends BaseModel implements Savable{
 
     public void setSSID(String SSID) {
         this.ssid = SSID;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     @Override
