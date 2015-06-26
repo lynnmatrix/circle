@@ -22,7 +22,7 @@ public class Message implements Updatable<MessageEntity>{
         this.entity = entity;
     }
 
-    MessageEntity getEntity() {
+    public MessageEntity getEntity() {
         return entity;
     }
 
@@ -63,6 +63,11 @@ public class Message implements Updatable<MessageEntity>{
             this.entity.setTimestamp(entity.getTimestamp());
             this.entity.save();
         }
+    }
+
+    @Override
+    public void remove() {
+        getEntity().delete();
     }
 
     public Observable<Message> reply(Topic topic) {

@@ -20,6 +20,8 @@ import rx.Observable;
  */
 public class UserAp implements Updatable<UserApEntity>{
     private static final Integer PAGE_SIZE = 20;
+    private static final Integer INITIAL_PAGE_SIZE = 50;
+    private static final int TOPIC_CAPABILITY = 200;
 
     private final UserApEntity entity;
     private final List<Topic> topics = new ArrayList<>();
@@ -27,9 +29,9 @@ public class UserAp implements Updatable<UserApEntity>{
 
     @Inject
     TopicService restService;
+
     @Inject
     TopicDBService dbService;
-
     private boolean loaded = false;
     private final TopicMapperDelegate mapperDelegate = new TopicMapperDelegate();
     private final DomainLister<Topic> topicLister = new DomainLister<>(new TopicListerDelegate());
@@ -43,7 +45,7 @@ public class UserAp implements Updatable<UserApEntity>{
         DaggerService.getDomainComponent().inject(this);
     }
 
-    UserApEntity getEntity() {
+    public UserApEntity getEntity() {
         return entity;
     }
 
@@ -68,6 +70,11 @@ public class UserAp implements Updatable<UserApEntity>{
     }
 
     @Override
+    public void remove() {
+        getEntity().delete();
+    }
+
+    @Override
     public String toString(){
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
@@ -86,7 +93,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
     Observable<Topic> publish(final Topic topic) {
         Observable<Topic> observable = restService.addTopic(topic.getEntity()).map(new
-                RestMapper<>(mapperDelegate, topics));
+                RestMapper<>(mapperDelegate));
 
         return observable;
     }
@@ -119,6 +126,16 @@ public class UserAp implements Updatable<UserApEntity>{
         public void setHasMore(boolean hasMore) {
             UserAp.this.hasMoreTopic = hasMore;
         }
+
+        @Override
+        public List<Topic> getOriginSource() {
+            return topics;
+        }
+
+        @Override
+        public int getCapability() {
+            return TOPIC_CAPABILITY;
+        }
     }
 
     private class TopicListerDelegate implements DomainLister.Delegate<Topic> {
@@ -135,20 +152,19 @@ public class UserAp implements Updatable<UserApEntity>{
 
         @Override
         public Observable<List<Topic>> createDBObservable() {
-            return dbService.listTopics(getAP()).map(new DBMapper<>(mapperDelegate, topics));
+            return dbService.listTopics(getAP()).map(new DBMapper<>(mapperDelegate));
         }
 
         @Override
         public Observable<List<Topic>> createRefreshRestObservable() {
-            return restService.listTopics(getAP(), PAGE_SIZE, null, null).map(new
-                    RestListMapper<>(mapperDelegate, topics));
+            return restService.listTopics(getAP(), INITIAL_PAGE_SIZE, getLatestTopicTimestamp(), null).map
+                    (new RefreshMapper(mapperDelegate));
         }
 
         @Override
         public Observable<List<Topic>> createLoadMoreRestObservable() {
-            return restService.listTopics(getAP(), PAGE_SIZE, null, getOldestTopicId()).map(new
-                    RestListMapper<>(mapperDelegate,
-                    topics));
+            return restService.listTopics(getAP(), PAGE_SIZE, (String) null, getOldestTopicId())
+                    .map(new LoadMoreMapper(mapperDelegate));
         }
 
         @Override
@@ -158,12 +174,27 @@ public class UserAp implements Updatable<UserApEntity>{
 
         private String getOldestTopicId(){
             String oldestTopicId = null;
+            // Id on circle server is auto decrement
             for(Topic topic : topics) {
-                if(null == oldestTopicId ||topic.getTopicId().compareTo(oldestTopicId) > 0) {
+                if (null == oldestTopicId
+                        || topic.getTopicId().length() > oldestTopicId.length()
+                        || topic.getTopicId().compareTo(oldestTopicId) > 0) {
                     oldestTopicId = topic.getTopicId();
                 }
             }
             return oldestTopicId;
         }
+
+        private Long getLatestTopicTimestamp() {
+            Long latestTopicStamp = null;
+            for(Topic topic : topics) {
+                if (null == latestTopicStamp
+                        || topic.getTimestamp() > latestTopicStamp) {
+                    latestTopicStamp = topic.getTimestamp();
+                }
+            }
+            return latestTopicStamp;
+        }
     }
+
 }

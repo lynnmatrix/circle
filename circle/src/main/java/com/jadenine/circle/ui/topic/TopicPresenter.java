@@ -26,8 +26,12 @@ import rx.subscriptions.Subscriptions;
 public class TopicPresenter extends ViewPresenter<TopicView> {
     private final UserAp userAp;
 
-    private Subscription running = Subscriptions.empty();
-    private Subscription loadingMore = Subscriptions.empty();
+    private Subscription refreshSubscription = Subscriptions.empty();{
+        refreshSubscription.unsubscribe();
+    }
+    private Subscription loadingMoreSubscription = Subscriptions.empty();{
+        loadingMoreSubscription.unsubscribe();
+    }
 
     public TopicPresenter(UserAp userAp) {
         this.userAp = userAp;
@@ -46,8 +50,8 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
     @Override
     protected void onExitScope() {
         super.onExitScope();
-        running.unsubscribe();
-        loadingMore.unsubscribe();
+        refreshSubscription.unsubscribe();
+        loadingMoreSubscription.unsubscribe();
     }
 
     void loadTopics() {
@@ -55,34 +59,30 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        running = topicsObservable.subscribe(new Observer<List<Topic>>() {
+        refreshSubscription = topicsObservable.subscribe(new Observer<List<Topic>>() {
             @Override
             public void onCompleted() {
-                running = Subscriptions.empty();
+                refreshSubscription = Subscriptions.empty();
+                refreshSubscription.unsubscribe();
             }
 
             @Override
             public void onError(Throwable e) {
-                running = Subscriptions.empty();
+                refreshSubscription = Subscriptions.empty();
+                refreshSubscription.unsubscribe();
             }
 
             @Override
             public void onNext(List<Topic> topics) {
                 if (!hasView()) return;
 
-                Collections.sort(topics, new Comparator<Topic>() {
-                    @Override
-                    public int compare(Topic lhs, Topic rhs) {
-                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
-                    }
-                });
                 getView().getTopicAdapter().setTopics(topics);
             }
         });
     }
 
     void loadMore() {
-        if(!userAp.hasMoreTopic()) {
+        if(!userAp.hasMoreTopic() || !loadingMoreSubscription.isUnsubscribed() ) {
             return;
         }
 
@@ -90,15 +90,17 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        loadingMore = topicsObservable.subscribe(new Observer<List<Topic>>() {
+        loadingMoreSubscription = topicsObservable.subscribe(new Observer<List<Topic>>() {
             @Override
             public void onCompleted() {
-                loadingMore = Subscriptions.empty();
+                loadingMoreSubscription = Subscriptions.empty();
+                loadingMoreSubscription.unsubscribe();
             }
 
             @Override
             public void onError(Throwable e) {
-                loadingMore = Subscriptions.empty();
+                loadingMoreSubscription = Subscriptions.empty();
+                loadingMoreSubscription.unsubscribe();
             }
 
             @Override

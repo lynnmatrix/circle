@@ -17,6 +17,8 @@ import rx.Observable;
  * Created by linym on 6/10/15.
  */
 public class Topic implements Updatable<TopicEntity>{
+    private static final int MESSAGE_CAPABILITY = Integer.MAX_VALUE;
+
     private final TopicEntity entity;
     private final List<Message> messages = new ArrayList<>();
 
@@ -44,7 +46,7 @@ public class Topic implements Updatable<TopicEntity>{
         DaggerService.getDomainComponent().inject(this);
     }
 
-    TopicEntity getEntity() {
+    public TopicEntity getEntity() {
         return entity;
     }
 
@@ -81,6 +83,11 @@ public class Topic implements Updatable<TopicEntity>{
         }
     }
 
+    @Override
+    public void remove() {
+        getEntity().delete();
+    }
+
     public Observable<List<Message>> listMessage(){
         return messageLister.list();
     }
@@ -88,7 +95,7 @@ public class Topic implements Updatable<TopicEntity>{
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
         Observable<Message> observable = messageRestService.addMessage(getAp(), message.getEntity
-                ()).map(new RestMapper<>(mapperDelegate, messages));
+                ()).map(new RestMapper<>(mapperDelegate));
 
         return observable;
     }
@@ -119,6 +126,16 @@ public class Topic implements Updatable<TopicEntity>{
             Topic.this.hasMore = hasMore;
         }
 
+        @Override
+        public List<Message> getOriginSource() {
+            return messages;
+        }
+
+        @Override
+        public int getCapability() {
+            return MESSAGE_CAPABILITY;
+        }
+
     }
 
     private class MessageListerDelegate implements DomainLister.Delegate<Message> {
@@ -141,7 +158,7 @@ public class Topic implements Updatable<TopicEntity>{
         @Override
         public Observable<List<Message>> createRefreshRestObservable() {
             return messageRestService.listMessages
-                    (getTopicId()).map(getRestMapper());
+                    (getTopicId()).map(new RefreshMapper<MessageEntity, Message>(mapperDelegate));
         }
 
         @Override
@@ -155,11 +172,8 @@ public class Topic implements Updatable<TopicEntity>{
         }
 
         private DBMapper getDBMapper() {
-            return new DBMapper(mapperDelegate, messages);
+            return new DBMapper(mapperDelegate);
         }
 
-        private RestListMapper getRestMapper() {
-            return new RestListMapper(mapperDelegate, messages);
-        }
     }
 }

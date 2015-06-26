@@ -16,6 +16,7 @@ import rx.Observable;
  * Created by linym on 6/17/15.
  */
 public class Account {
+    private static final int USER_AP_CAPABILITY = Integer.MAX_VALUE;
     private final String deviceId;
     private final ArrayList<UserAp> aps = new ArrayList<>();
 
@@ -44,8 +45,8 @@ public class Account {
     }
 
     Observable<List<UserAp>> addUserAp(final UserAp userAp) {
-        Observable<List<UserAp>> observable = apService.addAP(userAp.getEntity()).map(new RestListMapper<>
-                (finder, aps));
+        Observable<List<UserAp>> observable = apService.addAP(userAp.getEntity()).map(new
+                RefreshMapper<UserApEntity, UserAp>(finder));
         return observable;
     }
 
@@ -73,6 +74,16 @@ public class Account {
         public void setHasMore(boolean hasMore) {
             Account.this.hasMore = hasMore;
         }
+
+        @Override
+        public List<UserAp> getOriginSource() {
+            return aps;
+        }
+
+        @Override
+        public int getCapability() {
+            return USER_AP_CAPABILITY;
+        }
     }
 
     private class UserApListerDelegate implements DomainLister.Delegate<UserAp> {
@@ -86,15 +97,14 @@ public class Account {
             loaded = true;
         }
 
-
         @Override
         public Observable<List<UserAp>> createDBObservable() {
-            return apDBService.listAps().map(new DBMapper<>(finder, aps));
+            return apDBService.listAps().map(new DBMapper<>(finder));
         }
 
         @Override
         public Observable<List<UserAp>> createRefreshRestObservable() {
-            return apService.listAPs(getDeviceId()).map(new RestListMapper<>(finder, aps));
+            return apService.listAPs(getDeviceId()).map(new RefreshMapper<UserApEntity, UserAp>(finder));
         }
 
         @Override

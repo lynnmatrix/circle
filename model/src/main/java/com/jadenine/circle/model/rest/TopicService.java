@@ -18,7 +18,6 @@ public interface TopicService {
      *  NOTE: The topic id is auto <b>decrement</b>.
      * </p>
      *
-     *
      * @param ap
      * @param count (optional, default 20)  Specifies the number of topics to try and retrieve,
      *              up to a maximum of 200.
@@ -31,6 +30,23 @@ public interface TopicService {
     Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
                                                         @Query("count") Integer count,
                                                         @Query("since_id") String sinceId,
+                                                        @Query("before_id") String beforeId);
+
+    /**
+     *
+     * See {@link TopicService#listTopics(String, Integer, String, String)}
+     *
+     * @param ap See {@link TopicService#listTopics(String, Integer, String, String)}
+     * @param count See {@link TopicService#listTopics(String, Integer, String, String)}
+     * @param sinceTimestamp (optional) Returns results with a topic id <b>less than</b> the
+     *                       specified ID.
+     * @param beforeId See {@link TopicService#listTopics(String, Integer, String, String)}
+     *
+     */
+    @GET("/topic/list")
+    Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
+                                                        @Query("count") Integer count,
+                                                        @Query("since_timestamp") Long sinceTimestamp,
                                                         @Query("before_id") String beforeId);
 
     @POST("/topic/add")
