@@ -7,8 +7,6 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.message.MessagePath;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import flow.Flow;
@@ -107,12 +105,6 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
             public void onNext(List<Topic> topics) {
                 if (!hasView()) return;
 
-                Collections.sort(topics, new Comparator<Topic>() {
-                    @Override
-                    public int compare(Topic lhs, Topic rhs) {
-                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
-                    }
-                });
                 getView().getTopicAdapter().setTopics(topics);
             }
         });

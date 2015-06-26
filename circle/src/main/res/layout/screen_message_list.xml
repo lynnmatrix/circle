@@ -45,16 +45,6 @@
         android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:clickable="true"
-        android:src="@drawable/ic_actionbar_send_dark"
-        app:layout_anchor="@+id/scrollableview"
-        app:layout_anchorGravity="bottom|right|end"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/reply_toolbar"
         android:layout_width="match_parent"
@@ -78,5 +68,15 @@
             android:layout_marginRight="80dp"/>
 
     </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:clickable="true"
+        android:src="@drawable/ic_actionbar_send_dark"
+        app:layout_anchor="@+id/scrollableview"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </com.jadenine.circle.ui.message.MessageListView>

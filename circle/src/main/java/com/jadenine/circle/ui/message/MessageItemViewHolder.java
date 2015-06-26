@@ -39,7 +39,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
     public void bind(Topic topic, Message message, int position) {
         boolean isOwner = topic.getUser().equals(message.getUser());
 
-        fromView.setText(String.format("%d•%s", position + 1, isOwner ? fromView.getContext()
+        fromView.setText(String.format("%d•%s", (topic.getMessageCount() - position), isOwner ? fromView.getContext()
                 .getString(R.string.topic_owner) : "User" + (message.getUser() + message
                 .getTopicId()).hashCode()));
         dateView.setText(getFormattedTime(message.getTimestamp()));
