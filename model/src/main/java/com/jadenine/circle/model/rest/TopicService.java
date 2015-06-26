@@ -38,8 +38,8 @@ public interface TopicService {
      *
      * @param ap See {@link TopicService#listTopics(String, Integer, String, String)}
      * @param count See {@link TopicService#listTopics(String, Integer, String, String)}
-     * @param sinceTimestamp (optional) Returns results with a topic id <b>less than</b> the
-     *                       specified ID.
+     * @param sinceTimestamp (optional) Returns results with a timestamp <b>greater than</b> the
+     *                       specified timestamp.
      * @param beforeId See {@link TopicService#listTopics(String, Integer, String, String)}
      *
      */

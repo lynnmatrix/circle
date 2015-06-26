@@ -25,6 +25,9 @@ public class TopicItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.content)
     TextView contentView;
 
+    @InjectView(R.id.message_count)
+    TextView messageCountView;
+
     public TopicItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
@@ -33,6 +36,7 @@ public class TopicItemViewHolder extends RecyclerView.ViewHolder {
     public void bind(Topic topic) {
         dateView.setText(getFormattedTime(topic.getTimestamp()));
         contentView.setText(topic.getTopic());
+        messageCountView.setText(""+topic.getMessageCount());
     }
 
     private String getFormattedTime(long timestamp) {

@@ -70,6 +70,10 @@ public class Topic implements Updatable<TopicEntity>{
         return entity.getLatestMessageId();
     }
 
+    public int getMessageCount() {
+        return getEntity().getMessageCount();
+    }
+
     public long getTimestamp() {
         return entity.getTimestamp();
     }
@@ -77,8 +81,9 @@ public class Topic implements Updatable<TopicEntity>{
     @Override
     public void merge(TopicEntity entity) {
         if(entity.getTimestamp() - this.entity.getTimestamp() > 0) {
-            this.entity.setLatestMessageId(entity.getLatestMessageId());
             this.entity.setTimestamp(entity.getTimestamp());
+            this.entity.setLatestMessageId(entity.getLatestMessageId());
+            this.entity.setMessageCount(entity.getMessageCount());
             this.entity.save();
         }
     }

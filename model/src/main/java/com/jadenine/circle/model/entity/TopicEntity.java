@@ -16,9 +16,11 @@ public class TopicEntity extends CircleBaseModel {
     String user;
     String topic;
 
-    String latestMessageId;
-
     long createdTimestamp;
+
+    int messageCount;
+
+    String latestMessageId;
 
     public TopicEntity(){}
 
@@ -64,4 +66,11 @@ public class TopicEntity extends CircleBaseModel {
         return createdTimestamp;
     }
 
+    public int getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(int messageCount) {
+        this.messageCount = messageCount;
+    }
 }
