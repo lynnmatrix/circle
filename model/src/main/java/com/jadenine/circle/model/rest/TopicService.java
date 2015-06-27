@@ -3,7 +3,6 @@ package com.jadenine.circle.model.rest;
 import com.jadenine.circle.model.entity.TopicEntity;
 
 import retrofit.http.Body;
-import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
@@ -26,7 +25,7 @@ public interface TopicService {
      * @param beforeId (optional) Returns results with a topic id <b>greater than</b> the
      *                        specified ID.
      */
-    @GET("/topic/list")
+    @POST("/topic/list")
     Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
                                                         @Query("count") Integer count,
                                                         @Query("since_id") String sinceId,
@@ -43,7 +42,7 @@ public interface TopicService {
      * @param beforeId See {@link TopicService#listTopics(String, Integer, String, String)}
      *
      */
-    @GET("/topic/list")
+    @POST("/topic/list")
     Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
                                                         @Query("count") Integer count,
                                                         @Query("since_timestamp") Long sinceTimestamp,

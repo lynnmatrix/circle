@@ -1,11 +1,8 @@
 package com.jadenine.circle.domain;
 
-import android.text.TextUtils;
-
 import com.jadenine.circle.model.entity.MessageEntity;
 
 import rx.Observable;
-import rx.android.internal.Preconditions;
 
 /**
  * Created by linym on 6/3/15.
@@ -61,17 +58,11 @@ public class Message implements Updatable<MessageEntity>{
     }
 
     public boolean isPrivate() {
-        return getEntity().isPrivate();
+        return getEntity().getPrivary();
     }
 
     public void setIsPrivate(boolean isPrivate, String replyTo) {
-        if(!isPrivate) {
-            replyTo = null;
-        }
-        Preconditions.checkArgument(isPrivate || !isPrivate && !TextUtils.isEmpty(replyTo),
-                "public message should not has replyTo.");
-
-        getEntity().setIsPrivate(isPrivate);
+        getEntity().setPrivary(isPrivate);
         getEntity().setReplyToUser(replyTo);
     }
 

@@ -160,6 +160,9 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     }
 
     private void addTag(String ap) {
+        if(!hasView()) {
+            return;
+        }
         try {
             PushAgent.getInstance(getContext()).getTagManager().add(ap);
         } catch (Exception e) {

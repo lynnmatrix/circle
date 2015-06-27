@@ -20,7 +20,7 @@ public class MessageEntity extends CircleBaseModel{
 
     String replyToUser;
 
-    boolean isPrivate;
+    boolean privary;
 
     MessageEntity(){}
 
@@ -56,12 +56,12 @@ public class MessageEntity extends CircleBaseModel{
         this.content = content;
     }
 
-    public boolean isPrivate() {
-        return isPrivate;
+    public boolean getPrivary() {
+        return privary;
     }
 
-    public void setIsPrivate(boolean isPrivate) {
-        this.isPrivate = isPrivate;
+    public void setPrivary(boolean privary) {
+        this.privary = privary;
     }
 
     public void setReplyToUser(String replyTo) {
