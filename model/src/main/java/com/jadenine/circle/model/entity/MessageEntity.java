@@ -56,4 +56,7 @@ public class MessageEntity extends CircleBaseModel{
         this.content = content;
     }
 
+    public boolean isPrivate() {
+        return isPrivate;
+    }
 }

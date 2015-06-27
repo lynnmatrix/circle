@@ -3,6 +3,7 @@ package com.jadenine.circle.ui.message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
@@ -21,6 +22,9 @@ import butterknife.InjectView;
 public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
+
+    @InjectView(R.id.private_view)
+    ImageView privateView;
 
     @InjectView(R.id.from)
     TextView fromView;
@@ -44,6 +48,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
                 .getTopicId()).hashCode()));
         dateView.setText(getFormattedTime(message.getTimestamp()));
         contentView.setText(message.getContent());
+        privateView.setVisibility(message.isPrivate()?View.VISIBLE : View.GONE);
     }
 
     @NonNull

@@ -57,6 +57,10 @@ public class Message implements Updatable<MessageEntity>{
         return entity.getTimestamp();
     }
 
+    public boolean isPrivate() {
+        return getEntity().isPrivate();
+    }
+
     @Override
     public void merge(MessageEntity entity) {
         if(entity.getTimestamp() - this.entity.getTimestamp() > 0) {
@@ -73,4 +77,5 @@ public class Message implements Updatable<MessageEntity>{
     public Observable<Message> reply(Topic topic) {
         return topic.addReply(this);
     }
+
 }
