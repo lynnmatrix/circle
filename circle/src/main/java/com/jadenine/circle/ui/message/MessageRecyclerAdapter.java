@@ -46,4 +46,8 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageItemView
         this.messages = messages;
         notifyDataSetChanged();
     }
+
+    public Message getMessage(int position) {
+        return messages.get(position);
+    }
 }

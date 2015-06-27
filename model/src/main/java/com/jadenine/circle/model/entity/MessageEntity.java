@@ -59,4 +59,12 @@ public class MessageEntity extends CircleBaseModel{
     public boolean isPrivate() {
         return isPrivate;
     }
+
+    public void setIsPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    public void setReplyToUser(String replyTo) {
+        this.replyToUser = replyTo;
+    }
 }

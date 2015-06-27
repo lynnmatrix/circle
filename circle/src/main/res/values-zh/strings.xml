@@ -7,5 +7,6 @@
         <xliff:g id="WEBSITE">%s</xliff:g></string>
     <string name="share_link">www.jadenine.cn/app/circle.apk</string>
     <string name="notification_title_new_topic">号外</string>
+    <string name="reply_type_private">私信</string>
 
 </resources>

@@ -13,11 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
 
 import javax.inject.Inject;
 
@@ -40,6 +43,9 @@ public class MessageListView extends CoordinatorLayout{
 
     @InjectView(R.id.reply_toolbar)
     Toolbar replyToolbar;
+
+    @InjectView(R.id.private_checkbox)
+    CheckBox privateCheckBox;
 
     @InjectView(R.id.message_edit)
     EditText replyEditor;
@@ -64,6 +70,15 @@ public class MessageListView extends CoordinatorLayout{
         messageRecyclerView.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         messageRecyclerView.setLayoutManager(linearLayoutManager);
+
+        messageRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
+                new RecyclerItemClickListener.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                presenter.setReplyTo(position);
+            }
+        }));
 
         configToolbar();
         getMessageAdapter();
@@ -95,7 +110,12 @@ public class MessageListView extends CoordinatorLayout{
 //                ToolbarColorizer.colorizeToolbar(toolbar, mutedLightColor, activity);
             }
         });
-
+        privateCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                presenter.onPrivateCheckedChanged(isChecked);
+            }
+        });
     }
 
     @OnClick(R.id.fab_add_message)
