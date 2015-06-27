@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui;
 
+import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
 
 import com.jadenine.circle.mortar.DaggerScope;
@@ -14,6 +15,12 @@ class HomeActivityModule {
     private final HomeActivity homeActivity;
     public HomeActivityModule(HomeActivity homeActivity) {
         this.homeActivity = homeActivity;
+    }
+
+    @DaggerScope(HomeActivity.class)
+    @Provides
+    Activity provideActivity(){
+        return homeActivity;
     }
 
     @DaggerScope(HomeActivity.class)

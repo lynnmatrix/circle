@@ -6,5 +6,7 @@
         <item name="colorPrimary">@color/pink</item>
         <item name="colorPrimaryDark">@color/purple</item>
         <item name="colorAccent">@color/pink</item>
+
     </style>
+
 </resources>

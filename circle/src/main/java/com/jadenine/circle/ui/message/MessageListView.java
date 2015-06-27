@@ -1,8 +1,10 @@
 package com.jadenine.circle.ui.message;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.graphics.Palette;
@@ -45,6 +47,9 @@ public class MessageListView extends CoordinatorLayout{
     @Inject
     MessagePresenter presenter;
 
+    @Inject
+    Activity activity;
+
     public MessageListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         DaggerService.<MessagePath.Component>getDaggerComponent(context).inject(this);
@@ -79,24 +84,15 @@ public class MessageListView extends CoordinatorLayout{
             }
         });
 
-//        replyToolbar.inflateMenu(R.menu.menu_reply);
-//        replyToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                if(R.id.action_send == item.getItemId()) {
-//                    presenter.send();
-//                }
-//                return false;
-//            }
-//        });
-
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.starry_night);
 
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {
                 int mutedColor = palette.getMutedColor(R.attr.colorPrimary);
+                int mutedLightColor = palette.getVibrantColor(Color.WHITE);
                 collapsingToolbarLayout.setContentScrimColor(mutedColor);
+//                ToolbarColorizer.colorizeToolbar(toolbar, mutedLightColor, activity);
             }
         });
 

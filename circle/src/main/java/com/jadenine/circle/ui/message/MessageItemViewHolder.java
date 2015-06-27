@@ -48,7 +48,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
                 .getTopicId()).hashCode()));
         dateView.setText(getFormattedTime(message.getTimestamp()));
         contentView.setText(message.getContent());
-        privateView.setVisibility(message.isPrivate()?View.VISIBLE : View.GONE);
+        privateView.setVisibility(message.isPrivate() ? View.VISIBLE : View.GONE);
     }
 
     @NonNull

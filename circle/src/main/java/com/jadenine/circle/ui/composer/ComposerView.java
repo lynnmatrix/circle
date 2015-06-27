@@ -1,6 +1,8 @@
 package com.jadenine.circle.ui.composer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -31,6 +34,9 @@ public class ComposerView extends RelativeLayout {
 
     @Inject
     ComposerPresenter presenter;
+
+    @Inject
+    Activity activity;
 
     public ComposerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,6 +68,7 @@ public class ComposerView extends RelativeLayout {
             }
         });
 
+        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
     }
 
     @Override

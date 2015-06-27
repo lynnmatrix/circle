@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui;
 
+import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
 
 import com.jadenine.circle.app.CircleApplication;
@@ -13,6 +14,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 @dagger.Component(dependencies = CircleApplication.AppComponent.class, modules =
         HomeActivityModule.class)
 public interface HomeComponent {
+    Activity getActivity();
     DrawerLayout getDrawerLayout();
     Account account();
     void inject(HomeActivity homeActivity);
