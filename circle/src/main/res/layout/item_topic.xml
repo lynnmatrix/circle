@@ -10,12 +10,10 @@
     android:layout_marginTop="5dp"
     android:foreground="?android:attr/selectableItemBackground">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/date"
@@ -39,17 +37,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_forum_black"
+                android:tint="?attr/colorPrimary"/>
 
             <TextView
                 android:id="@+id/message_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start|center_vertical"
-                android:padding="5dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_forum_black"
                 android:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 

@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/nav_header_bg"
+        android:background="@color/primary_dark"
         android:scaleType="centerInside" />
 
     <TextView

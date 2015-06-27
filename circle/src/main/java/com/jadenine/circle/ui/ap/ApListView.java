@@ -66,7 +66,8 @@ public class ApListView extends RelativeLayout implements HandlesBack {
             }
         });
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.pink, R.color.orange, R.color.green);
+        swipeRefreshLayout.setColorSchemeResources(R.color.primary_light, R.color.primary, R.color
+                .primary_dark);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
