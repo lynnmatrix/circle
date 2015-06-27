@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.dagger.DomainComponent;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.utils.Device;
@@ -17,8 +18,9 @@ import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
 
+import javax.inject.Inject;
+
 import dagger.Module;
-import dagger.Provides;
 import mortar.MortarScope;
 
 /**
@@ -29,16 +31,24 @@ public class CircleApplication extends Application {
     public static final String ROOT_SCOPE_NAME = "Root";
     private MortarScope rootScope;
 
+    @Inject
+    Account account;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        com.jadenine.circle.domain.dagger.DaggerService.init(Device.getDeviceId(this));
+
         AppComponent appComponent = DaggerCircleApplication_AppComponent.builder()
+                .domainComponent(com.jadenine.circle.domain.dagger.DaggerService.getDomainComponent())
                 .appModule(new AppModule(this)).build();
 
         MortarScope.Builder builder = MortarScope.buildRootScope();
         builder.withService(DaggerService.SERVICE_NAME, appComponent);
 
         rootScope = builder.build(ROOT_SCOPE_NAME);
+
+        appComponent.inject(this);
 
         registerUmengMessageHandler();
 
@@ -83,8 +93,9 @@ public class CircleApplication extends Application {
     }
 
     @DaggerScope(CircleApplication.class)
-    @dagger.Component(modules = {AppModule.class})
+    @dagger.Component(dependencies = DomainComponent.class, modules = {AppModule.class})
     public interface AppComponent {
+        void inject(CircleApplication app);
         Account account();
     }
 
@@ -94,12 +105,6 @@ public class CircleApplication extends Application {
         private final Context appContext;
         public AppModule(Application application){
             this.appContext = application;
-        }
-
-        @Provides
-        @DaggerScope(CircleApplication.class)
-        public Account provideAccount() {
-            return new Account(Device.getDeviceId(appContext));
         }
 
     }

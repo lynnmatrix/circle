@@ -17,4 +17,5 @@ public interface DomainComponent {
     void inject(UserAp userAp);
     void inject(Topic topic);
     void inject(Message message);
+    Account getAccount();
 }

@@ -18,7 +18,7 @@ public class UserApEntity extends CircleBaseModel {
 
     String ssid;
 
-    public UserApEntity(){}
+    UserApEntity(){}
 
     public UserApEntity(String user, String ap, String ssid) {
         this.user = user;

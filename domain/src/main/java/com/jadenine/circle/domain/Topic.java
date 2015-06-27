@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
 import rx.Observable;
 
 /**
@@ -26,6 +27,10 @@ public class Topic implements Updatable<TopicEntity>{
     MessageService messageRestService;
     @Inject
     MessageDBService messageDBService;
+
+    @Inject
+    Lazy<Account> account;
+
     private boolean loaded = false;
     private boolean hasMore = true;
 
@@ -99,8 +104,7 @@ public class Topic implements Updatable<TopicEntity>{
 
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
-        Observable<Message> observable = messageRestService.addMessage(getAp(), message.getEntity
-                ()).map(new RestMapper<>(mapperDelegate));
+        Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map (new RestMapper<>(mapperDelegate));
 
         return observable;
     }
@@ -163,7 +167,10 @@ public class Topic implements Updatable<TopicEntity>{
         @Override
         public Observable<List<Message>> createRefreshRestObservable() {
             return messageRestService.listMessages
-                    (getTopicId()).map(new RefreshMapper<MessageEntity, Message>(mapperDelegate));
+                    (account.get().getDeviceId(), getAp(), getTopicId()).map(new
+                    RefreshMapper<MessageEntity,
+                    Message>
+                    (mapperDelegate));
         }
 
         @Override

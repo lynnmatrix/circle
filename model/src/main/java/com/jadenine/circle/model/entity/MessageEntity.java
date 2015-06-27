@@ -11,10 +11,23 @@ import com.raizlabs.android.dbflow.annotation.Table;
 public class MessageEntity extends CircleBaseModel{
     @PrimaryKey
     String messageId;
+
+    String ap;
     String topicId;
 
     String user;
     String content;
+
+    String replyToUser;
+
+    boolean isPrivate;
+
+    MessageEntity(){}
+
+    public MessageEntity(String ap, String topicId){
+        this.ap = ap;
+        this.topicId = topicId;
+    }
 
     public String getTopicId() {
         return topicId;

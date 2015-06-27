@@ -14,8 +14,8 @@ public class Message implements Updatable<MessageEntity>{
         return new Message(entity);
     }
 
-    public Message(){
-        this(new MessageEntity());
+    public Message(String ap, String topicId) {
+        this(new MessageEntity(ap, topicId));
     }
 
     public Message(MessageEntity entity) {

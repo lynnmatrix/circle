@@ -121,8 +121,8 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
             return;
         }
         hideInputMethod();
-        Message message = new Message();
-        message.setTopicId(topic.getTopicId());
+        Message message = new Message(topic.getAp(), topic.getTopicId());
+        
         message.setUser(Device.getDeviceId(getView().getContext()));
         message.setContent(content);
 

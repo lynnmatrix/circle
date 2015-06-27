@@ -4,6 +4,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.BuildConfig;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
@@ -37,6 +38,18 @@ public class DomainModule {
     public static final String ENDPOINT = BuildConfig.DEBUG && !FORE_AZURE ? ENDPOINT_LOCAL :
             ENDPOINT_AZURE;
 
+    private final String deviceId;
+
+    DomainModule(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    @Provides
+    @Singleton
+    public Account provideAccount() {
+        return new Account(deviceId);
+    }
+
     @Provides
     @Singleton
     public RestAdapter provideRestAdapter(){
@@ -59,6 +72,7 @@ public class DomainModule {
                 .build();
         return restAdapter;
     }
+
 
     @Provides
     @Singleton

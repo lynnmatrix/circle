@@ -22,7 +22,7 @@ public class TopicEntity extends CircleBaseModel {
 
     String latestMessageId;
 
-    public TopicEntity(){}
+    TopicEntity(){}
 
     public TopicEntity(String ap, String user, String topic) {
         this.ap = ap;
