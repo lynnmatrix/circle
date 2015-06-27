@@ -3,10 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/pink</item>
+        <item name="colorPrimaryDark">@color/purple</item>
+        <item name="colorAccent">@color/pink</item>
     </style>
-
-    <color name="pink">#D70073</color>
-    <color name="orange">#FF9900</color>
-    <color name="green">#009900</color>
-
 </resources>

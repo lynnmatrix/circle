@@ -3,15 +3,15 @@
     <item
         android:id="@+id/item_share_wechat"
         android:title="@string/share_wechat"
-        android:icon="@android:drawable/ic_menu_share"/>
+        android:icon="@drawable/ic_share_black"/>
 
     <item
         android:id="@+id/item_share"
         android:title="@string/share"
-        android:icon="@android:drawable/ic_menu_share"/>
+        android:icon="@drawable/ic_share_black"/>
 
     <item
         android:id="@+id/item_wifi_scan"
         android:title="@string/wifi_scan"
-        android:icon="@drawable/ic_wifi"/>
+        android:icon="@drawable/ic_wifi_black"/>
 </menu>

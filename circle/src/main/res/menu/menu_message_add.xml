@@ -4,6 +4,7 @@
       tools:context="com.jadenine.circle.ui.MessageAddActivity">
     <item android:id="@+id/action_send"
           android:title="@string/action_send"
+          android:icon="@drawable/ic_send_black"
           android:orderInCategory="100"
           app:showAsAction="always"/>
 </menu>
