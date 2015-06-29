@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui.composer;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
@@ -16,10 +17,10 @@ import flow.path.Path;
 @DaggerScope(ComposerPresenter.class)
 @Layout(R.layout.screen_composer)
 public class ComposerPath extends Path implements ScreenComponentFactory {
-    private final UserAp ap;
+    private final String ap;
 
-    public ComposerPath(UserAp userAp) {
-        this.ap = userAp;
+    public ComposerPath(String ap) {
+        this.ap = ap;
     }
 
     @Override
@@ -38,8 +39,14 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
     class Module{
         @DaggerScope(ComposerPresenter.class)
         @Provides
-        ComposerPresenter providePresenter() {
-            return new ComposerPresenter(ap);
+        UserAp provideUserAp(Account account) {
+            return account.getUserAp(ap);
+        }
+
+        @DaggerScope(ComposerPresenter.class)
+        @Provides
+        ComposerPresenter providePresenter(UserAp userAp) {
+            return new ComposerPresenter(userAp);
         }
     }
 }
