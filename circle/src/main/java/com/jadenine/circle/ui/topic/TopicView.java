@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 
@@ -74,6 +75,7 @@ public class TopicView extends CoordinatorLayout{
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {

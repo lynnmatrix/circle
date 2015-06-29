@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.dagger.DomainComponent;
@@ -14,6 +15,8 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.utils.Device;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
@@ -30,6 +33,8 @@ import mortar.MortarScope;
 public class CircleApplication extends Application {
     public static final String ROOT_SCOPE_NAME = "Root";
     private MortarScope rootScope;
+
+    private RefWatcher refWatcher;
 
     @Inject
     Account account;
@@ -53,6 +58,8 @@ public class CircleApplication extends Application {
         registerUmengMessageHandler();
 
         FlowManager.init(this);
+
+        refWatcher = installLeakCanary();
     }
 
     private void registerUmengMessageHandler() {
@@ -90,6 +97,18 @@ public class CircleApplication extends Application {
         }
 
         return super.getSystemService(name);
+    }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        CircleApplication application = (CircleApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    protected RefWatcher installLeakCanary() {
+        if(BuildConfig.DEBUG) {
+            return LeakCanary.install(this);
+        }
+        return RefWatcher.DISABLED;
     }
 
     @DaggerScope(CircleApplication.class)
