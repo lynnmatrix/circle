@@ -12,7 +12,9 @@ import com.jadenine.circle.model.db.TopicDBService;
 import com.jadenine.circle.model.db.impl.ApDBServiceImpl;
 import com.jadenine.circle.model.db.impl.MessageDBServiceImpl;
 import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
+import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
+import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.MessageService;
 import com.jadenine.circle.model.rest.TopicService;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
@@ -56,7 +58,8 @@ public class DomainModule {
         Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                return f.getDeclaredClass().equals(ModelAdapter.class);
+                return f.getDeclaredClass().equals(ModelAdapter.class) || null != f.getAnnotation
+                        (GsonIgnore.class);
             }
 
             @Override
@@ -90,6 +93,12 @@ public class DomainModule {
     @Singleton
     MessageService provideMessageService(RestAdapter restAdapter) {
         return restAdapter.create(MessageService.class);
+    }
+
+    @Provides
+    @Singleton
+    ImageService provideImageService(RestAdapter restAdapter) {
+        return restAdapter.create(ImageService.class);
     }
 
     @Provides

@@ -1,25 +1,43 @@
 package com.jadenine.circle.ui.composer;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.domain.UserAp;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.Subscriptions;
 
 /**
  * Created by linym on 6/9/15.
  */
-public class ComposerPresenter extends ViewPresenter<ComposerView>{
+public class ComposerPresenter extends ViewPresenter<ComposerView> implements PreferenceManager
+        .OnActivityResultListener{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
+    private static final int PICK_IMAGE = 1;
 
     private final UserAp userAp;
+    private Uri imageUri;
+    private String mimeType;
+    private Subscription sendSubscription = Subscriptions.empty();{
+        sendSubscription.unsubscribe();
+    }
 
     public ComposerPresenter(UserAp userAp) {
         this.userAp = userAp;
@@ -46,6 +64,13 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
         outState.putString(BUNDLE_TYPED_CONTENT, getView().editor.getText().toString());
     }
 
+    void pickImage() {
+        Intent intent = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        getView().activity.startActivityForResult(intent, PICK_IMAGE);
+    }
 
     void send(final String content) {
         if(TextUtils.isEmpty(content)){
@@ -54,28 +79,75 @@ public class ComposerPresenter extends ViewPresenter<ComposerView>{
             return;
         }
 
-        Topic topic = new Topic(userAp, content);
+        if (!sendSubscription.isUnsubscribed()) {
+            return;
+        }
 
-        topic.publish(userAp).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Topic>() {
+        final Topic topic = new Topic(userAp, content);
 
+        InputStream inputStream = null;
+        ContentResolver contentResolver = getView().getContext().getContentResolver();
+        try {
+            inputStream = contentResolver.openInputStream(imageUri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        sendSubscription = topic.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
             @Override
             public void onCompleted() {
-                Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
-                        .LENGTH_SHORT).show();
-                Flow.get(getView().getContext()).goBack();
+                topic.publish(userAp).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Topic>() {
+
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(getView().getContext(), R.string.message_send_success,
+                                Toast.LENGTH_SHORT).show();
+                        Flow.get(getView().getContext()).goBack();
+                        sendSubscription = Subscriptions.empty();
+                        sendSubscription.unsubscribe();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
+                                .LENGTH_LONG).show();
+                        sendSubscription = Subscriptions.empty();
+                        sendSubscription.unsubscribe();
+                    }
+
+                    @Override
+                    public void onNext(Topic topic1) {
+                    }
+                });
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
-                        .LENGTH_LONG).show();
+                        .LENGTH_SHORT).show();
             }
 
             @Override
-            public void onNext(Topic topic1) {
-
+            public void onNext(String imageUri) {
+                topic.addImage(imageUri);
             }
         });
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(PICK_IMAGE == requestCode && resultCode == Activity.RESULT_OK) {
+            ContentResolver contentResolver = getView().getContext().getContentResolver();
+
+            imageUri = data.getData();
+            mimeType = contentResolver.getType(imageUri);
+
+            getView().imageView.setImageURI(imageUri);
+            getView().imageView.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
     }
 }

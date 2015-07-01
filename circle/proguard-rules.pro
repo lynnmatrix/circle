@@ -19,3 +19,5 @@
 -keep class com.tencent.mm.sdk.** {
    *;
 }
+
+-dontwarn com.squareup.okhttp.**

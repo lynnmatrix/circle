@@ -28,10 +28,11 @@ public class UserAp implements Updatable<UserApEntity>{
     private boolean hasMoreTopic = true;
 
     @Inject
-    TopicService restService;
+    TopicService topicRestService;
 
     @Inject
-    TopicDBService dbService;
+    TopicDBService topicDBService;
+
     private boolean loaded = false;
     private final TopicMapperDelegate mapperDelegate = new TopicMapperDelegate();
     private final DomainLister<Topic> topicLister = new DomainLister<>(new TopicListerDelegate());
@@ -92,7 +93,7 @@ public class UserAp implements Updatable<UserApEntity>{
     }
 
     Observable<Topic> publish(final Topic topic) {
-        Observable<Topic> observable = restService.addTopic(topic.getEntity()).map(new
+        Observable<Topic> observable = topicRestService.addTopic(topic.getEntity()).map(new
                 RestMapper<>(mapperDelegate));
 
         return observable;
@@ -152,18 +153,18 @@ public class UserAp implements Updatable<UserApEntity>{
 
         @Override
         public Observable<List<Topic>> createDBObservable() {
-            return dbService.listTopics(getAP()).map(new DBMapper<>(mapperDelegate));
+            return topicDBService.listTopics(getAP()).map(new DBMapper<>(mapperDelegate));
         }
 
         @Override
         public Observable<List<Topic>> createRefreshRestObservable() {
-            return restService.listTopics(getAP(), INITIAL_PAGE_SIZE, getLatestTopicTimestamp(), null).map
+            return topicRestService.listTopics(getAP(), INITIAL_PAGE_SIZE, getLatestTopicTimestamp(), null).map
                     (new RefreshMapper(mapperDelegate));
         }
 
         @Override
         public Observable<List<Topic>> createLoadMoreRestObservable() {
-            return restService.listTopics(getAP(), PAGE_SIZE, (String) null, getOldestTopicId())
+            return topicRestService.listTopics(getAP(), PAGE_SIZE, (String) null, getOldestTopicId())
                     .map(new LoadMoreMapper(mapperDelegate));
         }
 

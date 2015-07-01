@@ -2,7 +2,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.jadenine.circle.ui.MessageAddActivity">
-    <item android:id="@+id/action_send"
+
+      <item
+          android:id="@+id/action_add_image"
+          android:icon="@drawable/ic_insert_photo_black"
+          android:title="@string/action_add_image"
+          app:showAsAction="always"/>
+
+      <item android:id="@+id/action_send"
           android:title="@string/action_send"
           android:icon="@drawable/ic_send_black"
           android:orderInCategory="100"

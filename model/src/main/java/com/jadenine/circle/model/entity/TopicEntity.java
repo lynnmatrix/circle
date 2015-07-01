@@ -9,12 +9,16 @@ import com.raizlabs.android.dbflow.annotation.Table;
  */
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
 public class TopicEntity extends CircleBaseModel {
+    public static final String IMAGE_DELIMITER = ",";
+
     @PrimaryKey
     String topicId;
     String ap;
 
     String user;
     String topic;
+
+    String images;
 
     long createdTimestamp;
 
@@ -52,6 +56,14 @@ public class TopicEntity extends CircleBaseModel {
 
     public void setTopic(String content) {
         this.topic = content;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public String getLatestMessageId() {
