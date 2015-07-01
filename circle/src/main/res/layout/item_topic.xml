@@ -8,7 +8,8 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="5dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,15 +31,20 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="@dimen/topic_item_min_height"
-            android:text="Large Text"
+            android:padding="5dp"
+            android:text="Large Text.........................................................."
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-        <ImageView
+        <com.jadenine.circle.ui.widgets.AspectRatioImageView
             android:id="@+id/imageview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerInside"
-            android:visibility="gone"/>
+            android:minWidth="220dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            app:aspectRatioEnabled="true"
+            app:aspectRatio="0.5"
+            app:dominantMeasurement="width"/>
 
         <LinearLayout
             android:layout_width="match_parent"
