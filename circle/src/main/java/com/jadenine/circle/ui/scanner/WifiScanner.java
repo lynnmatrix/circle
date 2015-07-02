@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -26,11 +25,12 @@ public class WifiScanner {
         void onWifiScanned(List<Pair<String, String>> result);
     }
 
-    public static void scanner(Context context, final ScanCallback callback) {
+    public static void scanner(final Context context, final ScanCallback callback) {
         final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         context.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
+                context.unregisterReceiver(this);
                 List<ScanResult> results = wifiManager.getScanResults();
                 List<Pair<String, String>> wifiInfoResults = new ArrayList<>(results.size());
                 for (ScanResult ap : results) {

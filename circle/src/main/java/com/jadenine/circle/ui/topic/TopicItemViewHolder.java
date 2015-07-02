@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.topic;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,10 +9,13 @@ import android.widget.TextView;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Topic;
+import com.jadenine.circle.mortar.DaggerService;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,9 +38,12 @@ public class TopicItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.message_count)
     TextView messageCountView;
 
+    @Inject
+    Drawable errorDrawable;
     public TopicItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        DaggerService.<DaggerTopicPath_Component>getDaggerComponent(itemView.getContext()).inject(this);
     }
 
     public void bind(Topic topic) {
@@ -46,7 +53,8 @@ public class TopicItemViewHolder extends RecyclerView.ViewHolder {
         if(null != topic.getImages() && topic.getImages().size() > 0) {
             imageView.setVisibility(View.VISIBLE);
             Uri imageUri = Uri.parse(topic.getImages().get(0));
-            Picasso.with(imageView.getContext()).load(imageUri).into(imageView);
+            Picasso.with(imageView.getContext()).load(imageUri).centerCrop().error(errorDrawable)
+                    .resize(440, 220).onlyScaleDown().into(imageView);
         } else {
             imageView.setVisibility(View.GONE);
         }

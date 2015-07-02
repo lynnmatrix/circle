@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:minWidth="220dp"
             android:padding="5dp"
-            android:scaleType="centerCrop"
             app:aspectRatioEnabled="true"
             app:aspectRatio="0.5"
             app:dominantMeasurement="width"/>

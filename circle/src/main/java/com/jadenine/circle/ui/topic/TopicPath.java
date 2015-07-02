@@ -1,5 +1,12 @@
 package com.jadenine.circle.ui.topic;
 
+import android.app.Activity;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
+
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
@@ -35,6 +42,7 @@ public class TopicPath extends Path implements ScreenComponentFactory {
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component{
         void inject(TopicView topicView);
+        void inject(TopicItemViewHolder viewHolder);
     }
 
     @dagger.Module
@@ -49,6 +57,23 @@ public class TopicPath extends Path implements ScreenComponentFactory {
         @Provides
         TopicPresenter providePresenter(UserAp userAp) {
             return new TopicPresenter(userAp);
+        }
+
+        @DaggerScope(TopicPresenter.class)
+        @Provides
+        Drawable provideErrorDrawable(Activity activity){
+            Drawable errorDrawable = activity.getResources().getDrawable(R.drawable
+                    .ic_error_outline_black);
+
+            TypedValue typedValue = new TypedValue();
+            int[] textSizeAttr = new int[]{R.attr.colorPrimary};
+            int indexOfAttrColorPrimary = 0;
+            TypedArray a = activity.obtainStyledAttributes(typedValue.data, textSizeAttr);
+            int colorPrimary = a.getColor(indexOfAttrColorPrimary, Color.BLACK);
+            a.recycle();
+
+            errorDrawable.setColorFilter(colorPrimary, PorterDuff.Mode.SRC_IN);
+            return errorDrawable;
         }
     }
 
