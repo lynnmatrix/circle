@@ -75,15 +75,10 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     private boolean alreadyAdded(ApUtils.AP currentAp) {
         boolean currentAPAlreadyAdded = false;
 
-        int count = getAdapter().getCount();
-        for (int i = 0; i < count; i++) {
-            UserAp userAp = getAdapter().getItem(i);
-            if (null != userAp) {
-                if (currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
-                    currentAPAlreadyAdded = true;
-                    break;
-                }
-            } else {
+        List<UserAp> userApList = account.getUserAps();
+        for (UserAp userAp : userApList) {
+            if (currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
+                currentAPAlreadyAdded = true;
                 break;
             }
         }

@@ -85,53 +85,61 @@ public class ComposerPresenter extends ViewPresenter<ComposerView> implements Pr
 
         final Topic topic = new Topic(userAp, content);
 
-        InputStream inputStream = null;
-        ContentResolver contentResolver = getView().getContext().getContentResolver();
-        try {
-            inputStream = contentResolver.openInputStream(imageUri);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        if(null != imageUri) {
+            InputStream inputStream = null;
+            ContentResolver contentResolver = getView().getContext().getContentResolver();
+            try {
+                inputStream = contentResolver.openInputStream(imageUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-        sendSubscription = topic.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
+            sendSubscription = topic.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
+
+                @Override
+                public void onCompleted() {
+                    publish(topic);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNext(String imageUri) {
+                    topic.addImage(imageUri);
+                }
+            });
+        } else {
+            publish(topic);
+        }
+    }
+
+    private void publish(Topic topic){
+        topic.publish(userAp).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Topic>() {
+
             @Override
             public void onCompleted() {
-                topic.publish(userAp).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Topic>() {
-
-                    @Override
-                    public void onCompleted() {
-                        Toast.makeText(getView().getContext(), R.string.message_send_success,
-                                Toast.LENGTH_SHORT).show();
-                        Flow.get(getView().getContext()).goBack();
-                        sendSubscription = Subscriptions.empty();
-                        sendSubscription.unsubscribe();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
-                                .LENGTH_LONG).show();
-                        sendSubscription = Subscriptions.empty();
-                        sendSubscription.unsubscribe();
-                    }
-
-                    @Override
-                    public void onNext(Topic topic1) {
-                    }
-                });
+                Toast.makeText(getView().getContext(), R.string.message_send_success,
+                        Toast.LENGTH_SHORT).show();
+                Flow.get(getView().getContext()).goBack();
+                sendSubscription = Subscriptions.empty();
+                sendSubscription.unsubscribe();
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
-                        .LENGTH_SHORT).show();
+                        .LENGTH_LONG).show();
+                sendSubscription = Subscriptions.empty();
+                sendSubscription.unsubscribe();
             }
 
             @Override
-            public void onNext(String imageUri) {
-                topic.addImage(imageUri);
+            public void onNext(Topic topic1) {
             }
         });
     }

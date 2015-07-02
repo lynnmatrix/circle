@@ -40,6 +40,10 @@ public class Account {
         return deviceId;
     }
 
+    public List<UserAp> getUserAps(){
+        return aps;
+    }
+
     public Observable<List<UserAp>> listAPs() {
         return userApLister.list();
     }
@@ -52,7 +56,8 @@ public class Account {
 
     public UserAp getUserAp(String ap) {
         for(UserAp userAp : aps) {
-            if (userAp.getAP().equals(ap)) {
+            boolean apMatch = userAp.getAP().equals(ap);
+            if (apMatch) {
                 return userAp;
             }
         }
