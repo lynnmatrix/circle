@@ -62,6 +62,7 @@ public class HomePresenter extends Presenter<HomeActivity> {
     protected void onExitScope() {
         if (null != wechatApi) {
             wechatApi.unregisterApp();
+            wechatApi.detach();
         }
         super.onExitScope();
     }
