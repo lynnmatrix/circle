@@ -34,21 +34,22 @@ class DomainLister<D> {
     }
 
     public Observable<List<D>> list() {
+
         Observable<List<D>> observable;
         if (!delegate.isDBLoaded()) {
-            observable = delegate.createRefreshRestObservable().startWith(delegate.createDBObservable())
-                    .map(new Func1<List<D>, List<D>>() {
+            Observable<List<D>> dbObservable = delegate.createDBObservable();
+            observable = dbObservable.flatMap(new Func1<List<D>, Observable<List<D>>>() {
                 @Override
-                public List<D> call(List<D> topics) {
+                public Observable<List<D>> call(List<D> ds) {
                     delegate.onDBLoaded();
-                    return topics;
+                    return delegate.createRefreshRestObservable();
                 }
             }).subscribeOn(Schedulers.io());
         } else {
             List[] lists = {delegate.getRestStartSource()};
             Observable restObservable = delegate.createRefreshRestObservable();
-            observable = restObservable.startWith(Observable.from(lists)).subscribeOn(Schedulers
-                    .io());
+            observable = restObservable.startWith(Observable.from(lists)).subscribeOn
+                    (Schedulers.io());
         }
         return observable;
     }
