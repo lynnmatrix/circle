@@ -3,13 +3,12 @@ package com.jadenine.circle.ui.message;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Message;
 import com.jadenine.circle.domain.Topic;
+import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.Device;
 
 import java.util.Collections;
@@ -110,25 +109,6 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         return topic;
     }
 
-    /**
-     * 隐藏键盘和去掉焦点
-     */
-    private void toggleInputMethod(boolean show) {
-        InputMethodManager inputManager = (InputMethodManager)getView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        View focusView = getView().replyEditor;
-        if (inputManager.isActive() && focusView != null) {
-            if (show) {
-                if (focusView.requestFocus()) {
-                    inputManager.showSoftInput(focusView, InputMethodManager.SHOW_IMPLICIT);
-                }
-            } else {
-                inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-                focusView.clearFocus();
-            }
-        }
-    }
-
     public void send() {
         boolean isPrivate  = getView().privateCheckBox.isChecked();
         String replyTo = null;
@@ -145,7 +125,7 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
                     .LENGTH_SHORT).show();
             return;
         }
-        toggleInputMethod(false);
+        SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, false);
         Message message = new Message(topic.getAp(), topic.getTopicId());
 
         message.setUser(Device.getDeviceId(getView().getContext()));
@@ -187,7 +167,7 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         replyTo = message.getUser();
         if(hasView()) {
             updateHint();
-            toggleInputMethod(true);
+            SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, true);
         }
     }
 

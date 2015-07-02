@@ -21,7 +21,7 @@ class RestMapper<E extends Savable, D extends Updatable> implements Func1<E, D> 
             domainModel.merge(e);
         } else {
             domainModel = mapperDelegate.build(e);
-            mapperDelegate.getOriginSource().add(domainModel);
+            mapperDelegate.getOriginSource().add(0, domainModel);
             e.save();
         }
         return domainModel;

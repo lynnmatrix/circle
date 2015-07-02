@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -56,6 +57,7 @@ public class ComposerPresenter extends ViewPresenter<ComposerView> implements Pr
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().editor.setText(content);
         }
+        SoftKeyboardToggler.toggleInputMethod(getView().editor, true);
     }
 
     @Override
@@ -104,6 +106,9 @@ public class ComposerPresenter extends ViewPresenter<ComposerView> implements Pr
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
+                    if(!hasView()){
+                        return;
+                    }
                     Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast.LENGTH_SHORT).show();
                 }
 
@@ -122,8 +127,12 @@ public class ComposerPresenter extends ViewPresenter<ComposerView> implements Pr
 
             @Override
             public void onCompleted() {
+                if(!hasView()){
+                    return;
+                }
                 Toast.makeText(getView().getContext(), R.string.message_send_success,
                         Toast.LENGTH_SHORT).show();
+                SoftKeyboardToggler.toggleInputMethod(getView().editor, false);
                 Flow.get(getView().getContext()).goBack();
                 sendSubscription = Subscriptions.empty();
                 sendSubscription.unsubscribe();
@@ -132,6 +141,9 @@ public class ComposerPresenter extends ViewPresenter<ComposerView> implements Pr
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                if(!hasView()){
+                    return;
+                }
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
                 sendSubscription = Subscriptions.empty();

@@ -29,8 +29,9 @@ class RefreshMapper<E extends Savable, D extends Updatable<E>> implements Func1<
         TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
                 .withModels(restResultClassifier.getReceivedTopicEntities())));
         List<D> source = mapperDelegate.getOriginSource();
-        source.addAll(0, restResultClassifier.getNewDomainObject());
-
+        if(restResultClassifier.getNewDomainObject().size() > 0) {
+            source.addAll(0, restResultClassifier.getNewDomainObject());
+        }
         boolean needClear = entities.hasMore() || source.size() > mapperDelegate.getCapability();
 
         if (needClear) {

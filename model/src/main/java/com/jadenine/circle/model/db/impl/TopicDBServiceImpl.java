@@ -22,7 +22,7 @@ public class TopicDBServiceImpl implements TopicDBService {
             public void call(Subscriber<? super List<TopicEntity>> subscriber) {
                 List<TopicEntity> userApEntities = new Select().from(TopicEntity.class)
                         .where(Condition.column(TopicEntity$Table.AP).eq(ap))
-                        .queryList();
+                        .orderBy(true, TopicEntity$Table.TOPICID).queryList();
                 if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(userApEntities);
                     subscriber.onCompleted();

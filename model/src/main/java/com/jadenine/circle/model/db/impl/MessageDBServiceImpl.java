@@ -22,6 +22,7 @@ public class MessageDBServiceImpl implements MessageDBService {
             public void call(Subscriber<? super List<MessageEntity>> subscriber) {
                 List<MessageEntity> userApEntities = new Select().from(MessageEntity.class)
                         .where(Condition.column(MessageEntity$Table.TOPICID).eq(topic))
+                        .orderBy(true, MessageEntity$Table.MESSAGEID)
                         .queryList();
                 if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(userApEntities);
