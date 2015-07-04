@@ -10,7 +10,9 @@ import android.widget.Toast;
 import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
-import com.jadenine.circle.domain.dagger.DomainComponent;
+import com.jadenine.circle.domain.dagger.DaggerDomainComponentProduction;
+import com.jadenine.circle.domain.dagger.DomainComponentProduction;
+import com.jadenine.circle.domain.dagger.DomainModule;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.utils.Device;
@@ -42,10 +44,13 @@ public class CircleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        com.jadenine.circle.domain.dagger.DaggerService.init(Device.getDeviceId(this));
+        DomainComponentProduction domainComponent = DaggerDomainComponentProduction.builder()
+                .domainModule(new DomainModule(Device.getDeviceId(this))).build();
+
+        com.jadenine.circle.domain.dagger.DaggerService.setComponent(domainComponent);
 
         AppComponent appComponent = DaggerCircleApplication_AppComponent.builder()
-                .domainComponent(com.jadenine.circle.domain.dagger.DaggerService.getDomainComponent())
+                .domainComponentProduction(domainComponent)
                 .appModule(new AppModule(this)).build();
 
         MortarScope.Builder builder = MortarScope.buildRootScope();
@@ -112,7 +117,7 @@ public class CircleApplication extends Application {
     }
 
     @DaggerScope(CircleApplication.class)
-    @dagger.Component(dependencies = DomainComponent.class, modules = {AppModule.class})
+    @dagger.Component(dependencies = DomainComponentProduction.class, modules = {AppModule.class})
     public interface AppComponent {
         void inject(CircleApplication app);
         Account account();

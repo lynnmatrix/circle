@@ -8,9 +8,13 @@ public class DaggerService {
 
     public synchronized static void init(String deviceId) {
         if(null == domainComponent) {
-            domainComponent = DaggerDomainComponent.builder()
+            domainComponent = DaggerDomainComponentProduction.builder()
                     .domainModule(new DomainModule(deviceId)).build();
         }
+    }
+
+    public static void setComponent(DomainComponent component) {
+        domainComponent = component;
     }
 
     public static DomainComponent getDomainComponent(){

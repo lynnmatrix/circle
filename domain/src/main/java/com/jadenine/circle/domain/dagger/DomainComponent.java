@@ -5,13 +5,9 @@ import com.jadenine.circle.domain.Message;
 import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.domain.UserAp;
 
-import javax.inject.Singleton;
-
 /**
- * Created by linym on 6/18/15.
+ * Created by linym on 7/3/15.
  */
-@dagger.Component(modules = DomainModule.class)
-@Singleton
 public interface DomainComponent {
     void inject(Account account);
     void inject(UserAp userAp);

@@ -41,6 +41,8 @@ public class Topic implements Updatable<TopicEntity>{
     MessageDBService messageDBService;
     @Inject
     ImageService imageService;
+    @Inject
+    AzureBlobUploader blobUploader;
 
     @Inject
     Lazy<Account> account;
@@ -145,7 +147,7 @@ public class Topic implements Updatable<TopicEntity>{
                 return Observable.create(new Observable.OnSubscribe<String>() {
                     @Override
                     public void call(Subscriber<? super String> subscriber) {
-                        boolean success = AzureBlobUploader.upload(image.getWritableSas(),
+                        boolean success = blobUploader.upload(image.getWritableSas(),
                                 imageInputStream, mimeType);
                         if (!subscriber.isUnsubscribed()) {
                             if (success) {

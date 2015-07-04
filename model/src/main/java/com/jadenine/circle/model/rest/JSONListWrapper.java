@@ -10,6 +10,14 @@ public class JSONListWrapper<T> {
     private boolean hasMore;
     private String nextId;
 
+    public JSONListWrapper(){}
+
+    public JSONListWrapper(List<T> itemList, boolean hasMore, String nextId) {
+        this.itemList = itemList;
+        this.hasMore = hasMore;
+        this.nextId = nextId;
+    }
+
     public List<T> getAll() {
         return itemList;
     }

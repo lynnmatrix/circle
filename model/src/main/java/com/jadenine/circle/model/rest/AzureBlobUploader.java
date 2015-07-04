@@ -11,7 +11,7 @@ import java.net.URL;
  */
 public class AzureBlobUploader {
     // upload file to azure blob storage
-    public static Boolean upload(String sasUrl, InputStream inputStream, String mimeType) {
+    public Boolean upload(String sasUrl, InputStream inputStream, String mimeType) {
         try {
             if(null == mimeType) {
                 mimeType = "application/octet-stream";
