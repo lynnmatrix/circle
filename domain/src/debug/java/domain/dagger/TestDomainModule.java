@@ -80,8 +80,8 @@ public class TestDomainModule {
     @Singleton
     TopicService provideTopicRestService() {
         TopicService mockService = mock(TopicService.class);
-        when(mockService.listTopics(Matchers.anyString(), Matchers.anyInt(), Matchers.anyLong(),
-                Matchers.anyString())).thenReturn(Observable.<JSONListWrapper<TopicEntity>>empty());
+        when(mockService.listTopics(Matchers.anyString(), Matchers.anyInt(), Matchers.anyLong()))
+                .thenReturn(Observable.<JSONListWrapper<TopicEntity>>empty());
         return mockService;
     }
 

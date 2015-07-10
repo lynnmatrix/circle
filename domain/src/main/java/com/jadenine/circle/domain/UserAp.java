@@ -92,13 +92,6 @@ public class UserAp implements Updatable<UserApEntity>{
         return account.addUserAp(this);
     }
 
-    Observable<Topic> publish(final Topic topic) {
-        Observable<Topic> observable = topicRestService.addTopic(topic.getEntity()).map(new
-                RestMapper<>(mapperDelegate));
-
-        return observable;
-    }
-
     public Topic getTopic(String topicId) {
         for (Topic topic : topics) {
             if (topic.getTopicId().equals(topicId)) {
@@ -110,6 +103,16 @@ public class UserAp implements Updatable<UserApEntity>{
 
     public boolean hasMoreTopic(){
         return hasMoreTopic;
+    }
+
+
+
+
+    Observable<Topic> publish(final Topic topic) {
+        Observable<Topic> observable = topicRestService.addTopic(topic.getEntity()).map(new
+                RestMapper<>(mapperDelegate));
+
+        return observable;
     }
 
     private class TopicMapperDelegate implements MapperDelegate<TopicEntity, Topic> {
@@ -158,14 +161,15 @@ public class UserAp implements Updatable<UserApEntity>{
 
         @Override
         public Observable<List<Topic>> createRefreshRestObservable() {
-            return topicRestService.listTopics(getAP(), INITIAL_PAGE_SIZE, getLatestTopicTimestamp(), null).map
+            return topicRestService.refresh(getAP(), INITIAL_PAGE_SIZE, getOldestTopicId(),
+                    getLatestTopicTimestamp()).map
                     (new RefreshMapper(mapperDelegate));
         }
 
         @Override
         public Observable<List<Topic>> createLoadMoreRestObservable() {
-            return topicRestService.listTopics(getAP(), PAGE_SIZE, (String) null, getOldestTopicId())
-                    .map(new LoadMoreMapper(mapperDelegate));
+            return topicRestService.loadMore(getAP(), PAGE_SIZE, getOldestTopicId(),
+                    getLatestTopicTimestamp()).map(new LoadMoreMapper(mapperDelegate));
         }
 
         @Override
@@ -174,16 +178,12 @@ public class UserAp implements Updatable<UserApEntity>{
         }
 
         private String getOldestTopicId(){
-            String oldestTopicId = null;
-            // Id on circle server is auto decrement
-            for(Topic topic : topics) {
-                if (null == oldestTopicId
-                        || topic.getTopicId().length() > oldestTopicId.length()
-                        || topic.getTopicId().compareTo(oldestTopicId) > 0) {
-                    oldestTopicId = topic.getTopicId();
-                }
+            if(topics.isEmpty()) {
+                return null;
             }
-            return oldestTopicId;
+
+            Topic oldestTopic = topics.get(topics.size() -1);
+            return oldestTopic.getTopicId();
         }
 
         private Long getLatestTopicTimestamp() {

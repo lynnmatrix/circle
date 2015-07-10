@@ -12,41 +12,48 @@ import rx.Observable;
  */
 public interface TopicService {
     /**
-     * Return a collection of the most recent topics under the specified AP.
-     * <p>
-     *  NOTE: The topic id is auto <b>decrement</b>.
-     * </p>
+     *
+     * List topics of the most recent topics satisfied with the following specification.
+     * Including entities of these topics.
+     *
+     * This API is usually used to refresh the list of the most recent topics.
      *
      * @param ap
      * @param count (optional, default 20)  Specifies the number of topics to try and retrieve,
      *              up to a maximum of 200.
-     * @param sinceId (optional) Returns results with a topic id <b>less than</b> the
-     *                       specified ID.
-     * @param beforeId (optional) Returns results with a topic id <b>greater than</b> the
-     *                        specified ID.
+     * @param sinceTopicId (optional) The id of topic in result must be <b>less than</b> or
+     *                     <b>equal to</b> the specified sinceTopicId.
+     * @param sinceTimestamp (optional) the topic or entity in result must has a modified-timestamp
+     *                       <b>greater than</b> or <b>equals to</b> the specified timestamp.
+     *
      */
     @POST("/topic/list")
-    Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
-                                                        @Query("count") Integer count,
-                                                        @Query("since_id") String sinceId,
-                                                        @Query("before_id") String beforeId);
+    Observable<JSONListWrapper<TopicEntity>> refresh(@Query("ap") String ap,
+                                                     @Query("count") Integer count,
+                                                     @Query("since_topic_id") String sinceTopicId,
+                                                     @Query("since_timestamp") Long sinceTimestamp);
 
     /**
+     * Return a collection of the most recent topics under the specified AP.
+     * Including entities of these topics.
+     * <p>
+     *  NOTE: The topic id is auto <b>decrement</b>.
+     * </p>
      *
-     * See {@link TopicService#listTopics(String, Integer, String, String)}
+     * This API is usually used to load more topics in the the timeline of the most recent topics.
      *
-     * @param ap See {@link TopicService#listTopics(String, Integer, String, String)}
-     * @param count See {@link TopicService#listTopics(String, Integer, String, String)}
-     * @param sinceTimestamp (optional) Returns results with a timestamp <b>greater than</b> the
-     *                       specified timestamp.
-     * @param beforeId See {@link TopicService#listTopics(String, Integer, String, String)}
-     *
+     * @param ap
+     * @param count See {@link TopicService#refresh(String, Integer, String, Long)}
+     * @param beforeTopicId (optional) Returns results with a topic id <b>greater than</b> the
+     *                    beforeId
+     * @param beforeTimestamp (optional) the topic or entity in result must has a
+     *                        created-timestamp <b>less than</b> the specified timestamp.
      */
     @POST("/topic/list")
-    Observable<JSONListWrapper<TopicEntity>> listTopics(@Query("ap") String ap,
-                                                        @Query("count") Integer count,
-                                                        @Query("since_timestamp") Long sinceTimestamp,
-                                                        @Query("before_id") String beforeId);
+    Observable<JSONListWrapper<TopicEntity>> loadMore(@Query("ap") String ap,
+                                                      @Query("count") Integer count,
+                                                      @Query("before_topic_id") String beforeTopicId,
+                                                      @Query("before_timestamp") Long beforeTimestamp);
 
     @POST("/topic/add")
     Observable<TopicEntity> addTopic(@Body TopicEntity entity);

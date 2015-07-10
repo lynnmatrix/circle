@@ -1,30 +1,44 @@
 package com.jadenine.circle.model.entity;
 
 import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+
+import java.util.List;
 
 /**
  * Created by linym on 6/10/15.
  */
-@Table(databaseName = CircleDatabase.NAME, allFields = true)
+@Table(databaseName = CircleDatabase.NAME)
 public class TopicEntity extends CircleBaseModel {
     public static final String IMAGE_DELIMITER = ",";
 
     @PrimaryKey
+    @Column(name = "topicId")
     String topicId;
+
+    @Column(name = "ap")
     String ap;
 
+    @Column(name = "user")
     String user;
+    @Column(name = "topic")
     String topic;
 
+    @Column(name = "images")
     String images;
 
+    @Column(name = "createdTimestamp")
     long createdTimestamp;
 
+    @Column(name = "messageCount")
     int messageCount;
 
+    @Column(name = "latestMessageId")
     String latestMessageId;
+
+    List<MessageEntity> messages;
 
     TopicEntity(){}
 
