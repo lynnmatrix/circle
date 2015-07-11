@@ -19,9 +19,9 @@ class DBMapper<E extends Savable, D extends Updatable<E>> implements Func1<List<
     }
 
     @Override
-    public List<D> call(List<E> userAps) {
+    public List<D> call(List<E> entities) {
 
-        for (E entity : userAps) {
+        for (E entity : entities) {
             D domainModel = mapperDelegate.find(entity);
             if (null == domainModel) {
                 domainModel = mapperDelegate.build(entity);

@@ -11,6 +11,7 @@ import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
 import com.jadenine.circle.model.db.impl.ApDBServiceImpl;
 import com.jadenine.circle.model.db.impl.MessageDBServiceImpl;
+import com.jadenine.circle.model.db.impl.TimelineStateDBService;
 import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
 import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
@@ -124,6 +125,12 @@ public class DomainModule {
     @Singleton
     MessageDBService provideMessageDBService(){
         return new MessageDBServiceImpl();
+    }
+
+    @Provides
+    @Singleton
+    TimelineStateDBService provideTimelineStateService(){
+        return new TimelineStateDBService();
     }
 
 }

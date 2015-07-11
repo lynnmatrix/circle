@@ -31,4 +31,21 @@ public class MessageDBServiceImpl implements MessageDBService {
             }
         });
     }
+
+    @Override
+    public Observable<List<MessageEntity>> listMessagesOfAp(final String ap) {
+        return Observable.create(new Observable.OnSubscribe<List<MessageEntity>>() {
+            @Override
+            public void call(Subscriber<? super List<MessageEntity>> subscriber) {
+                List<MessageEntity> userApEntities = new Select().from(MessageEntity.class)
+                        .where(Condition.column(MessageEntity$Table.AP).eq(ap))
+                        .orderBy(true, MessageEntity$Table.TIMESTAMP)
+                        .queryList();
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onNext(userApEntities);
+                    subscriber.onCompleted();
+                }
+            }
+        });
+    }
 }

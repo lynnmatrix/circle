@@ -5,10 +5,7 @@ import java.util.List;
 /**
  * Created by linym on 6/18/15.
  */
-interface MapperDelegate<E, D> {
-    D find(E e);
-
-    D build(E e);
+interface MapperDelegate<E, D> extends Binder<E, D> {
 
     void setHasMore(boolean hasMore);
 

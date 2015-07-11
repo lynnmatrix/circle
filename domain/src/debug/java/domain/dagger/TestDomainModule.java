@@ -13,6 +13,7 @@ import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.rest.MessageService;
+import com.jadenine.circle.model.rest.TimelineResult;
 import com.jadenine.circle.model.rest.TopicService;
 
 import org.mockito.Matchers;
@@ -80,8 +81,10 @@ public class TestDomainModule {
     @Singleton
     TopicService provideTopicRestService() {
         TopicService mockService = mock(TopicService.class);
-        when(mockService.listTopics(Matchers.anyString(), Matchers.anyInt(), Matchers.anyLong()))
-                .thenReturn(Observable.<JSONListWrapper<TopicEntity>>empty());
+        when(mockService.refresh(Matchers.anyString(), Matchers.anyInt(), Matchers.anyString(),
+                Matchers
+                .anyLong()))
+                .thenReturn(Observable.<TimelineResult<TopicEntity>>empty());
         return mockService;
     }
 

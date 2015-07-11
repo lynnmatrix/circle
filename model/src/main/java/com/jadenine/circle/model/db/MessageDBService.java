@@ -11,4 +11,6 @@ import rx.Observable;
  */
 public interface MessageDBService {
     Observable<List<MessageEntity>> listMessages(String topic);
+
+    Observable<List<MessageEntity>> listMessagesOfAp(String ap);
 }

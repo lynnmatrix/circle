@@ -1,6 +1,8 @@
 package com.jadenine.circle.domain;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.MessageDBService;
@@ -64,6 +66,12 @@ public class Topic implements Updatable<TopicEntity>{
 
     public Topic(TopicEntity entity) {
         this.entity = entity;
+        if(null != entity.getMessages() && !entity.getMessages().isEmpty()) {
+            for(MessageEntity messageEntity : entity.getMessages()) {
+                messages.add(Message.build(messageEntity));
+            }
+        }
+
         DaggerService.getDomainComponent().inject(this);
     }
 
@@ -96,7 +104,11 @@ public class Topic implements Updatable<TopicEntity>{
     }
 
     public long getTimestamp() {
-        return entity.getTimestamp();
+        long timestamp = entity.getTimestamp();
+        if(!messages.isEmpty()) {
+            timestamp = messages.get(messages.size() -1).getTimestamp();
+        }
+        return timestamp;
     }
 
     @Override
@@ -106,12 +118,35 @@ public class Topic implements Updatable<TopicEntity>{
             this.entity.setLatestMessageId(entity.getLatestMessageId());
             this.entity.setMessageCount(entity.getMessageCount());
             this.entity.save();
+
+            if(!DomainUtils.checkEmpty(entity.getMessages())) {
+                mergeMessages(entity);
+            }
         }
+    }
+
+    private void mergeMessages(TopicEntity topicEntity) {
+        List<Message> addMessages = new ArrayList<>(topicEntity.getMessages().size());
+        for(MessageEntity messageEntity : topicEntity.getMessages()) {
+            Message message = getMessage(messageEntity.getMessageId());
+            if(null != message) {
+                Log.wtf("Entity", "No ");
+                continue;
+            }
+            message = Message.build(messageEntity);
+            addMessages.add(message);
+        }
+        messages.addAll(addMessages);
     }
 
     @Override
     public void remove() {
         getEntity().delete();
+    }
+
+
+    public List<Message> getMessages() {
+        return messages;
     }
 
     public Observable<List<Message>> listMessage(){
@@ -120,7 +155,7 @@ public class Topic implements Updatable<TopicEntity>{
 
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
-        Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map (new RestMapper<>(mapperDelegate));
+        Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map(new RestMapper<>(mapperDelegate));
 
         return observable;
     }
@@ -208,12 +243,7 @@ public class Topic implements Updatable<TopicEntity>{
                 Message> {
         @Override
         public Message find(MessageEntity messageEntity) {
-            for(Message message : messages) {
-                if(message.getMessageId().equals(messageEntity.getMessageId())){
-                    return message;
-                }
-            }
-            return null;
+            return getMessage(messageEntity.getMessageId());
         }
 
         @Override
@@ -236,6 +266,16 @@ public class Topic implements Updatable<TopicEntity>{
             return MESSAGE_CAPABILITY;
         }
 
+    }
+
+    @Nullable
+    private Message getMessage(String messageId) {
+        for(Message message : messages) {
+            if(message.getMessageId().equals(messageId)){
+                return message;
+            }
+        }
+        return null;
     }
 
     private class MessageListerDelegate implements DomainLister.Delegate<Message> {

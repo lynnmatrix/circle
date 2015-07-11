@@ -23,7 +23,8 @@ class LoadMoreMapper<E extends Savable, D extends Updatable<E>> implements Func1
     @Override
     public List<D> call(JSONListWrapper<E> entities) {
 
-        RestResultClassifier restResultClassifier = new RestResultClassifier(entities, mapperDelegate).invoke();
+        RestResultClassifier restResultClassifier = new RestResultClassifier(entities.getAll(),
+                mapperDelegate).invoke();
 
         TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo.withModels
                 (restResultClassifier.getReceivedTopicEntities())));

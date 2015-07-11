@@ -99,4 +99,13 @@ public class TopicEntity extends CircleBaseModel {
     public void setMessageCount(int messageCount) {
         this.messageCount = messageCount;
     }
+
+    public List<MessageEntity> getMessages(){
+        return messages;
+    }
+    public void setMessages(List<MessageEntity> messages) {
+        this.messages = messages;
+    }
+
+
 }

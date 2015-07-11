@@ -28,7 +28,7 @@ public interface TopicService {
      *
      */
     @POST("/topic/list")
-    Observable<JSONListWrapper<TopicEntity>> refresh(@Query("ap") String ap,
+    Observable<TimelineResult<TopicEntity>> refresh(@Query("ap") String ap,
                                                      @Query("count") Integer count,
                                                      @Query("since_topic_id") String sinceTopicId,
                                                      @Query("since_timestamp") Long sinceTimestamp);
@@ -50,7 +50,7 @@ public interface TopicService {
      *                        created-timestamp <b>less than</b> the specified timestamp.
      */
     @POST("/topic/list")
-    Observable<JSONListWrapper<TopicEntity>> loadMore(@Query("ap") String ap,
+    Observable<TimelineResult<TopicEntity>> loadMore(@Query("ap") String ap,
                                                       @Query("count") Integer count,
                                                       @Query("before_topic_id") String beforeTopicId,
                                                       @Query("before_timestamp") Long beforeTimestamp);
