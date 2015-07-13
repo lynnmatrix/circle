@@ -74,11 +74,6 @@ public class Message implements Updatable<MessageEntity>{
         }
     }
 
-    @Override
-    public void remove() {
-        getEntity().delete();
-    }
-
     public Observable<Message> reply(Topic topic) {
         return topic.addReply(this);
     }

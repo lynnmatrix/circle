@@ -59,11 +59,6 @@ public class UserAp implements Updatable<UserApEntity>{
     }
 
     @Override
-    public void remove() {
-        getEntity().delete();
-    }
-
-    @Override
     public String toString(){
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }

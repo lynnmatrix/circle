@@ -139,12 +139,6 @@ public class Topic implements Updatable<TopicEntity>{
         messages.addAll(addMessages);
     }
 
-    @Override
-    public void remove() {
-        getEntity().delete();
-    }
-
-
     public List<Message> getMessages() {
         return messages;
     }

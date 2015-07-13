@@ -6,7 +6,5 @@ package com.jadenine.circle.domain;
 interface Updatable<E> {
     void merge(E e);
 
-    void remove();
-
     E getEntity();
 }
