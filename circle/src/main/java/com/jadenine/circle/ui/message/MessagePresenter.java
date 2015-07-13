@@ -11,18 +11,10 @@ import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.Device;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import mortar.ViewPresenter;
-import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
 import rx.android.internal.Preconditions;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
 
 /**
  * Created by linym on 6/9/15.
@@ -33,7 +25,6 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
     private static final String BUNDLE_REPLYTO = "reply_to";
 
     private final Topic topic;
-    private Subscription running = Subscriptions.empty();
 
     private String replyTo;
 
@@ -71,38 +62,10 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
         outState.putString(BUNDLE_REPLYTO, replyTo);
     }
 
-    @Override
-    protected void onExitScope() {
-        super.onExitScope();
-        running.unsubscribe();
-    }
-
     void loadMessages() {
-        Observable<List<Message>> messageObservable = topic.listMessage().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-
-        running = messageObservable.subscribe(new Observer<List<Message>>() {
-            @Override
-            public void onCompleted() {
-                running = Subscriptions.empty();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                running = Subscriptions.empty();
-            }
-
-            @Override
-            public void onNext(List<Message> messages) {
-                if(!hasView()) return;
-                Collections.sort(messages, new Comparator<Message>() {
-                    @Override
-                    public int compare(Message lhs, Message rhs) {
-                        return (int) (rhs.getTimestamp() - lhs.getTimestamp());
-                    }
-                });
-                getView().getMessageAdapter().setMessages(messages);
-            }
-        });
+        if(hasView()) {
+            getView().getMessageAdapter().setMessages(topic.getMessages());
+        }
     }
 
     Topic getTopic() {
@@ -111,7 +74,7 @@ public class MessagePresenter extends ViewPresenter<MessageListView>{
 
     public void send() {
         boolean isPrivate  = getView().privateCheckBox.isChecked();
-        String replyTo = null;
+        String replyTo;
         if(isPrivate) {
             replyTo = topic.getUser();
         } else {

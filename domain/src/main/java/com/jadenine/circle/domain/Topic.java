@@ -30,12 +30,11 @@ import rx.schedulers.Schedulers;
  * Created by linym on 6/10/15.
  */
 public class Topic implements Updatable<TopicEntity>{
-    private static final int MESSAGE_CAPABILITY = Integer.MAX_VALUE;
 
     private final TopicEntity entity;
     private final List<Message> messages = new ArrayList<>();
 
-    List<String> images;
+    private List<String> images;
 
     @Inject
     MessageService messageRestService;
@@ -48,13 +47,6 @@ public class Topic implements Updatable<TopicEntity>{
 
     @Inject
     Lazy<Account> account;
-
-    private boolean loaded = false;
-    private boolean hasMore = true;
-
-    private final MessageMapperDelegate mapperDelegate = new MessageMapperDelegate();
-    private final DomainLister<Message> messageLister = new DomainLister<>(new
-            MessageListerDelegate());
 
     public static Topic build(TopicEntity entity) {
         return new Topic(entity);
@@ -143,13 +135,25 @@ public class Topic implements Updatable<TopicEntity>{
         return messages;
     }
 
-    public Observable<List<Message>> listMessage(){
-        return messageLister.list();
-    }
-
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
-        Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map(new RestMapper<>(mapperDelegate));
+        Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map
+                (new Func1<MessageEntity, Message>() {
+
+            @Override
+            public Message call(MessageEntity messageEntity) {
+                Message msg = getMessage(messageEntity.getMessageId());
+                if(null != msg) {
+                    Log.wtf("Entity", "Message same as the new reply exists.");
+                    return msg;
+                }
+                msg = Message.build(messageEntity);
+                messages.add(msg);
+                msg.getEntity().save();
+
+                return msg;
+            }
+        });
 
         return observable;
     }
@@ -233,35 +237,6 @@ public class Topic implements Updatable<TopicEntity>{
         return images;
     }
 
-    private class MessageMapperDelegate implements MapperDelegate<MessageEntity,
-                Message> {
-        @Override
-        public Message find(MessageEntity messageEntity) {
-            return getMessage(messageEntity.getMessageId());
-        }
-
-        @Override
-        public Message build(MessageEntity messageEntity) {
-            return Message.build(messageEntity);
-        }
-
-        @Override
-        public void setHasMore(boolean hasMore) {
-            Topic.this.hasMore = hasMore;
-        }
-
-        @Override
-        public List<Message> getOriginSource() {
-            return messages;
-        }
-
-        @Override
-        public int getCapability() {
-            return MESSAGE_CAPABILITY;
-        }
-
-    }
-
     @Nullable
     private Message getMessage(String messageId) {
         for(Message message : messages) {
@@ -272,45 +247,4 @@ public class Topic implements Updatable<TopicEntity>{
         return null;
     }
 
-    private class MessageListerDelegate implements DomainLister.Delegate<Message> {
-
-        @Override
-        public boolean isDBLoaded() {
-            return loaded;
-        }
-
-        @Override
-        public void onDBLoaded() {
-            loaded = true;
-        }
-
-        @Override
-        public Observable<List<Message>> createDBObservable() {
-            return messageDBService.listMessages(getTopicId()).map(getDBMapper());
-        }
-
-        @Override
-        public Observable<List<Message>> createRefreshRestObservable() {
-            return messageRestService.listMessages
-                    (account.get().getDeviceId(), getAp(), getTopicId()).map(new
-                    RefreshMapper<MessageEntity,
-                    Message>
-                    (mapperDelegate));
-        }
-
-        @Override
-        public Observable<List<Message>> createLoadMoreRestObservable() {
-            return null;
-        }
-
-        @Override
-        public List<Message> getRestStartSource() {
-            return messages;
-        }
-
-        private DBMapper getDBMapper() {
-            return new DBMapper(mapperDelegate);
-        }
-
-    }
 }
