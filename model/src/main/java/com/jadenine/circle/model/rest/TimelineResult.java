@@ -6,6 +6,14 @@ import java.util.List;
  * Created by linym on 7/11/15.
  */
 public class TimelineResult<T> {
+    public TimelineResult(){}
+    public TimelineResult(List<T> add, List<T> update, boolean hasMore, String nextId) {
+        this.add = add;
+        this.update = update;
+        this.hasMore = hasMore;
+        this.nextId = nextId;
+    }
+
     public List<T> getAdd() {
         return add;
     }

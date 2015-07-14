@@ -13,8 +13,11 @@ import java.util.concurrent.TimeUnit;
 
 import domain.dagger.DaggerTestDomainComponent;
 import domain.dagger.TestDomainModule;
-import rx.Observable;
 import rx.Observer;
+
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by linym on 7/3/15.
@@ -39,7 +42,7 @@ public class AccountTest {
     }
 
     @Test
-    public void testGetUserAps() throws Exception {
+    public void testAddUserAp() throws Exception {
         Assert.assertNotNull(account.getUserAps());
         Assert.assertTrue(account.getUserAps().isEmpty());
 
@@ -68,10 +71,9 @@ public class AccountTest {
 
     @Test
     public void testListAPs() throws Exception {
-        Observable<List<UserAp>> listObservable = account.listAPs();
-        Assert.assertNotNull(listObservable);
+
         final CountDownLatch latch = new CountDownLatch(1);
-        listObservable.subscribe(new Observer<List<UserAp>>() {
+        account.listAPs().subscribe(new Observer<List<UserAp>>() {
             @Override
             public void onCompleted() {
                 latch.countDown();
@@ -79,7 +81,8 @@ public class AccountTest {
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
+                latch.countDown();
             }
 
             @Override
@@ -88,7 +91,11 @@ public class AccountTest {
             }
         });
 
-        Assert.assertTrue(latch.await(1, TimeUnit.SECONDS));
+        Assert.assertTrue(latch.await(100, TimeUnit.SECONDS));
+
+        verify(account.apDBService).listAps();
+        verify(account.apService).listAPs(eq(DEVICE_ID));
+        assertFalse(account.getUserAps().isEmpty());
     }
 
 
