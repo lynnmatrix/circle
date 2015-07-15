@@ -72,7 +72,7 @@ public class UserAp implements Updatable<UserApEntity>{
     }
 
     public boolean hasMoreTopic(){
-        return topicTimeline.hasMoreTopic();
+        return topicTimeline.hasMore();
     }
 
     public Topic getTopic(String topicId) {

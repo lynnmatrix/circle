@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by linym on 7/10/15.
  */
-class TopicTimeline {
+class TopicTimeline implements Loadable<Topic> {
     private static final Integer PAGE_SIZE = 20;
     private static final Integer INITIAL_PAGE_SIZE = 50;
     private static final int TOPIC_CAPABILITY = 200;
@@ -66,6 +66,7 @@ class TopicTimeline {
         return null;
     }
 
+    @Override
     public Observable<List<Topic>> refresh() {
 
         Observable<List<Topic>> observable;
@@ -86,13 +87,15 @@ class TopicTimeline {
         return observable;
     }
 
+    @Override
     public Observable<List<Topic>> loadMore() {
         List[] lists = {topics};
         Observable restObservable = createLoadMoreRestObservable();
         return restObservable.startWith(Observable.from(lists)).subscribeOn(Schedulers.io());
     }
 
-    public boolean hasMoreTopic() {
+    @Override
+    public boolean hasMore() {
         return timelineState.getHasMoreTopic();
     }
 

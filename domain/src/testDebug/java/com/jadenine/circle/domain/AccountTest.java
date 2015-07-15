@@ -98,5 +98,25 @@ public class AccountTest {
         assertFalse(account.getUserAps().isEmpty());
     }
 
+    @Test
+    public void testListChat() throws InterruptedException {
+        /*final CountDownLatch latch = new CountDownLatch(1);
+        account.listChat().subscribe(new Observer<List<Chat>>() {
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
 
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Chat> chats) {
+
+            }
+        });
+        assertTrue(latch.await(10, TimeUnit.SECONDS));*/
+    }
 }

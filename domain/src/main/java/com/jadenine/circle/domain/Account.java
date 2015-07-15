@@ -28,7 +28,7 @@ public class Account {
     private boolean loaded = false;
     private boolean hasMore = true;
 
-    private  final UserApMapperDelegate finder = new UserApMapperDelegate();
+    private final UserApMapperDelegate finder = new UserApMapperDelegate();
     private final DomainLister<UserAp> userApLister = new DomainLister<>(new UserApListerDelegate());
 
     public Account(String deviceId) {

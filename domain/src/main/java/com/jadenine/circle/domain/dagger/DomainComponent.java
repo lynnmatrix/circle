@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain.dagger;
 
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Chat;
 import com.jadenine.circle.domain.Message;
 import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.domain.UserAp;
@@ -13,5 +14,6 @@ public interface DomainComponent {
     void inject(UserAp userAp);
     void inject(Topic topic);
     void inject(Message message);
+    void inject(Chat chat);
     Account getAccount();
 }

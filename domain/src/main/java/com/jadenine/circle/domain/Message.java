@@ -58,11 +58,11 @@ public class Message implements Updatable<MessageEntity>{
     }
 
     public boolean isPrivate() {
-        return getEntity().getPrivary();
+        return getEntity().getPrivacy();
     }
 
     public void setIsPrivate(boolean isPrivate, String replyTo) {
-        getEntity().setPrivary(isPrivate);
+        getEntity().setPrivacy(isPrivate);
         getEntity().setReplyToUser(replyTo);
     }
 
@@ -76,5 +76,9 @@ public class Message implements Updatable<MessageEntity>{
 
     public Observable<Message> reply(Topic topic) {
         return topic.addReply(this);
+    }
+
+    public Observable<Message> reply(Chat chat) {
+        return chat.send(this);
     }
 }
