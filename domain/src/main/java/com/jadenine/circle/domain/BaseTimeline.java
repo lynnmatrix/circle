@@ -36,7 +36,7 @@ public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loa
         if(getRangeCount() > 0) {
             lastRange = rangeList.getFirst();
         } else {
-            lastRange = new TimelineRange(getTimeline(), new ArrayList(), loader);
+            lastRange = new TimelineRange(getTimelineId(), new ArrayList(), loader);
         }
         return lastRange;
     }
@@ -46,22 +46,48 @@ public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loa
         if(getRangeCount() > 0) {
             lastRange = rangeList.getLast();
         } else {
-            lastRange = new TimelineRange(getTimeline(), new ArrayList(), loader);
+            lastRange = new TimelineRange(getTimelineId(), new ArrayList(), loader);
         }
         return lastRange;
     }
 
-    protected abstract String getTimeline();
+    public @NotNull TimelineRange<T> getRange(Long id) {
+        if(rangeList.size() < 0) {
+            throw new IllegalStateException("Empty range list.");
+        }
+        TimelineRange<T> result = null;
+        for(TimelineRange range : rangeList) {
+            if(id >= range.cursor.getTop()) {
+                result = range;
+                if (id <=range.cursor.getBottom()){
+                    break;// current range contains the id.
+                }
+            } else {
+                break;// No range contains the id now, but the last range may include this is
+                // after loading more.
+            }
+        }
+        if(null == result) {
+            throw new IllegalStateException("No range found for id:" +id + ", which should not happened." );
+        }
+        return result;
+    }
+
+    protected abstract String getTimelineId();
 
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> refresh() {
         final TimelineRange<T> firstRange = getFirstRange();
+        final Long originalTop = firstRange.cursor.getTop();
         return firstRange.refresh().flatMap(new Func1<TimelineRange<T>,
                 Observable<List<TimelineRange<T>>>>() {
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> ts) {
                 if(firstRange != ts) {
                     rangeList.add(0, ts);
+                    group(ts.getAll());
+                } else if(firstRange.cursor.getTop() < originalTop) {
+                    group(ts.getSubRange(firstRange.cursor.getTop(), originalTop));
                 }
                 return Observable.just(getAllRanges());
             }
@@ -70,13 +96,19 @@ public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loa
 
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> loadMore() {
-        //TODO load more for the last range which has one visible range at least.
-        //For now, we load more for the last range which may be not visible now.
         final TimelineRange<T> lastRange = getLastRange();
+        final Long originalBottom = lastRange.cursor.getBottom();
+
         return lastRange.loadMore().flatMap(new Func1<TimelineRange<T>,
                 Observable<List<TimelineRange<T>>>>() {
             @Override
-            public Observable<List<TimelineRange<T>>> call(TimelineRange<T> ts) {
+            public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
+                if(range.cursor.getBottom() > originalBottom) {
+                    for(T entity : range.getSubRange(originalBottom, range.cursor.getBottom() +
+                            1)) {
+                        range.group(entity);
+                    }
+                }
                 return Observable.just(getAllRanges());
             }
         });
@@ -85,5 +117,13 @@ public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loa
     @Override
     public boolean hasMore() {
         return getLastRange().hasMore();
+    }
+
+    private void group(List<T> entities) {
+        TimelineRange<T> range;
+        for(T entity : entities) {
+            range = getRange(entity.getGroupId());
+            range.group(entity);
+        }
     }
 }

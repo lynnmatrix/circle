@@ -1,5 +1,7 @@
 package com.jadenine.circle.domain;
 
+import android.support.annotation.NonNull;
+
 import com.jadenine.circle.model.entity.MessageEntity;
 
 import rx.Observable;
@@ -7,8 +9,10 @@ import rx.Observable;
 /**
  * Created by linym on 6/3/15.
  */
-public class Message implements Updatable<MessageEntity>{
+public class Message implements Updatable<MessageEntity>, Identifiable<Long>{
     private final MessageEntity entity;
+    private Long messageId;
+    private Long groupId;
 
     public static Message build(MessageEntity entity) {
         return new Message(entity);
@@ -31,6 +35,24 @@ public class Message implements Updatable<MessageEntity>{
     }
     public void setTopicId(String topicId) {
         entity.setTopicId(topicId);
+    }
+
+    @NonNull
+    @Override
+    public Long getId() {
+        if(null == messageId && null != getMessageId()) {
+            messageId = Long.valueOf(getMessageId());
+        }
+        return messageId;
+    }
+
+    @NonNull
+    @Override
+    public Long getGroupId() {
+        if(null == groupId && null != getTopicId()) {
+            groupId = Long.valueOf(getTopicId());
+        }
+        return groupId;
     }
 
     public String getMessageId() {
@@ -81,4 +103,5 @@ public class Message implements Updatable<MessageEntity>{
     public Observable<Message> reply(Chat chat) {
         return chat.send(this);
     }
+
 }

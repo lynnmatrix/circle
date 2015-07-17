@@ -8,7 +8,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
  * Created by linym on 6/3/15.
  */
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
-public class MessageEntity extends CircleBaseModel{
+public class MessageEntity extends CircleBaseModel {
     @PrimaryKey
     String messageId;
 

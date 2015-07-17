@@ -83,6 +83,33 @@ public class TimelineRangeTest {
 
     }
 
+    @Test
+    public void testSubRange(){
+        List list = new ArrayList<>();
+        list.add(new Id(1l));
+        list.add(new Id(2l));
+
+        list.add(new Id(4l));
+        list.add(new Id(5l));
+
+        list.add(new Id(8l));
+        list.add(new Id(10l));
+
+        TimelineRange<Id> range = new TimelineRange<>(TIMELINE, list, new Loader());
+
+        assertEquals(5, range.getSubRange(1l, 10l).size());
+        assertEquals(6, range.getSubRange(1l, 11l).size());
+        assertEquals(0, range.getSubRange(1l, 1l).size());
+
+        List<Id> range2_8 = range.getSubRange(2l, 8l);
+        assertEquals(Long.valueOf(2l), range2_8.get(0).getId());
+        assertEquals(Long.valueOf(5l), range2_8.get(range2_8.size() - 1).getId());
+
+        List<Id> range3_7 = range.getSubRange(3l, 7l);
+        assertEquals(Long.valueOf(4l), range3_7.get(0).getId());
+        assertEquals(Long.valueOf(5l), range3_7.get(range3_7.size() - 1).getId());
+    }
+
     private class Id implements Identifiable<Long> {
         private final Long id;
         public Id(Long id){
@@ -92,6 +119,12 @@ public class TimelineRangeTest {
         @NonNull
         @Override
         public Long getId() {
+            return id;
+        }
+
+        @NonNull
+        @Override
+        public Long getGroupId() {
             return id;
         }
     }

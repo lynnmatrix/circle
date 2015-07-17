@@ -47,6 +47,12 @@ public class Chat implements Identifiable<Long>{
         return chatId;
     }
 
+    @NonNull
+    @Override
+    public Long getGroupId() {
+        return chatId;
+    }
+
     public List<Message> getMessages(){
         return messages;
     }

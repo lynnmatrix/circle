@@ -2,8 +2,10 @@ package com.jadenine.circle.domain;
 
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import rx.Observable;
@@ -13,9 +15,10 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/15/15.
  */
-public class TimelineRange<T extends Identifiable<Long>> {
+public class  TimelineRange<T extends Identifiable<Long>> {
     final TimelineRangeCursor cursor;
     private final List<T> list;
+    private final SortedCollection<Long, Group<T>> groupList;
     private final RangeLoader<T> loader;
 
     public TimelineRange(String timeline, List<T> list, RangeLoader<T> loader) {
@@ -24,6 +27,13 @@ public class TimelineRange<T extends Identifiable<Long>> {
         Preconditions.checkNotNull(loader, "Null loader.");
 
         this.list = list;
+        this.groupList = new SortedCollection<>(new Comparator<Group<T>>() {
+            @Override
+            public int compare(Group<T> lhs, Group<T> rhs) {
+                return (int) (lhs.getGroupId() - rhs.getGroupId());
+            }
+        });
+
         this.cursor = new TimelineRangeCursor(timeline);
         this.loader = loader;
         if (list.size() > 0) {
@@ -59,8 +69,8 @@ public class TimelineRange<T extends Identifiable<Long>> {
 
     /**
      * Load more entities in current range.
-     * The caller of this api should contact this range with the previous range if they are
-     * continuous.
+     * The caller of this api should contact this range with the previous range(with greater id) if
+     * they are continuous.
      * @return The current range.
      */
     public Observable<TimelineRange<T>> loadMore() {
@@ -100,4 +110,37 @@ public class TimelineRange<T extends Identifiable<Long>> {
         list.addAll(range.getAll());
         cursor.contact(range.cursor);
     }
- }
+
+    /**
+     * Retrieve sub range of entities in [start, end)
+     * @param start
+     * @param end exclusive
+     * @return
+     */
+    public List<T> getSubRange(@NotNull Long start, @NotNull Long end) {
+        Preconditions.checkArgument(start < end && start >= cursor.getTop() && end <= cursor.getBottom() +1, "Invalid sub " +
+                "range ["+ start + ","+end +"]. " +
+                "Current range is ["+cursor.getTop() +"," + cursor.getBottom()+"]");
+        int startIndex = -1;
+        int endIndex = list.size();
+        for (int i = 0; i< list.size(); i++) {
+            T entity = list.get(i);
+            if (start <= entity.getId() && startIndex < 0) {
+                startIndex = i;
+            } else if(entity.getId() <= end){
+                endIndex = i;
+            }
+        }
+
+        return list.subList(startIndex, endIndex);
+    }
+
+    public void group(T entity) {
+        Group<T> group = groupList.get(entity.getGroupId());
+        if(null == group) {
+            group = new Group<>(entity.getGroupId());
+            groupList.put(group);
+        }
+        group.addEntity(entity);
+    }
+}
