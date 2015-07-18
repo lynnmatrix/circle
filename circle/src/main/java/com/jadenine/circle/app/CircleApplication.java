@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import dagger.Module;
 import mortar.MortarScope;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/6/15.
@@ -44,6 +45,9 @@ public class CircleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if(BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
         DomainComponentProduction domainComponent = DaggerDomainComponentProduction.builder()
                 .domainModule(new DomainModule(Device.getDeviceId(this))).build();
 

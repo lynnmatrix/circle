@@ -4,6 +4,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
+import com.jadenine.circle.model.db.impl.TimelineStateDBService;
 import com.jadenine.circle.model.entity.Image;
 import com.jadenine.circle.model.entity.MessageEntity;
 import com.jadenine.circle.model.entity.TopicEntity;
@@ -122,10 +123,9 @@ public class TestDomainModule {
         String oldestTopicId = topicEntity.getTopicId();
         long latestTimestamp = topicEntity.getMessages().get(topicEntity.getMessages().size() -
                 1).getTimestamp();
-        when(mockService.refresh(eq(USER_AP_MAC), Matchers.anyInt(),
-                eq(oldestTopicId),
-                longThat(new GreaterOrEqual<>(latestTimestamp)))).thenReturn(Observable
-                .just(new TimelineResult<TopicEntity>()));
+        when(mockService.refresh(eq(USER_AP_MAC), Matchers.anyInt(), eq(oldestTopicId), longThat
+                (new GreaterOrEqual<>(latestTimestamp)))).thenReturn(Observable.just(new
+                TimelineResult<TopicEntity>()));
         return mockService;
     }
 
@@ -151,7 +151,8 @@ public class TestDomainModule {
     @Singleton
     AzureBlobUploader provideBlobUploader(){
         AzureBlobUploader mockUploader = mock(AzureBlobUploader.class);
-        when(mockUploader.upload(Matchers.anyString(), Matchers.<InputStream>any(), Matchers.anyString()))
+        when(mockUploader.upload(Matchers.anyString(), Matchers.<InputStream>any(), Matchers
+                .anyString()))
                 .thenReturn(true);
 
         return new AzureBlobUploader();
@@ -162,8 +163,8 @@ public class TestDomainModule {
     @Singleton
     ApDBService provideApDBService(){
         ApDBService mockService = mock(ApDBService.class);
-        when(mockService.listAps()).thenReturn(Observable
-                .<List<UserApEntity>>just(new ArrayList<UserApEntity>()));
+        when(mockService.listAps()).thenReturn(Observable.<List<UserApEntity>>just(new
+                ArrayList<UserApEntity>()));
         return mockService;
     }
 
@@ -171,8 +172,7 @@ public class TestDomainModule {
     @Singleton
     TopicDBService provideTopicDBService() {
         TopicDBService mockService = mock(TopicDBService.class);
-        when(mockService.listTopics(anyString())).thenReturn(Observable.<List<TopicEntity>>just
-                        (new ArrayList<TopicEntity>()));
+        when(mockService.listTopics(anyString())).thenReturn(Observable.<List<TopicEntity>>just(new ArrayList<TopicEntity>()));
         return mockService;
     }
 
@@ -182,6 +182,13 @@ public class TestDomainModule {
         MessageDBService mockService = mock(MessageDBService.class);
         doReturn(Observable.<List<MessageEntity>>just(new ArrayList<MessageEntity>())).when(mockService)
                 .listMessages(anyString());
+        return mockService;
+    }
+
+    @Provides
+    @Singleton
+    TimelineStateDBService provideTimelineStateService(){
+        TimelineStateDBService mockService = mock(TimelineStateDBService.class);
         return mockService;
     }
 }

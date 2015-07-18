@@ -1,10 +1,10 @@
 package com.jadenine.circle.model.state;
 
 import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import rx.android.internal.Preconditions;
@@ -15,9 +15,9 @@ import rx.android.internal.Preconditions;
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
 public class TimelineRangeCursor extends BaseModel{
     @PrimaryKey(autoincrement = true)
-    long _id;
+    @Column(length = -1) //issue https://github.com/Raizlabs/DBFlow/pull/305/commits
+    long id;
 
-    @Unique
     @NotNull
     String timeline;
 

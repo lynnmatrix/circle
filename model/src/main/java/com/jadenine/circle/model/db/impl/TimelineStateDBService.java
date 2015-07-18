@@ -1,6 +1,5 @@
 package com.jadenine.circle.model.db.impl;
 
-import com.jadenine.circle.model.entity.MessageEntity$Table;
 import com.jadenine.circle.model.state.TimelineState;
 import com.jadenine.circle.model.state.TimelineState$Table;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
@@ -19,7 +18,6 @@ public class TimelineStateDBService {
             public void call(Subscriber<? super TimelineState> subscriber) {
                 TimelineState timelineState = new Select().from(TimelineState.class)
                         .where(Condition.column(TimelineState$Table.AP).eq(ap))
-                        .orderBy(true, MessageEntity$Table.MESSAGEID)
                         .querySingle();
                 if(null == timelineState) {
                     timelineState = new TimelineState(ap);

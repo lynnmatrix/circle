@@ -20,11 +20,11 @@ public class TopicDBServiceImpl implements TopicDBService {
         return Observable.create(new Observable.OnSubscribe<List<TopicEntity>>() {
             @Override
             public void call(Subscriber<? super List<TopicEntity>> subscriber) {
-                List<TopicEntity> userApEntities = new Select().from(TopicEntity.class)
+                List<TopicEntity> topicEntities = new Select().from(TopicEntity.class)
                         .where(Condition.column(TopicEntity$Table.AP).eq(ap))
                         .orderBy(true, TopicEntity$Table.TOPICID).queryList();
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onNext(userApEntities);
+                    subscriber.onNext(topicEntities);
                     subscriber.onCompleted();
                 }
             }

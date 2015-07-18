@@ -35,7 +35,7 @@ public class DomainModule {
 
     public static final RestAdapter.LogLevel LOGLEVEL = BuildConfig.DEBUG ? RestAdapter.LogLevel
             .FULL : RestAdapter.LogLevel.NONE;
-    public static final String ENDPOINT_LOCAL = "http://192.168.9.220:8080";
+    public static final String ENDPOINT_LOCAL = "http://192.168.9.117:8080";
     public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
     public static final boolean FORE_AZURE = false;
 

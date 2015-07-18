@@ -42,14 +42,14 @@ class DomainLister<D> {
                 @Override
                 public Observable<List<D>> call(List<D> ds) {
                     delegate.onDBLoaded();
-                    return delegate.createRefreshRestObservable();
+                    return Observable.mergeDelayError(delegate.createRefreshRestObservable(),
+                            Observable.just(ds));
                 }
             }).subscribeOn(Schedulers.io());
         } else {
             List[] lists = {delegate.getRestStartSource()};
             Observable restObservable = delegate.createRefreshRestObservable();
-            observable = restObservable.startWith(Observable.from(lists)).subscribeOn
-                    (Schedulers.io());
+            observable = Observable.mergeDelayError(Observable.from(lists), restObservable).subscribeOn(Schedulers.io());
         }
         return observable;
     }

@@ -135,6 +135,11 @@ public class Topic implements Updatable<TopicEntity>{
         return messages;
     }
 
+    public void setMessages(List<Message> messages) {
+        this.messages.clear();
+        this.messages.addAll(messages);
+    }
+
     Observable<Message> addReply(final Message message) {
         message.setTopicId(getTopicId());
         Observable<Message> observable = messageRestService.addMessage(message.getEntity()).map
@@ -246,5 +251,4 @@ public class Topic implements Updatable<TopicEntity>{
         }
         return null;
     }
-
 }

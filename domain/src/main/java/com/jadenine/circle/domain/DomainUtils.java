@@ -22,7 +22,7 @@ public class DomainUtils {
     }
 
     public static boolean checkEmpty(Collection collection) {
-        return null == collection || !collection.isEmpty();
+        return null == collection || collection.isEmpty();
     }
 
     public static int getSize(Collection collection) {

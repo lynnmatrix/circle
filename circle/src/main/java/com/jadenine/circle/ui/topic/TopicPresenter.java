@@ -17,6 +17,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/10/15.
@@ -66,14 +67,15 @@ public class TopicPresenter extends ViewPresenter<TopicView> {
 
             @Override
             public void onError(Throwable e) {
+                Timber.e(e, "Failed to load topics.");
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
             }
 
             @Override
             public void onNext(List<Topic> topics) {
+                Timber.i("hasView():%b", hasView());
                 if (!hasView()) return;
-
                 getView().getTopicAdapter().setTopics(topics);
             }
         });

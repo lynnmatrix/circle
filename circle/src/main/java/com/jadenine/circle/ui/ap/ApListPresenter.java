@@ -23,6 +23,7 @@ import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/9/15.
@@ -74,7 +75,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
     private boolean alreadyAdded(ApUtils.AP currentAp) {
         boolean currentAPAlreadyAdded = false;
-
+        Timber.i("Current ap info, ssid %s",currentAp.getSSID());
         List<UserAp> userApList = account.getUserAps();
         for (UserAp userAp : userApList) {
             if (currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
@@ -86,7 +87,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
     }
 
     private void addAPIfNot(ApUtils.AP ap) {
-        if (alreadyAdded(ap)) {
+        if (null == ap || alreadyAdded(ap)) {
             return;
         }
 
@@ -104,6 +105,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
             @Override
             public void onNext(List<UserAp> userAps) {
+                Timber.i("hasView():%b", hasView());
                 if (!hasView()) return;
                 getAdapter().clear();
                 getAdapter().addAll(userAps);
@@ -125,6 +127,7 @@ public class ApListPresenter extends ViewPresenter<ApListView> {
 
             @Override
             public void onError(Throwable e) {
+                Timber.e(e, "Failed to load aps.");
                 if (!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
             }

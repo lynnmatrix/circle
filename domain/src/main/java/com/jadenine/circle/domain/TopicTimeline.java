@@ -28,12 +28,14 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.Func1;
+import rx.functions.Func3;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by linym on 7/10/15.
  */
-class TopicTimeline implements Loadable<Topic> {
+public class TopicTimeline implements Loadable<Topic> {
     private static final Integer PAGE_SIZE = 20;
     private static final Integer INITIAL_PAGE_SIZE = 50;
     private static final int TOPIC_CAPABILITY = 200;
@@ -75,14 +77,16 @@ class TopicTimeline implements Loadable<Topic> {
             observable = dbObservable.flatMap(new Func1<List<Topic>, Observable<List<Topic>>>() {
                 @Override
                 public Observable<List<Topic>> call(List<Topic> ds) {
-                    return createRefreshRestObservable();
+                    List[] lists = {topics};
+                    Observable restObservable = createRefreshRestObservable();
+                    return Observable.mergeDelayError(Observable.from(lists), restObservable);
                 }
             }).subscribeOn(Schedulers.io());
         } else {
             List[] lists = {topics};
             Observable restObservable = createRefreshRestObservable();
-            observable = restObservable.startWith(Observable.from(lists)).subscribeOn(Schedulers
-                    .io());
+            observable = Observable.mergeDelayError(Observable.from(lists), restObservable)
+                    .subscribeOn(Schedulers.io());
         }
         return observable;
     }
@@ -114,29 +118,29 @@ class TopicTimeline implements Loadable<Topic> {
     }
 
     private Observable<List<Topic>> createDBObservable() {
-        //TODO load messages
-        //TODO timelinestate
-            timelineStateDBService.getTimelineState(getAp()).map(new Func1<TimelineState, Void>() {
+        Observable<TimelineState> timelineStateObservable = timelineStateDBService
+                .getTimelineState(getAp()).map(new Func1<TimelineState, TimelineState>() {
 
-                @Override
-                public Void call(TimelineState timelineState) {
-                    TopicTimeline.this.timelineState = timelineState;
-                    return null;
-                }
-            });
+            @Override
+            public TimelineState call(TimelineState timelineState) {
+                Timber.i("Got timeline state");
+                TopicTimeline.this.timelineState = timelineState;
+                return TopicTimeline.this.timelineState;
+            }
+        });
 
-        Observable<Map<String, List<Message>>> messageObservable = messageDBService.listMessagesOfAp
-                (getAp()).map(new
-                                                                               Func1<List<MessageEntity>,
-                Map<String, List<Message>>>() {
+        final Observable<Map<String, List<Message>>> messageObservable = messageDBService
+                .listMessagesOfAp(getAp()).map(new Func1<List<MessageEntity>, Map<String,
+                        List<Message>>>() {
 
             @Override
             public Map<String, List<Message>> call(List<MessageEntity> messageEntities) {
+                Timber.i("Got messages");
                 HashMap<String, List<Message>> topicMessageMap = new HashMap<>();
-                for(MessageEntity messageEntity : messageEntities) {
+                for (MessageEntity messageEntity : messageEntities) {
                     Message message = Message.build(messageEntity);
                     List<Message> messages = topicMessageMap.get(message.getTopicId());
-                    if(null == message) {
+                    if (null == messages) {
                         messages = new LinkedList<>();
                         topicMessageMap.put(message.getTopicId(), messages);
                     }
@@ -148,7 +152,23 @@ class TopicTimeline implements Loadable<Topic> {
         Observable<List<Topic>> topicObservable = topicDBService.listTopics(getAp()).map(new
                 TopicDBMapper());
 
-        return topicObservable;
+        return  Observable.zip(timelineStateObservable, topicObservable, messageObservable, new
+                Func3<TimelineState, List<Topic>, Map<String, List<Message>>, List<Topic>>() {
+
+            @Override
+            public List<Topic> call(TimelineState timelineState, List<Topic> topics, Map<String,
+                    List<Message>> stringListMap) {
+                Timber.i("dbloaded");
+                dbLoaded = true;
+                for (Topic topic : topics) {
+                    List<Message> messages = stringListMap.get(topic.getTopicId());
+                    if (null != messages) {
+                        topic.setMessages(messages);
+                    }
+                }
+                return topics;
+            }
+        });
     }
 
     private Observable<List<Topic>> createRefreshRestObservable() {
@@ -294,7 +314,7 @@ class TopicTimeline implements Loadable<Topic> {
     private class TopicDBMapper implements Func1<List<TopicEntity>, List<Topic>> {
         @Override
         public List<Topic> call(List<TopicEntity> topicEntities) {
-            dbLoaded = true;
+            Timber.i("Got topics");
             for (TopicEntity entity : topicEntities) {
                 Topic domainModel = find(entity.getTopicId());
                 if (null == domainModel) {
