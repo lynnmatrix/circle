@@ -1,5 +1,6 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -48,17 +49,17 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      * continual with current range, otherwise a new range.
      */
     public Observable<TimelineRange<T>> refresh() {
-        return loader.refresh(cursor.getTop(), Constants.PAGE_SIZE).flatMap(new Func1<JSONListWrapper<T>,
-                Observable<TimelineRange<T>>>() {
+        return loader.refresh(cursor.getTop(), Constants.PAGE_SIZE).flatMap(
+                new Func1<JSONListWrapper<T>, Observable<TimelineRange<T>>>() {
 
             @Override
             public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
                 TimelineRange<T> range = TimelineRange.this;
-                if(jsonListWrapper.hasMore()) {
+                if (jsonListWrapper.hasMore()) {
                     TimelineRange nextRange = new TimelineRange(cursor.getTimeline(),
                             jsonListWrapper.getAll(), loader);
                     range = nextRange;
-                } else if(jsonListWrapper.getAll().size() > 0)  {
+                } else if (jsonListWrapper.getAll().size() > 0) {
                     list.addAll(0, jsonListWrapper.getAll());
                     cursor.setTop(list.get(0).getId());
                 }
@@ -73,6 +74,7 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      * they are continuous.
      * @return The current range.
      */
+    //TODO Limit the result by the top of previous range.
     public Observable<TimelineRange<T>> loadMore() {
         return loader.loadMore(cursor.getBottom(), Constants.PAGE_SIZE).flatMap(new Func1<JSONListWrapper<T>,
                 Observable<TimelineRange<T>>>() {

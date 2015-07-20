@@ -3,6 +3,7 @@ package com.jadenine.circle.domain;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.entity.MessageEntity;
 import com.jadenine.circle.model.rest.MessageService;
@@ -18,7 +19,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/14/15.
  */
-public class Chat implements Identifiable<Long>{
+public class Chat implements Identifiable<Long> {
     private String ap;
     private String topicId;
     private String topicUser;

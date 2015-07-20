@@ -2,6 +2,8 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 
+import com.jadenine.circle.model.Identifiable;
+
 import java.util.Comparator;
 import java.util.List;
 

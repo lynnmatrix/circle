@@ -16,6 +16,7 @@ import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
 import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
+import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.MessageService;
 import com.jadenine.circle.model.rest.TopicService;
@@ -95,6 +96,12 @@ public class DomainModule {
     @Singleton
     MessageService provideMessageService(RestAdapter restAdapter) {
         return restAdapter.create(MessageService.class);
+    }
+
+    @Provides
+    @Singleton
+    DirectMessageService provideChatService(RestAdapter restAdapter) {
+        return restAdapter.create(DirectMessageService.class);
     }
 
     @Provides

@@ -2,6 +2,7 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 
+import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.entity.MessageEntity;
 
 import rx.Observable;
@@ -9,7 +10,7 @@ import rx.Observable;
 /**
  * Created by linym on 6/3/15.
  */
-public class Message implements Updatable<MessageEntity>, Identifiable<Long>{
+public class Message implements Updatable<MessageEntity>, Identifiable<Long> {
     private final MessageEntity entity;
     private Long messageId;
     private Long groupId;

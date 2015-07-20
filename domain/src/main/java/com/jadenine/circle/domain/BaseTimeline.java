@@ -1,6 +1,10 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.model.Identifiable;
 import com.raizlabs.android.dbflow.annotation.NotNull;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
+import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,7 +17,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/15/15.
  */
-public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loadable<TimelineRange<T>> {
+public abstract class BaseTimeline<T extends Identifiable<Long>> implements Loadable<TimelineRange<T>> {
 
     private final LinkedList<TimelineRange<T>> rangeList = new LinkedList<>();
 
@@ -125,5 +129,7 @@ public abstract class BaseTimeline<T extends Identifiable<Long> > implements Loa
             range = getRange(entity.getGroupId());
             range.group(entity);
         }
+        TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
+                .withModels(entities)));
     }
 }

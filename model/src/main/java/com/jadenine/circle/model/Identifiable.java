@@ -1,4 +1,4 @@
-package com.jadenine.circle.domain;
+package com.jadenine.circle.model;
 
 import android.support.annotation.NonNull;
 

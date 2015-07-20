@@ -2,6 +2,8 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 
+import com.jadenine.circle.model.Identifiable;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;

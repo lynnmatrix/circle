@@ -5,12 +5,14 @@ import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
 import com.jadenine.circle.model.db.impl.TimelineStateDBService;
+import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.Image;
 import com.jadenine.circle.model.entity.MessageEntity;
 import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
+import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.rest.MessageService;
@@ -132,10 +134,24 @@ public class TestDomainModule {
     @Provides
     @Singleton
     MessageService provideMessageService() {
-        MessageService mockServcie = mock(MessageService.class);
-        when(mockServcie.listMessages(Matchers.anyString(), Matchers.anyString(), Matchers
+        MessageService mockService = mock(MessageService.class);
+        when(mockService.listMessages(Matchers.anyString(), Matchers.anyString(), Matchers
                 .anyString())).thenReturn(Observable.just(new JSONListWrapper<MessageEntity>()));
-        return mockServcie;
+        return mockService;
+    }
+
+    @Provides
+    @Singleton
+    DirectMessageService provideChatService() {
+        DirectMessageService mockService = mock(DirectMessageService.class);
+        when(mockService.listMessages(Matchers.anyString(), Matchers.anyInt(), Matchers
+                .isNull(Long.class), Matchers.isNull(Long.class)))
+                .thenReturn(Observable.just(new JSONListWrapper<DirectMessageEntity>()));
+        when(mockService.listMessages(Matchers.anyString(), Matchers.anyInt(), Matchers
+                .anyLong(), Matchers.anyLong()))
+                .thenReturn(Observable.just(new JSONListWrapper<DirectMessageEntity>()));
+
+        return mockService;
     }
 
     @Provides

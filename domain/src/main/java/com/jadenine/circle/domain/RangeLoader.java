@@ -1,5 +1,6 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 
 import rx.Observable;

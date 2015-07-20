@@ -1,5 +1,6 @@
 package com.jadenine.circle.model.rest;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,6 +20,9 @@ public class JSONListWrapper<T> {
     }
 
     public List<T> getAll() {
+        if(null == itemList) {
+            return Collections.emptyList();
+        }
         return itemList;
     }
 
