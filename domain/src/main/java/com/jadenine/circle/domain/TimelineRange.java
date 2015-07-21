@@ -1,5 +1,7 @@
 package com.jadenine.circle.domain;
 
+import android.support.annotation.NonNull;
+
 import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
@@ -7,7 +9,9 @@ import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import rx.Observable;
 import rx.android.internal.Preconditions;
@@ -22,11 +26,23 @@ public class  TimelineRange<T extends Identifiable<Long>> {
     private final SortedCollection<Long, Group<T>> groupList;
     private final RangeLoader<T> loader;
 
+    private AtomicBoolean dbLoaded = new AtomicBoolean(false);
+
     public TimelineRange(String timeline, List<T> list, RangeLoader<T> loader) {
-        Preconditions.checkNotNull(timeline, "Invalid timeline.");
+        this(new TimelineRangeCursor(timeline, list), list, loader, true);
+    }
+
+    public TimelineRange(TimelineRangeCursor cursor, RangeLoader<T> loader) {
+        this(cursor, new LinkedList<T>(), loader, false);
+    }
+
+    private TimelineRange(TimelineRangeCursor cursor, List<T> list,
+                          RangeLoader<T> loader, boolean dbLoaded) {
+        Preconditions.checkNotNull(cursor, "Null cursor");
         Preconditions.checkNotNull(list, "Null list");
         Preconditions.checkNotNull(loader, "Null loader.");
 
+        this.cursor = cursor;
         this.list = list;
         this.groupList = new SortedCollection<>(new Comparator<Group<T>>() {
             @Override
@@ -35,12 +51,8 @@ public class  TimelineRange<T extends Identifiable<Long>> {
             }
         });
 
-        this.cursor = new TimelineRangeCursor(timeline);
         this.loader = loader;
-        if (list.size() > 0) {
-            this.cursor.setTop(list.get(0).getId());
-            this.cursor.setBottom(list.get(list.size() - 1).getId());
-        }
+        this.dbLoaded.set(dbLoaded);
     }
 
     /**
@@ -49,24 +61,26 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      * continual with current range, otherwise a new range.
      */
     public Observable<TimelineRange<T>> refresh() {
-        return loader.refresh(cursor.getTop()).flatMap(
-                new Func1<JSONListWrapper<T>, Observable<TimelineRange<T>>>() {
+        if(!isDBLoaded()) {
+            return loadLocal();
+        } else {
+            return loader.refresh(cursor.getTop()).flatMap(new Func1<JSONListWrapper<T>, Observable<TimelineRange<T>>>() {
 
-            @Override
-            public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
-                TimelineRange<T> range = TimelineRange.this;
-                if (jsonListWrapper.hasMore() && null != cursor.getTop()) {
-                    TimelineRange nextRange = new TimelineRange(cursor.getTimeline(),
-                            jsonListWrapper.getAll(), loader);
-                    range = nextRange;
-                } else if (jsonListWrapper.getAll().size() > 0) {
-                    list.addAll(0, jsonListWrapper.getAll());
-                    cursor.setTop(list.get(0).getId());
-                    cursor.setBottom(list.get(list.size() - 1).getId());
+                @Override
+                public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
+                    TimelineRange<T> range = TimelineRange.this;
+                    if (jsonListWrapper.hasMore() && null != cursor.getTop()) {
+                        TimelineRange nextRange = new TimelineRange(cursor.getTimeline(), jsonListWrapper.getAll(), loader);
+                        range = nextRange;
+                    } else if (jsonListWrapper.getAll().size() > 0) {
+                        list.addAll(0, jsonListWrapper.getAll());
+                        cursor.setTop(list.get(0).getId());
+                        cursor.setBottom(list.get(list.size() - 1).getId());
+                    }
+                    return Observable.just(range);
                 }
-                return Observable.just(range);
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -77,18 +91,34 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      */
     //TODO Limit the result by the top of previous range.
     public Observable<TimelineRange<T>> loadMore() {
-        return loader.loadMore(cursor.getBottom())
-                .flatMap(new Func1<JSONListWrapper<T>,
-                Observable<TimelineRange<T>>>() {
+        if(!isDBLoaded()) {
+            return loadLocal();
+        } else {
+            return loader.loadMore(cursor.getBottom()).flatMap(new Func1<JSONListWrapper<T>,
+                    Observable<TimelineRange<T>>>() {
 
-            @Override
-            public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
-                if (jsonListWrapper.getAll().size() > 0) {
-                    list.addAll(jsonListWrapper.getAll());
-                    cursor.setBottom(list.get(list.size()
-                            - 1).getId());
+                @Override
+                public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
+                    if (jsonListWrapper.getAll().size() > 0) {
+                        list.addAll(jsonListWrapper.getAll());
+                        cursor.setBottom(list.get(list.size() - 1).getId());
+                    }
+                    cursor.setHasMore(jsonListWrapper.hasMore());
+                    return Observable.just(TimelineRange.this);
                 }
-                cursor.setHasMore(jsonListWrapper.hasMore());
+            });
+        }
+    }
+
+    @NonNull
+    private Observable<TimelineRange<T>> loadLocal() {
+        return loader.loadTimelineRange(cursor.getTop(), cursor.getBottom()).flatMap(new Func1<List<T>, Observable<TimelineRange<T>>>() {
+            @Override
+            public Observable<TimelineRange<T>> call(List<T> list) {
+                if (list.size() > 0) {
+                    TimelineRange.this.list.addAll(list);
+                }
+                dbLoaded.set(true);
                 return Observable.just(TimelineRange.this);
             }
         });
@@ -150,5 +180,9 @@ public class  TimelineRange<T extends Identifiable<Long>> {
             groupList.put(group);
         }
         group.addEntity(entity);
+    }
+
+    boolean isDBLoaded() {
+        return dbLoaded.get();
     }
 }

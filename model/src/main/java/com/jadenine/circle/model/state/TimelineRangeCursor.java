@@ -1,11 +1,14 @@
 package com.jadenine.circle.model.state;
 
+import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.db.CircleDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.util.List;
 
 import rx.android.internal.Preconditions;
 
@@ -32,6 +35,14 @@ public class TimelineRangeCursor extends BaseModel{
     TimelineRangeCursor(){}
     public TimelineRangeCursor(String timeline) {
         this.timeline = timeline;
+    }
+
+    public TimelineRangeCursor(String timeline, List<? extends Identifiable<Long>> list) {
+        this.timeline = timeline;
+        if (list.size() > 0) {
+            setTop(list.get(0).getId());
+            setBottom(list.get(list.size() - 1).getId());
+        }
     }
 
     public Long getTop() {

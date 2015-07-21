@@ -1,5 +1,7 @@
 package com.jadenine.circle.domain;
 
+import android.support.annotation.NonNull;
+
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -13,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import rx.Observable;
 import rx.android.internal.Preconditions;
@@ -28,6 +31,7 @@ public class BaseTimeline<T extends DirectMessageEntity> implements
 
     private final RangeLoader<T> loader;
     private final String timeline;
+    private AtomicBoolean cursorDBLoaded = new AtomicBoolean(false);
 
     public BaseTimeline(String timeline, RangeLoader<T> loader) {
         Preconditions.checkNotNull(loader, "Null loader for timeline.");
@@ -93,13 +97,33 @@ public class BaseTimeline<T extends DirectMessageEntity> implements
 
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> refresh() {
+        if(!cursorDBLoaded.get()) {
+            return loader.loadTimelineRangeCursors(getTimelineId()).flatMap(new Func1<List<TimelineRangeCursor>, Observable<List<TimelineRange<T>>>>() {
+                @Override
+                public Observable<List<TimelineRange<T>>> call(List<TimelineRangeCursor> timelineRangeCursors) {
+                    if(rangeList.isEmpty()) {
+                        for(TimelineRangeCursor cursor : timelineRangeCursors) {
+                            rangeList.add(new TimelineRange<>(cursor, loader));
+                        }
+                    }
+                    cursorDBLoaded.set(true);
+                    return innerRefresh();
+                }
+            });
+        } else {
+            return innerRefresh();
+        }
+    }
+
+    @NonNull
+    private Observable<List<TimelineRange<T>>> innerRefresh() {
         final TimelineRange<T> firstRange = getFirstRange();
         final Long originalTop = firstRange.cursor.getTop();
         return firstRange.refresh().flatMap(new Func1<TimelineRange<T>,
                 Observable<List<TimelineRange<T>>>>() {
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> ts) {
-                if(firstRange != ts) {
+                if (firstRange != ts) {
                     rangeList.add(0, ts);
                     group(ts.getAll());
                 } else if (null == originalTop && null != firstRange.cursor.getTop()) {
@@ -114,21 +138,31 @@ public class BaseTimeline<T extends DirectMessageEntity> implements
 
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> loadMore() {
-        final TimelineRange<T> lastRange = getLastRange();
-        final Long originalBottom = lastRange.cursor.getBottom();
+        if(!cursorDBLoaded.get()) {
+            throw new IllegalStateException("TimelineCursor should be loaded before loading more.");
+        }
+        TimelineRange<T> rangeToLoadMore = null;
+        for(TimelineRange range : rangeList) {
+            if(!range.isDBLoaded()){
+                rangeToLoadMore = range;
+                break;
+            }
+        }
+        if(null == rangeToLoadMore){
+            rangeToLoadMore = getLastRange();
+        }
+        final Long originalBottom = rangeToLoadMore.cursor.getBottom();
 
-        return lastRange.loadMore().flatMap(new Func1<TimelineRange<T>,
+        return rangeToLoadMore.loadMore().flatMap(new Func1<TimelineRange<T>,
                 Observable<List<TimelineRange<T>>>>() {
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
-                if(range.cursor.getBottom() > originalBottom) {
+                if (range.cursor.getBottom() > originalBottom) {
                     List<T> entities = range.getSubRange(originalBottom, range.cursor.getBottom()
                             + 1);
                     for (T entity : entities) {
                         range.group(entity);
                     }
-
-                    //TODO Do not save entities loaded from database.
                     TransactionManager.getInstance().addTransaction(new SaveModelTransaction
                             (ProcessModelInfo.withModels(range.cursor)));
 

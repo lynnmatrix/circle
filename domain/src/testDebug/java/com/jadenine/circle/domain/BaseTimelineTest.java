@@ -3,6 +3,8 @@ package com.jadenine.circle.domain;
 import android.os.Build;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.db.impl.DirectMessageDBService;
+import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.rest.DirectMessageService;
 
@@ -37,6 +39,8 @@ public class BaseTimelineTest {
     BaseTimeline timeline;
     Account account;
     DirectMessageService messageService;
+    DirectMessageDBService messageDBService;
+    TimelineCursorDBService cursorDBService;
 
     @Before
     public void setUp(){
@@ -44,7 +48,10 @@ public class BaseTimelineTest {
                 TestDomainModule(DEVICE_ID)).build());
         account = DaggerService.getDomainComponent().getAccount();
         messageService = DaggerService.getDomainComponent().getDirectMessageService();
-        timeline = new BaseTimeline("TEST", new ChatLoader(account, messageService, 2));
+        messageDBService = DaggerService.getDomainComponent().getDirectMessageDBService();
+        cursorDBService = DaggerService.getDomainComponent().getTimelineRangeCursorDBService();
+        timeline = new BaseTimeline("TEST", new ChatLoader(account, messageService,
+                messageDBService, cursorDBService, 2));
     }
 
     @Test
