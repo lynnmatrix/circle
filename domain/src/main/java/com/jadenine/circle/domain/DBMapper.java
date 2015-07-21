@@ -1,7 +1,5 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.entity.Savable;
-
 import java.util.List;
 
 import rx.functions.Func1;
@@ -9,7 +7,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 6/18/15.
  */
-class DBMapper<E extends Savable, D extends Updatable<E>> implements Func1<List<E>,
+class DBMapper<E, D extends Updatable<E>> implements Func1<List<E>,
         List<D>> {
 
     private final MapperDelegate<E, D> mapperDelegate;

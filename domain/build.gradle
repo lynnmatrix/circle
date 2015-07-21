@@ -21,6 +21,10 @@ dependencies {
 
     testCompile "junit:junit:4.12"
     debugCompile "org.mockito:mockito-core:2.0.26-beta"
+//    debugCompile "org.powermock:powermock-module-junit4:1.6.2"
+//    debugCompile "org.powermock:powermock-api-mockito:1.6.2"
+
+    testCompile "org.robolectric:robolectric:3.0"
 
     //testApt 'com.google.dagger:dagger-compiler:2.0' //waiting for gradle plugin 1.3+
 }

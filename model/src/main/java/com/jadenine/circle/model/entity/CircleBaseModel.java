@@ -6,7 +6,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by linym on 6/24/15.
  */
-public abstract class CircleBaseModel extends BaseModel implements Savable{
+public abstract class CircleBaseModel extends BaseModel {
     @Column(name = "etag")
     String etag;
 

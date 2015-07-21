@@ -52,8 +52,8 @@ import static org.mockito.Mockito.when;
 public class TestDomainModule {
 
     private final String deviceId;
-    private final String USER_AP_MAC = "TMAC";
-    private final String USER_AP_SSID = "TSSID";
+    private final String USER_AP_MAC = "test_ap";
+    private final String USER_AP_SSID = "test_ssid";
 
     private final UserApEntity userApEntity;
     private final TopicEntity topicEntity;
@@ -61,6 +61,7 @@ public class TestDomainModule {
     private final List<UserApEntity> apList = new LinkedList<>();
     private final List<TopicEntity> topicList = new LinkedList<>();
 
+    private final List<DirectMessageEntity> directMessageList= new LinkedList<>();
     public TestDomainModule(String deviceId) {
         this.deviceId = deviceId;
 
@@ -80,6 +81,22 @@ public class TestDomainModule {
 
         topicEntity.setMessages(Collections.singletonList(messageEntity));
 
+        directMessageList.add(genTestDirectMessage(4));//id:6
+        directMessageList.add(genTestDirectMessage(3));//id:7
+        directMessageList.add(genTestDirectMessage(2));//id:8
+        directMessageList.add(genTestDirectMessage(1));//id:9
+
+    }
+
+    private DirectMessageEntity genTestDirectMessage(int number) {
+        DirectMessageEntity chatMessage = spy(new DirectMessageEntity(USER_AP_MAC, "test_topic_id",
+                1==number%2?"test_from":"test_from", 1==number % 2 ? "test_to":"test_from"));
+        chatMessage.setRootMessageId("9");
+        chatMessage.setRootUser("test_from");
+        doReturn(String.valueOf(10-number)).when(chatMessage).getMessageId();
+        chatMessage.setContent("message " + number);
+
+        return chatMessage;
     }
 
     @Provides
@@ -144,12 +161,15 @@ public class TestDomainModule {
     @Singleton
     DirectMessageService provideChatService() {
         DirectMessageService mockService = mock(DirectMessageService.class);
-        when(mockService.listMessages(Matchers.anyString(), Matchers.anyInt(), Matchers
+        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers
                 .isNull(Long.class), Matchers.isNull(Long.class)))
-                .thenReturn(Observable.just(new JSONListWrapper<DirectMessageEntity>()));
-        when(mockService.listMessages(Matchers.anyString(), Matchers.anyInt(), Matchers
-                .anyLong(), Matchers.anyLong()))
-                .thenReturn(Observable.just(new JSONListWrapper<DirectMessageEntity>()));
+                .thenReturn(Observable.just(new JSONListWrapper<>(directMessageList.subList(0, 2),
+                        true, "8")));
+
+        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers
+                .isNull(Long.class), eq(7l)))
+                .thenReturn(Observable.just(new JSONListWrapper<>(directMessageList.subList(2, 4)
+                        , false, null)));
 
         return mockService;
     }

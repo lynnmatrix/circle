@@ -130,7 +130,7 @@ public class TimelineRangeTest {
                 .getDirectMessageService();
 
         TimelineRange<DirectMessageEntity> range = new TimelineRange<>(TIMELINE, new
-                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService));
+                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService, 2));
         final CountDownLatch latch = new CountDownLatch(1);
         range.refresh().subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
             @Override
@@ -163,7 +163,7 @@ public class TimelineRangeTest {
                 .getDirectMessageService();
 
         TimelineRange<DirectMessageEntity> range = new TimelineRange<>(TIMELINE, new
-                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService));
+                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService, 2));
         final CountDownLatch latch = new CountDownLatch(1);
         range.loadMore().subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
             @Override
@@ -210,12 +210,12 @@ public class TimelineRangeTest {
     private static class Loader implements RangeLoader<Id>{
 
         @Override
-        public Observable<JSONListWrapper<Id>> refresh(Long top, Integer count) {
+        public Observable<JSONListWrapper<Id>> refresh(Long top) {
             return null;
         }
 
         @Override
-        public Observable<JSONListWrapper<Id>> loadMore(Long bottom, Integer Count) {
+        public Observable<JSONListWrapper<Id>> loadMore(Long bottom) {
             return null;
         }
     }

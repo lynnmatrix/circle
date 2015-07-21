@@ -1,14 +1,18 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.Identifiable;
+import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
 import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import rx.Observable;
 import rx.android.internal.Preconditions;
@@ -17,13 +21,17 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/15/15.
  */
-public abstract class BaseTimeline<T extends Identifiable<Long>> implements Loadable<TimelineRange<T>> {
+public class BaseTimeline<T extends DirectMessageEntity> implements
+        Loadable<TimelineRange<T>> {
 
     private final LinkedList<TimelineRange<T>> rangeList = new LinkedList<>();
 
     private final RangeLoader<T> loader;
-    public BaseTimeline(RangeLoader<T> loader) {
+    private final String timeline;
+
+    public BaseTimeline(String timeline, RangeLoader<T> loader) {
         Preconditions.checkNotNull(loader, "Null loader for timeline.");
+        this.timeline = timeline;
         this.loader = loader;
     }
 
@@ -36,13 +44,14 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
     }
 
     public @NotNull TimelineRange getFirstRange() {
-        TimelineRange lastRange;
+        TimelineRange firstRange;
         if(getRangeCount() > 0) {
-            lastRange = rangeList.getFirst();
+            firstRange = rangeList.getFirst();
         } else {
-            lastRange = new TimelineRange(getTimelineId(), new ArrayList(), loader);
+            firstRange = new TimelineRange(getTimelineId(), new ArrayList(), loader);
+            rangeList.add(firstRange);
         }
-        return lastRange;
+        return firstRange;
     }
 
     public @NotNull TimelineRange<T> getLastRange(){
@@ -51,6 +60,7 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
             lastRange = rangeList.getLast();
         } else {
             lastRange = new TimelineRange(getTimelineId(), new ArrayList(), loader);
+            rangeList.add(lastRange);
         }
         return lastRange;
     }
@@ -77,7 +87,9 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
         return result;
     }
 
-    protected abstract String getTimelineId();
+    protected String getTimelineId() {
+        return this.timeline;
+    }
 
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> refresh() {
@@ -90,7 +102,9 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
                 if(firstRange != ts) {
                     rangeList.add(0, ts);
                     group(ts.getAll());
-                } else if(firstRange.cursor.getTop() < originalTop) {
+                } else if (null == originalTop && null != firstRange.cursor.getTop()) {
+                    group(ts.getAll());
+                } else if (null != originalTop && firstRange.cursor.getTop() < originalTop) {
                     group(ts.getSubRange(firstRange.cursor.getTop(), originalTop));
                 }
                 return Observable.just(getAllRanges());
@@ -108,11 +122,20 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
                 if(range.cursor.getBottom() > originalBottom) {
-                    for(T entity : range.getSubRange(originalBottom, range.cursor.getBottom() +
-                            1)) {
+                    List<T> entities = range.getSubRange(originalBottom, range.cursor.getBottom()
+                            + 1);
+                    for (T entity : entities) {
                         range.group(entity);
                     }
+
+                    //TODO Do not save entities loaded from database.
+                    TransactionManager.getInstance().addTransaction(new SaveModelTransaction
+                            (ProcessModelInfo.withModels(range.cursor)));
+
+                    TransactionManager.getInstance().addTransaction(new SaveModelTransaction
+                            (ProcessModelInfo.withModels(entities)));
                 }
+
                 return Observable.just(getAllRanges());
             }
         });
@@ -123,12 +146,18 @@ public abstract class BaseTimeline<T extends Identifiable<Long>> implements Load
         return getLastRange().hasMore();
     }
 
-    private void group(List<T> entities) {
+    private void group(Collection<T> entities) {
         TimelineRange<T> range;
+        Set<TimelineRangeCursor> cursorsNeedSave = new LinkedHashSet<>();
         for(T entity : entities) {
             range = getRange(entity.getGroupId());
             range.group(entity);
+            cursorsNeedSave.add(range.cursor);
         }
+        //TODO Do not save entities loaded from database.
+        TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
+                .withModels(cursorsNeedSave)));
+
         TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
                 .withModels(entities)));
     }

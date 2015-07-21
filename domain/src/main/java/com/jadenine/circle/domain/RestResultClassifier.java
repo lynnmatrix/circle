@@ -1,7 +1,5 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.entity.Savable;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +7,7 @@ import java.util.List;
 /**
  * Created by linym on 6/26/15.
  */
-class RestResultClassifier<E extends Savable, D extends Updatable<E>> {
+class RestResultClassifier<E, D extends Updatable<E>> {
     private final List<E> entities;
     private final Binder<E, D> mapperDelegate;
 

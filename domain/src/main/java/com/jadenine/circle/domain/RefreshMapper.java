@@ -1,6 +1,5 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.entity.Savable;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
@@ -14,7 +13,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 6/26/15.
  */
-class RefreshMapper<E extends Savable, D extends Updatable<E>> implements
+class RefreshMapper<E, D extends Updatable<E>> implements
         Func1<JSONListWrapper<E>, List<D>> {
     private final MapperDelegate mapperDelegate;
 

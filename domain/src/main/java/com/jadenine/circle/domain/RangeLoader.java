@@ -10,7 +10,7 @@ import rx.Observable;
  */
 public interface RangeLoader<T extends Identifiable<Long>>{
 
-    Observable<JSONListWrapper<T>> refresh(Long top, Integer count);
+    Observable<JSONListWrapper<T>> refresh(Long top);
 
-    Observable<JSONListWrapper<T>> loadMore(Long bottom, Integer Count);
+    Observable<JSONListWrapper<T>> loadMore(Long bottom);
 }

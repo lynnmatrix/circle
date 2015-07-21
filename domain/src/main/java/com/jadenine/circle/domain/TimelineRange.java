@@ -49,19 +49,20 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      * continual with current range, otherwise a new range.
      */
     public Observable<TimelineRange<T>> refresh() {
-        return loader.refresh(cursor.getTop(), Constants.PAGE_SIZE).flatMap(
+        return loader.refresh(cursor.getTop()).flatMap(
                 new Func1<JSONListWrapper<T>, Observable<TimelineRange<T>>>() {
 
             @Override
             public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
                 TimelineRange<T> range = TimelineRange.this;
-                if (jsonListWrapper.hasMore()) {
+                if (jsonListWrapper.hasMore() && null != cursor.getTop()) {
                     TimelineRange nextRange = new TimelineRange(cursor.getTimeline(),
                             jsonListWrapper.getAll(), loader);
                     range = nextRange;
                 } else if (jsonListWrapper.getAll().size() > 0) {
                     list.addAll(0, jsonListWrapper.getAll());
                     cursor.setTop(list.get(0).getId());
+                    cursor.setBottom(list.get(list.size() - 1).getId());
                 }
                 return Observable.just(range);
             }
@@ -76,14 +77,15 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      */
     //TODO Limit the result by the top of previous range.
     public Observable<TimelineRange<T>> loadMore() {
-        return loader.loadMore(cursor.getBottom(), Constants.PAGE_SIZE).flatMap(new Func1<JSONListWrapper<T>,
+        return loader.loadMore(cursor.getBottom())
+                .flatMap(new Func1<JSONListWrapper<T>,
                 Observable<TimelineRange<T>>>() {
 
             @Override
             public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
                 if (jsonListWrapper.getAll().size() > 0) {
                     list.addAll(jsonListWrapper.getAll());
-                    cursor.setBottom(jsonListWrapper.getAll().get(jsonListWrapper.getAll().size()
+                    cursor.setBottom(list.get(list.size()
                             - 1).getId());
                 }
                 cursor.setHasMore(jsonListWrapper.hasMore());
@@ -98,6 +100,10 @@ public class  TimelineRange<T extends Identifiable<Long>> {
 
     public List<T> getAll(){
         return new ArrayList<>(list);
+    }
+
+    public List<Group<T>> getAllGroups() {
+        return groupList.getAll();
     }
 
     /**
