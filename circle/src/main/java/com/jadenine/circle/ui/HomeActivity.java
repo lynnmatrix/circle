@@ -12,7 +12,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
-import com.jadenine.circle.ui.ap.ApListPath;
+import com.jadenine.circle.welcome.WelcomePath;
 import com.umeng.common.message.Log;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -81,12 +81,14 @@ public class HomeActivity extends MortarActivity {
 
     @Override
     protected Object buildDaggerService() {
-        return DaggerHomeComponent.builder().appComponent((CircleApplication.AppComponent) DaggerService.getDaggerComponent(getApplicationContext())).homeActivityModule(new HomeActivityModule(this)).build();
+        return DaggerHomeComponent.builder().appComponent((CircleApplication.AppComponent)
+                DaggerService.getDaggerComponent(getApplicationContext())).homeActivityModule(new
+                HomeActivityModule(this)).build();
     }
 
     @Override
     protected Object getFirstScreen() {
-        return new ApListPath();
+        return new WelcomePath();
     }
 
     @Override

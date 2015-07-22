@@ -2,7 +2,6 @@ package com.jadenine.circle.model.entity;
 
 import android.support.annotation.NonNull;
 
-import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.db.CircleDatabase;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -11,7 +10,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
  * Created by linym on 7/21/15.
  */
 @Table(databaseName = CircleDatabase.NAME, allFields = true)
-public class Bomb extends CircleBaseModel implements Identifiable<Long> {
+public class Bomb extends CircleBaseModel implements IdentifiableEntity {
 
     @PrimaryKey
     String messageId;

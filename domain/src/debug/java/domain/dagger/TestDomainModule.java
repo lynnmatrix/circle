@@ -4,6 +4,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
+import com.jadenine.circle.model.db.impl.BombDBService;
 import com.jadenine.circle.model.db.impl.DirectMessageDBService;
 import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
 import com.jadenine.circle.model.db.impl.TimelineStateDBService;
@@ -14,6 +15,7 @@ import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
+import com.jadenine.circle.model.rest.BombService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.JSONListWrapper;
@@ -178,6 +180,12 @@ public class TestDomainModule {
 
     @Provides
     @Singleton
+    BombService provideBombService() {
+        return mock(BombService.class);
+    }
+
+    @Provides
+    @Singleton
     ImageService provideImageService() {
         ImageService mockService = mock(ImageService.class);
         when(mockService.getWritableSas()).thenReturn(Observable.<Image>empty());
@@ -219,7 +227,8 @@ public class TestDomainModule {
     @Singleton
     MessageDBService provideMessageDBService() {
         MessageDBService mockService = mock(MessageDBService.class);
-        doReturn(Observable.<List<MessageEntity>>just(new ArrayList<MessageEntity>())).when(mockService)
+        doReturn(Observable.<List<MessageEntity>>just(new ArrayList<MessageEntity>())).when
+                (mockService)
                 .listMessages(anyString());
         return mockService;
     }
@@ -242,4 +251,11 @@ public class TestDomainModule {
     TimelineCursorDBService provideTimelineCursorDBService() {
         return mock(TimelineCursorDBService.class);
     }
+
+    @Provides
+    @Singleton
+    BombDBService provideBombDBService() {
+        return mock(BombDBService.class);
+    }
+
 }

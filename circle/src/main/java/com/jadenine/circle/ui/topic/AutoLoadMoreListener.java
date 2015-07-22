@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by linym on 6/25/15.
  */
-abstract class AutoLoadMoreListener extends RecyclerView.OnScrollListener {
+public abstract class AutoLoadMoreListener extends RecyclerView.OnScrollListener {
 
     public static final int DEFAULT_VISIBLE_THRESHOLD = 2;
 

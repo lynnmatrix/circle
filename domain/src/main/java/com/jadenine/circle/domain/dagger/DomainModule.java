@@ -10,6 +10,7 @@ import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
 import com.jadenine.circle.model.db.impl.ApDBServiceImpl;
+import com.jadenine.circle.model.db.impl.BombDBService;
 import com.jadenine.circle.model.db.impl.DirectMessageDBService;
 import com.jadenine.circle.model.db.impl.MessageDBServiceImpl;
 import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
@@ -18,6 +19,7 @@ import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
 import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
+import com.jadenine.circle.model.rest.BombService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.MessageService;
@@ -108,6 +110,12 @@ public class DomainModule {
 
     @Provides
     @Singleton
+    BombService provideBombService(RestAdapter restAdapter) {
+        return restAdapter.create(BombService.class);
+    }
+
+    @Provides
+    @Singleton
     ImageService provideImageService(RestAdapter restAdapter) {
         return restAdapter.create(ImageService.class);
     }
@@ -140,6 +148,12 @@ public class DomainModule {
     @Singleton
     DirectMessageDBService provideChatDBService() {
         return new DirectMessageDBService();
+    }
+
+    @Provides
+    @Singleton
+    BombDBService provideBombDBService() {
+        return new BombDBService();
     }
 
     @Provides

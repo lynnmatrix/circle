@@ -3,6 +3,7 @@ package com.jadenine.circle.domain;
 import android.text.TextUtils;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.TopicService;
@@ -19,7 +20,10 @@ import rx.functions.Func1;
  */
 public class UserAp implements Updatable<UserApEntity>{
 
+    public static final int BOMB_PAGE_COUNT = 200;
     private final UserApEntity entity;
+    private final BaseTimeline<Bomb> timeline;
+
     @Inject
     TopicService topicRestService;
 
@@ -31,6 +35,11 @@ public class UserAp implements Updatable<UserApEntity>{
 
     public UserAp(UserApEntity entity) {
         this.entity = entity;
+        BombLoader loader = new BombLoader(getAP(), BOMB_PAGE_COUNT);
+        DaggerService.getDomainComponent().inject(loader);
+
+        this.timeline = new BaseTimeline<>(getAP(), loader);
+
         DaggerService.getDomainComponent().inject(this);
         DaggerService.getDomainComponent().inject(topicTimeline);
     }
@@ -83,7 +92,6 @@ public class UserAp implements Updatable<UserApEntity>{
     public Observable<List<UserAp>> connect(Account account) {
         return account.addUserAp(this);
     }
-
     Observable<Topic> publish(final Topic topic) {
         Observable<Topic> observable = topicRestService.addTopic(topic.getEntity())
                 .map(new Func1<TopicEntity, Topic>() {
@@ -95,5 +103,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
         return observable;
     }
-
+    public Observable<List<TimelineRange<Bomb>>> refresh() {
+        return timeline.refresh();
+    }
 }

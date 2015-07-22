@@ -2,7 +2,7 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 
-import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
@@ -24,7 +24,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/15/15.
  */
-public class BaseTimeline<T extends DirectMessageEntity> implements
+public class BaseTimeline<T extends IdentifiableEntity> implements
         Loadable<TimelineRange<T>> {
 
     private final LinkedList<TimelineRange<T>> rangeList = new LinkedList<>();

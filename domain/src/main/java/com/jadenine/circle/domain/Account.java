@@ -64,6 +64,15 @@ public class Account {
         return null;
     }
 
+    public UserAp getDefaultAp() {
+        //TODO
+        UserAp ap = null;
+        if(getUserAps().size() > 0) {
+            ap = getUserAps().get(0);
+        }
+        return ap;
+    }
+
     private class UserApMapperDelegate implements MapperDelegate<UserApEntity, UserAp> {
         @Override
         public UserAp find(UserApEntity userApEntity) {
