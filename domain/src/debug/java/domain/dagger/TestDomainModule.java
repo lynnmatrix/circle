@@ -4,6 +4,8 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
+import com.jadenine.circle.model.db.impl.DirectMessageDBService;
+import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
 import com.jadenine.circle.model.db.impl.TimelineStateDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.Image;
@@ -109,11 +111,11 @@ public class TestDomainModule {
     @Singleton
     ApService provideApRestService() {
         ApService mockService = mock(ApService.class);
-        when(mockService.listAPs(eq(deviceId))).thenReturn(Observable
-                .just(new JSONListWrapper<>(apList, false, null)));
+        when(mockService.listAPs(eq(deviceId))).thenReturn(Observable.just(new JSONListWrapper<>
+                (apList, false, null)));
 
-        when(mockService.addAP(Matchers.<UserApEntity>any())).thenReturn(Observable
-                .just(new JSONListWrapper<>(apList, false, null)));
+        when(mockService.addAP(Matchers.<UserApEntity>any())).thenReturn(Observable.just(new
+                JSONListWrapper<>(apList, false, null)));
 
         doAnswer(new Answer<Observable<JSONListWrapper<UserApEntity>>>() {
                         @Override
@@ -166,8 +168,8 @@ public class TestDomainModule {
                 .thenReturn(Observable.just(new JSONListWrapper<>(directMessageList.subList(0, 2),
                         true, "8")));
 
-        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers
-                .isNull(Long.class), eq(7l)))
+        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers.isNull(Long.class),
+                eq(7l)))
                 .thenReturn(Observable.just(new JSONListWrapper<>(directMessageList.subList(2, 4)
                         , false, null)));
 
@@ -208,7 +210,8 @@ public class TestDomainModule {
     @Singleton
     TopicDBService provideTopicDBService() {
         TopicDBService mockService = mock(TopicDBService.class);
-        when(mockService.listTopics(anyString())).thenReturn(Observable.<List<TopicEntity>>just(new ArrayList<TopicEntity>()));
+        when(mockService.listTopics(anyString())).thenReturn(Observable.<List<TopicEntity>>just
+                (new ArrayList<TopicEntity>()));
         return mockService;
     }
 
@@ -226,5 +229,17 @@ public class TestDomainModule {
     TimelineStateDBService provideTimelineStateService(){
         TimelineStateDBService mockService = mock(TimelineStateDBService.class);
         return mockService;
+    }
+
+    @Provides
+    @Singleton
+    DirectMessageDBService provideChatDBService() {
+        return mock(DirectMessageDBService.class);
+    }
+
+    @Provides
+    @Singleton
+    TimelineCursorDBService provideTimelineCursorDBService() {
+        return mock(TimelineCursorDBService.class);
     }
 }
