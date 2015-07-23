@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
@@ -19,6 +20,7 @@ import com.umeng.message.PushAgent;
 import java.util.List;
 
 import flow.Flow;
+import flow.History;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -61,7 +63,12 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     }
 
     private void onApSelected(@NonNull UserAp userAp) {
-        Flow.get(getView()).set(new BombListPath(userAp.getAP()));
+        getView().drawerLayout.closeDrawer(GravityCompat.START);
+        History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
+        historyBuilder.pop();
+        historyBuilder.push(new BombListPath(userAp.getAP()));
+        Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
+//        Flow.get(getContext()).set(new BombListPath(userAp.getAP()));
         currentAp = userAp;
     }
 

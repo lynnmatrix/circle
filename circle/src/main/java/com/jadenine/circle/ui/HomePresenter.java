@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.ui.scanner.WifiPath;
@@ -49,13 +47,13 @@ public class HomePresenter extends Presenter<HomeActivity> {
             wechatApi = null;
         }
 
-        if(!weChatAvaliable()) {
-            Menu menu = getView().navigationView.getMenu();
-            MenuItem menuItem = menu.findItem(R.id.item_share_wechat);
-            if(null != menuItem) {
-                menuItem.setVisible(false);
-            }
-        }
+//        if(!weChatAvaliable()) {
+//            Menu menu = getView().navigationView.getMenu();
+//            MenuItem menuItem = menu.findItem(R.id.item_share_wechat);
+//            if(null != menuItem) {
+//                menuItem.setVisible(false);
+//            }
+//        }
     }
 
     @Override

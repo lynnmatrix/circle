@@ -3,6 +3,7 @@ package com.jadenine.circle.domain.dagger;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.BombLoader;
 import com.jadenine.circle.domain.Chat;
+import com.jadenine.circle.domain.ChatLoader;
 import com.jadenine.circle.domain.Message;
 import com.jadenine.circle.domain.Topic;
 import com.jadenine.circle.domain.TopicTimeline;
@@ -23,6 +24,8 @@ public interface DomainComponent {
     void inject(TopicTimeline timeline);
 
     void inject(BombLoader loader);
+
+    void inject(ChatLoader loader);
 
     Account getAccount();
 

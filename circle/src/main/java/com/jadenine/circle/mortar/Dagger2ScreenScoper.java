@@ -18,7 +18,7 @@ public class Dagger2ScreenScoper extends BasicScreenScoper {
     @Override
     protected void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
         if (!(path instanceof ScreenComponentFactory)) {
-            Log.w(TAG, "Path must imlement ComponentFactory");
+            Log.w(TAG, "Path must implement ComponentFactory");
             return;
         }
 

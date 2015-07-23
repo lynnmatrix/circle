@@ -125,12 +125,11 @@ public class TimelineRangeTest {
     public void testRefresh() throws InterruptedException {
         DaggerService.setComponent(DaggerTestDomainComponent.builder().testDomainModule(new
                 TestDomainModule(DEVICE_ID)).build());
-        Account account = DaggerService.getDomainComponent().getAccount();
-        DirectMessageService messageService = DaggerService.getDomainComponent()
-                .getDirectMessageService();
 
+        ChatLoader loader = new ChatLoader(2);
+        DaggerService.getDomainComponent().inject(loader);
         TimelineRange<DirectMessageEntity> range = new TimelineRange<>(TIMELINE, new
-                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService, 2));
+                ArrayList<DirectMessageEntity>(), loader);
         final CountDownLatch latch = new CountDownLatch(1);
         range.refresh().subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
             @Override

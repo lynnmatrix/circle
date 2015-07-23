@@ -2,6 +2,7 @@ package com.jadenine.circle.ui.menu;
 
 import android.content.Context;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -27,6 +28,9 @@ public class ApMenuView extends NavigationView {
 
     @Inject
     ApMenuPresenter presenter;
+
+    @Inject
+    DrawerLayout drawerLayout;
 
     public ApMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);

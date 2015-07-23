@@ -9,6 +9,8 @@ import com.jadenine.circle.model.state.TimelineRangeCursor;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -16,17 +18,14 @@ import rx.Observable;
  */
 public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     private final int pageCount;
-    private final Account account;
-    private final DirectMessageService messageService;
-    private final DirectMessageDBService messageDBService;
-    private final TimelineCursorDBService cursorDBService;
+    @Inject
+    Account account;
+    @Inject
+    DirectMessageService messageService;
+    @Inject DirectMessageDBService messageDBService;
+    @Inject TimelineCursorDBService cursorDBService;
 
-    public ChatLoader(Account account, DirectMessageService service, DirectMessageDBService
-            dbService, TimelineCursorDBService timelineCursorDBService, int pageCount) {
-        this.account = account;
-        this.messageService = service;
-        this.messageDBService = dbService;
-        this.cursorDBService = timelineCursorDBService;
+    public ChatLoader(int pageCount) {
         this.pageCount = pageCount;
     }
 
