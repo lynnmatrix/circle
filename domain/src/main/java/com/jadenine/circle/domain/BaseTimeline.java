@@ -195,4 +195,8 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
                 .withModels(entities)));
     }
+
+    public void addPublished(T entity) {
+        //TODO
+    }
 }

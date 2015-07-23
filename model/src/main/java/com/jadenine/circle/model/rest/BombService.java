@@ -2,6 +2,7 @@ package com.jadenine.circle.model.rest;
 
 import com.jadenine.circle.model.entity.Bomb;
 
+import retrofit.http.Body;
 import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
@@ -34,5 +35,5 @@ public interface BombService {
      * @return the sent message if succeed.
      */
     @POST("/bomb/add")
-    Observable<Bomb> add(Bomb message);
+    Observable<Bomb> add(@Body Bomb message);
 }

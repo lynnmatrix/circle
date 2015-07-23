@@ -168,5 +168,11 @@ public class DomainModule {
         return new TimelineStateDBService();
     }
 
+//    @Provides
+//    @Singleton
+//    BombComposer provideBombComposer(ImageService messageService, AzureBlobUploader blobUploader) {
+//        return new BombComposer(messageService, blobUploader);
+//    }
+
 }
 

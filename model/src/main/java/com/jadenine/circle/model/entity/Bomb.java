@@ -3,6 +3,7 @@ package com.jadenine.circle.model.entity;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 
@@ -25,6 +26,12 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     private String content;
 
     private String images;
+    Bomb(){}
+
+    public Bomb(@NotNull String ap, @NonNull String from) {
+        this.ap = ap;
+        this.from = from;
+    }
 
     public String getAp() {
         return ap;

@@ -14,7 +14,6 @@ import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.io.ByteArrayOutputStream;
 
@@ -39,13 +38,13 @@ public class HomePresenter extends Presenter<HomeActivity> {
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
 
-        if (null == wechatApi) {
-            wechatApi = WXAPIFactory.createWXAPI(getContext(), WX_APP_ID, false);
-        }
-        // WXAppSupportAPI为0表示没有安装微信
-        if (!wechatApi.registerApp(WX_APP_ID) || wechatApi.getWXAppSupportAPI() == 0) {
-            wechatApi = null;
-        }
+//        if (null == wechatApi) {
+//            wechatApi = WXAPIFactory.createWXAPI(getContext(), WX_APP_ID, false);
+//        }
+//        // WXAppSupportAPI为0表示没有安装微信
+//        if (!wechatApi.registerApp(WX_APP_ID) || wechatApi.getWXAppSupportAPI() == 0) {
+//            wechatApi = null;
+//        }
 
 //        if(!weChatAvaliable()) {
 //            Menu menu = getView().navigationView.getMenu();

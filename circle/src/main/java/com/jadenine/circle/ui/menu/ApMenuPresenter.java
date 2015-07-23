@@ -21,7 +21,6 @@ import java.util.List;
 
 import flow.Flow;
 import flow.History;
-import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -66,12 +65,12 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     private void onApSelected(@NonNull UserAp userAp) {
         getView().drawerLayout.closeDrawer(GravityCompat.START);
 
-        Path top = Path.get(getContext());
-        if(top instanceof BombListPath) {
-            if(((BombListPath) top).getAp().equals(userAp.getAP())){
-                return;
-            }
-        }
+//        Path top = Path.get(getContext());
+//        if(top instanceof BombListPath) {
+//            if(((BombListPath) top).getAp().equals(userAp.getAP())){
+//                return;
+//            }
+//        }
 
         History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
         historyBuilder.pop();

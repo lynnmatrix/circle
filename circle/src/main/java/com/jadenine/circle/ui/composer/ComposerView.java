@@ -47,7 +47,7 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
 
     public ComposerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<ComposerPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<BombComposerPath.Component>getDaggerComponent(context).inject(this);
     }
 
     @Override

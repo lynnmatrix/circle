@@ -8,6 +8,7 @@ import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.TopicService;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,6 +28,9 @@ public class UserAp implements Updatable<UserApEntity>{
     @Inject
     TopicService topicRestService;
 
+    @Inject
+    BombComposer bombComposer;
+
     private final TopicTimeline topicTimeline = new TopicTimeline(this);
 
     public static UserAp build(UserApEntity userApEntity) {
@@ -42,6 +46,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
         DaggerService.getDomainComponent().inject(this);
         DaggerService.getDomainComponent().inject(topicTimeline);
+
     }
 
     public UserApEntity getEntity() {
@@ -103,7 +108,26 @@ public class UserAp implements Updatable<UserApEntity>{
 
         return observable;
     }
+
     public Observable<List<TimelineRange<Bomb>>> refresh() {
         return timeline.refresh();
     }
+
+    public Observable<Bomb> publish(final Bomb bomb) {
+        Observable<Bomb> observable = bombComposer.send(bomb)
+                .map(new Func1<Bomb, Bomb>() {
+                    @Override
+                    public Bomb call(Bomb bomb1) {
+                        timeline.addPublished(bomb1);
+                        return bomb1;
+                    }
+                });
+
+        return observable;
+    }
+
+    public Observable<String> uploadImage(InputStream inputStream, String mimeType) {
+        return bombComposer.uploadImage(inputStream, mimeType);
+    }
+
 }
