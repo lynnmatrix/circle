@@ -30,6 +30,10 @@ public class BombListPath extends Path implements ScreenComponentFactory {
         this.ap = ap;
     }
 
+    public String getAp() {
+        return ap;
+    }
+
     @Override
     public Object createComponent(Object... dependencies) {
         return DaggerBombListPath_Component.builder().homeComponent((HomeComponent)
