@@ -12,6 +12,9 @@ import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.ContentValidater;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 
+import java.util.Collections;
+import java.util.List;
+
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -66,7 +69,9 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
 
     void loadMessages() {
         if (hasView()) {
-            getView().getBombAdapter().setBombs(bombGroup.getEntities());
+            List<Bomb> bombList = bombGroup.getEntities();
+            Collections.reverse(bombList);
+            getView().getBombAdapter().setBombs(bombList);
         }
     }
 

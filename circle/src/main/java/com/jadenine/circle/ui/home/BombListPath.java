@@ -1,12 +1,5 @@
 package com.jadenine.circle.ui.home;
 
-import android.app.Activity;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
-
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
@@ -60,23 +53,6 @@ public class BombListPath extends Path implements ScreenComponentFactory {
         @Provides
         BombListPresenter providePresenter(UserAp userAp) {
             return new BombListPresenter(userAp);
-        }
-
-        @DaggerScope(BombListPresenter.class)
-        @Provides
-        Drawable provideErrorDrawable(Activity activity){
-            Drawable errorDrawable = activity.getResources().getDrawable(R.drawable
-                    .ic_error_outline_black);
-
-            TypedValue typedValue = new TypedValue();
-            int[] textSizeAttr = new int[]{R.attr.colorPrimary};
-            int indexOfAttrColorPrimary = 0;
-            TypedArray a = activity.obtainStyledAttributes(typedValue.data, textSizeAttr);
-            int colorPrimary = a.getColor(indexOfAttrColorPrimary, Color.BLACK);
-            a.recycle();
-
-            errorDrawable.setColorFilter(colorPrimary, PorterDuff.Mode.SRC_IN);
-            return errorDrawable;
         }
     }
 }

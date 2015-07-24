@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui.home;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,6 +43,9 @@ public class BombListView extends RelativeLayout implements HandlesBack {
 
     @Inject
     BombListPresenter presenter;
+
+    @Inject
+    Drawable errorDrawable;
 
     public BombListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -116,7 +120,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     BombRecyclerAdapter getAdapter() {
         BombRecyclerAdapter adapter = (BombRecyclerAdapter) recyclerView.getAdapter();
         if(null == adapter) {
-            adapter = new BombRecyclerAdapter();
+            adapter = new BombRecyclerAdapter(errorDrawable);
             recyclerView.setAdapter(adapter);
         }
         return adapter;

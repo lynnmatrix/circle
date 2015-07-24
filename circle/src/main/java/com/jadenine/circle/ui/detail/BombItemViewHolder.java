@@ -46,6 +46,8 @@ public class BombItemViewHolder extends RecyclerView.ViewHolder{
                 .topic_owner) : "User" + (bomb.getFrom() + bomb.getRootMessageId()).hashCode()));
         dateView.setText(getFormattedTime(bomb.getTimestamp()));
         contentView.setText(bomb.getContent());
+
+        itemView.setTag(bomb.getId());
     }
 
     @NonNull
