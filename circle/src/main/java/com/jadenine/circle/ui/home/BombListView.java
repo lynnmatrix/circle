@@ -1,7 +1,6 @@
 package com.jadenine.circle.ui.home;
 
 import android.content.Context;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -94,6 +93,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         presenter.dropView(this);
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }

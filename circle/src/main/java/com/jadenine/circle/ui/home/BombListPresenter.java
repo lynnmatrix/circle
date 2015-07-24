@@ -7,6 +7,7 @@ import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.BombComposerPath;
+import com.jadenine.circle.ui.detail.BombGroupPath;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
 
     void onDetail(int position) {
         Group<Bomb> topic= getView().getAdapter().getBombGroup(position);
-//        Flow.get(getView().getContext()).set(new MessagePath(topic.getAp(), topic.getTopicId()));
+        Flow.get(getView().getContext()).set(new BombGroupPath(userAp.getAP(), topic.getGroupId()));
     }
 
     void addBomb() {

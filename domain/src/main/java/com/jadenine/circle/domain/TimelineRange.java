@@ -136,6 +136,10 @@ public class  TimelineRange<T extends Identifiable<Long>> {
         return groupList.getAll();
     }
 
+    public Group<T> getGroup(Long groupId) {
+        return groupList.get(groupId);
+    }
+
     /**
      * contact two continual range.
      * @param range
@@ -185,4 +189,5 @@ public class  TimelineRange<T extends Identifiable<Long>> {
     boolean isDBLoaded() {
         return dbLoaded.get();
     }
+
 }

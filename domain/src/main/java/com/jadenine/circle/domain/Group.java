@@ -47,4 +47,16 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
     public boolean hasRootEntity(){
         return null != entities.get(groupId);
     }
+
+    public T getRoot() {
+        return entities.get(groupId);
+    }
+
+    public T get(Long entityId) {
+        return entities.get(entityId);
+    }
+
+    public int getCount() {
+        return entities.size();
+    }
 }

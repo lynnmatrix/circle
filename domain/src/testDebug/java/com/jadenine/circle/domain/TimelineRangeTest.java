@@ -7,6 +7,7 @@ import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.state.TimelineRangeCursor;
 
 import org.junit.Test;
 
@@ -161,8 +162,12 @@ public class TimelineRangeTest {
         DirectMessageService messageService = DaggerService.getDomainComponent()
                 .getDirectMessageService();
 
+        ChatLoader loader = new ChatLoader(2);
+        DaggerService.getDomainComponent().inject(loader);
+
         TimelineRange<DirectMessageEntity> range = new TimelineRange<>(TIMELINE, new
-                ArrayList<DirectMessageEntity>(), new ChatLoader(account, messageService, 2));
+                ArrayList<DirectMessageEntity>(), loader);
+
         final CountDownLatch latch = new CountDownLatch(1);
         range.loadMore().subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
             @Override
@@ -215,6 +220,16 @@ public class TimelineRangeTest {
 
         @Override
         public Observable<JSONListWrapper<Id>> loadMore(Long bottom) {
+            return null;
+        }
+
+        @Override
+        public Observable<List<TimelineRangeCursor>> loadTimelineRangeCursors(String timeline) {
+            return null;
+        }
+
+        @Override
+        public Observable<List<Id>> loadTimelineRange(Long top, Long bottom) {
             return null;
         }
     }

@@ -130,4 +130,7 @@ public class UserAp implements Updatable<UserApEntity>{
         return bombComposer.uploadImage(inputStream, mimeType);
     }
 
+    public Group<Bomb> getBombGroup(Long groupId) {
+        return timeline.getRange(groupId).getGroup(groupId);
+    }
 }

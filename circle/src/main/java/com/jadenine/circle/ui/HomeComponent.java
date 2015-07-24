@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.DrawerLayout;
 
 import com.jadenine.circle.app.CircleApplication;
@@ -17,6 +18,8 @@ import com.jadenine.circle.ui.menu.ApMenuView;
 public interface HomeComponent {
     Activity getActivity();
     DrawerLayout getDrawerLayout();
+    Drawable getErrorDrawable();
+
     Account account();
     void inject(HomeActivity homeActivity);
 
