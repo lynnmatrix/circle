@@ -7,7 +7,6 @@ import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.BombComposerPath;
-import com.jadenine.circle.ui.composer.ComposerPath;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
         super.onLoad(savedInstanceState);
         if(!hasView()) return;
 
-        getView().collapsingToolbarLayout.setTitle(userAp.getSSID());
+        getView().toolbar.setTitle(userAp.getSSID());
 
         refresh();
     }
@@ -66,6 +65,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
             public void onCompleted() {
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
+                getView().swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -73,6 +73,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
                 Timber.e(e, "Failed to load topics.");
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
+                getView().swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

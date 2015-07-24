@@ -1,7 +1,6 @@
 package com.jadenine.circle.ui.home;
 
 import android.content.Context;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
@@ -18,6 +18,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.common.flow.HandlesBack;
 
 import javax.inject.Inject;
 
@@ -29,12 +30,10 @@ import butterknife.OnClick;
  * Created by linym on 7/22/15.
  */
 @DaggerScope(BombListPresenter.class)
-public class BombListView extends CoordinatorLayout {
+public class BombListView extends RelativeLayout implements HandlesBack {
     @InjectView(R.id.scrollable_view)
     RecyclerView recyclerView;
-    @InjectView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @InjectView(R.id.anim_toolbar)
+    @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
     @InjectView(R.id.swipe_refresh_layout)
@@ -121,6 +120,15 @@ public class BombListView extends CoordinatorLayout {
             recyclerView.setAdapter(adapter);
         }
         return adapter;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+            return true;
+        }
+        return false;
     }
 
 }

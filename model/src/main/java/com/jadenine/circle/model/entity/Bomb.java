@@ -17,15 +17,16 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     String messageId;
     String ap;
 
-    private String rootMessageId;
-    private String rootUser;
+    String rootMessageId;
+    String rootUser;
 
-    private String from;
-    private String to;
+    String from;
+    String to;
 
-    private String content;
+    String content;
 
-    private String images;
+    String images;
+
     Bomb(){}
 
     public Bomb(@NotNull String ap, @NonNull String from) {

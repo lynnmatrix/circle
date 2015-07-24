@@ -98,7 +98,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         boolean currentAPAlreadyAdded = false;
         List<UserAp> userApList = account.getUserAps();
         for (UserAp userAp : userApList) {
-            if (currentAp.equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
+            if (currentAp.getBSSID().equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
                 currentAPAlreadyAdded = true;
                 break;
             }

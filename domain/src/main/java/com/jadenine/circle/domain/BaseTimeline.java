@@ -117,19 +117,31 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
 
     @NonNull
     private Observable<List<TimelineRange<T>>> innerRefresh() {
-        final TimelineRange<T> firstRange = getFirstRange();
-        final Long originalTop = firstRange.cursor.getTop();
-        return firstRange.refresh().flatMap(new Func1<TimelineRange<T>,
+        final TimelineRange<T> refreshRange = getFirstRange();
+        final Long originalTop = refreshRange.cursor.getTop();
+        final boolean rangeDBLoaded = refreshRange.isDBLoaded();
+        final boolean emptyRange = null == originalTop;
+
+        return refreshRange.refresh().flatMap(new Func1<TimelineRange<T>,
                 Observable<List<TimelineRange<T>>>>() {
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> ts) {
-                if (firstRange != ts) {
+
+                if (refreshRange != ts) {
+                    if(emptyRange) {
+                        rangeList.remove(refreshRange);
+                    }
                     rangeList.add(0, ts);
-                    group(ts.getAll());
-                } else if (null == originalTop && null != firstRange.cursor.getTop()) {
-                    group(ts.getAll());
-                } else if (null != originalTop && firstRange.cursor.getTop() < originalTop) {
-                    group(ts.getSubRange(firstRange.cursor.getTop(), originalTop));
+                    group(ts.getAll(), rangeDBLoaded);
+                } else {
+                    if(emptyRange) {
+                        group(ts.getAll(), rangeDBLoaded);
+                    } else if(refreshRange.cursor.getTop() < originalTop){
+                        group(ts.getSubRange(refreshRange.cursor.getTop(), originalTop),
+                                rangeDBLoaded);
+                    } else if(!rangeDBLoaded) {
+                        group(ts.getAll(), rangeDBLoaded);
+                    }
                 }
                 return Observable.just(getAllRanges());
             }
@@ -180,7 +192,7 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         return getLastRange().hasMore();
     }
 
-    private void group(Collection<T> entities) {
+    private void group(Collection<T> entities, boolean fromRest) {
         TimelineRange<T> range;
         Set<TimelineRangeCursor> cursorsNeedSave = new LinkedHashSet<>();
         for(T entity : entities) {
@@ -188,12 +200,12 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
             range.group(entity);
             cursorsNeedSave.add(range.cursor);
         }
-        //TODO Do not save entities loaded from database.
-        TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
-                .withModels(cursorsNeedSave)));
 
-        TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo
-                .withModels(entities)));
+        if(fromRest) {
+            TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo.withModels(cursorsNeedSave)));
+
+            TransactionManager.getInstance().addTransaction(new SaveModelTransaction(ProcessModelInfo.withModels(entities)));
+        }
     }
 
     public void addPublished(T entity) {

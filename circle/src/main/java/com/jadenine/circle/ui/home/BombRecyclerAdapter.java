@@ -38,6 +38,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<BombGroupItemViewH
 
     public void setBombGroups(List<Group<Bomb>> bombGroups) {
         this.bombGroups = bombGroups;
+        notifyDataSetChanged();
     }
 
     public Group<Bomb> getBombGroup(int position) {
