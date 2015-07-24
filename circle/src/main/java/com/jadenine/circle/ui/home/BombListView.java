@@ -1,6 +1,8 @@
 package com.jadenine.circle.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +20,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
 
 import javax.inject.Inject;
@@ -46,6 +49,9 @@ public class BombListView extends RelativeLayout implements HandlesBack {
 
     @Inject
     Drawable errorDrawable;
+
+    @Inject
+    Activity activity;
 
     public BombListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -103,6 +109,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     }
 
     protected void configToolbar() {
+        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
         toolbar.setNavigationIcon(R.drawable.ic_drawer);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override

@@ -54,7 +54,6 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
             getView().replyEditor.setSelection(content.length());
         }
 
-        getView().topicHeader.bind(bombGroup, errorDrawable);
         updateHint();
 
         loadMessages();

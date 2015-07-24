@@ -45,5 +45,6 @@ public class ApMenuAdapter extends RecyclerView.Adapter<ApMenuItemViewHolder> {
     public void setUserAps(List<UserAp> userAps) {
         aps.clear();;
         aps.addAll(userAps);
+        notifyDataSetChanged();
     }
 }

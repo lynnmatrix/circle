@@ -65,7 +65,6 @@ public abstract class ComposerPresenter extends ViewPresenter<ComposerView> impl
         getView().activity.startActivityForResult(intent, PICK_IMAGE);
     }
 
-
     abstract void send(final String content);
 
     @Override
