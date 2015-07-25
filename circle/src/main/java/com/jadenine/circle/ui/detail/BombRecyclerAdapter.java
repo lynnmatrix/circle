@@ -67,7 +67,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         errorDrawable, avatarBinder);
                 break;
             case TYPE_REPLY:
-                ((BombItemViewHolder)holder).bind(bombs.get(position), position);
+                ((BombItemViewHolder)holder).bind(bombs.get(position), position, avatarBinder);
                 break;
         }
     }

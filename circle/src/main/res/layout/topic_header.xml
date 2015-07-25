@@ -10,29 +10,20 @@
         android:id="@+id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_avatar_1"/>
+        android:src="@drawable/ic_avatar_1"
+        android:padding="@dimen/activity_horizontal_margin"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:padding="5dp"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+        android:orientation="vertical"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="@dimen/topic_item_min_height"
-            android:padding="5dp"
+            android:gravity="start"
             android:text="Large Text.........................................................."
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
@@ -40,8 +31,6 @@
             android:id="@+id/content_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minWidth="220dp"
-            android:padding="5dp"
             app:aspectRatio="0.5"
             app:aspectRatioEnabled="true"
             app:dominantMeasurement="width"/>
@@ -49,8 +38,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -62,12 +50,19 @@
 
             <TextView
                 android:id="@+id/message_count"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="start|center_vertical"
                 android:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Small Text"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
         </LinearLayout>
     </LinearLayout>
 </com.jadenine.circle.ui.detail.TopicHeader>

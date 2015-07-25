@@ -9,15 +9,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.TimeFormatUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by linym on 7/24/15.
@@ -52,8 +51,6 @@ public class TopicHeader extends LinearLayout {
     public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
         setTag(rootBomb.getId());
 
-        Timber.e("avatar:%d", avatarBinder.getAvatar(rootBomb.getFrom(), rootBomb
-                .getRootMessageId()));
         avatarView.setImageResource(avatarBinder.getAvatar(rootBomb.getFrom(), rootBomb.getRootMessageId()));
 
         dateView.setText(getFormattedTime(rootBomb.getTimestamp()));

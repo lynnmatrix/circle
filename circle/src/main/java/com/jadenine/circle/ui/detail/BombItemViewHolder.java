@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +22,9 @@ import butterknife.InjectView;
 public class BombItemViewHolder extends RecyclerView.ViewHolder{
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
 
+    @InjectView(R.id.avatar)
+    ImageView avatarView;
+
     @InjectView(R.id.private_view)
     ImageView privateView;
 
@@ -33,13 +37,18 @@ public class BombItemViewHolder extends RecyclerView.ViewHolder{
     @InjectView(R.id.content)
     TextView contentView;
 
+
     public BombItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
     }
 
-    public void bind(Bomb bomb, int position) {
+    public void bind(Bomb bomb, int position, AvatarBinder avatarBinder) {
         privateView.setVisibility(View.GONE);
+
+        avatarView.setImageResource(avatarBinder.getAvatar(bomb.getFrom(), bomb.getRootMessageId
+                ()));
+
         boolean isOwner = bomb.getRootUser().equals(bomb.getFrom());
 
         fromView.setText(String.format("%s", isOwner ? fromView.getContext().getString(R.string
