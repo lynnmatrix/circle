@@ -12,6 +12,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 
 import javax.inject.Inject;
 
@@ -52,7 +53,9 @@ public class ApMenuView extends NavigationView {
                 presenter.onApSelected(position);
             }
         }));
-
+        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),
+                LinearLayoutManager.VERTICAL);
+        menuView.addItemDecoration(decoration);
         getAdapter();
         presenter.takeView(this);
     }

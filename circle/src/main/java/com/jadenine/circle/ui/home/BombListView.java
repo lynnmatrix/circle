@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
 
@@ -67,7 +69,10 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         recyclerView.setHasFixedSize(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),
+                LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
                 RecyclerItemClickListener.OnItemClickListener() {
             @Override
