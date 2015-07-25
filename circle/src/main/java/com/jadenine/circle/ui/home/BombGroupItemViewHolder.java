@@ -3,7 +3,6 @@ package com.jadenine.circle.ui.home;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 
-import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.detail.TopicHeader;
 
@@ -18,7 +17,7 @@ public class BombGroupItemViewHolder extends RecyclerView.ViewHolder {
         this.topicHeader = topicHeader;
     }
 
-    void bind(Group<Bomb> bombGroup, Drawable errorDrawable) {
-        topicHeader.bind(bombGroup, errorDrawable);
+    public void bind(Bomb rootBomb, int groupSize, Drawable errorDrawable) {
+        topicHeader.bind(rootBomb, groupSize, errorDrawable);
     }
 }

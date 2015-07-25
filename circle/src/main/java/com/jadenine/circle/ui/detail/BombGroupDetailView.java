@@ -3,6 +3,7 @@ package com.jadenine.circle.ui.detail;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,8 @@ public class BombGroupDetailView extends LinearLayout{
     @Inject
     BombGroupPresenter presenter;
 
+    @Inject
+    Drawable errorDrawable;
 
     public BombGroupDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -102,7 +105,7 @@ public class BombGroupDetailView extends LinearLayout{
     BombRecyclerAdapter getBombAdapter() {
         BombRecyclerAdapter messageAdapter = (BombRecyclerAdapter) bombList.getAdapter();
         if(null == messageAdapter) {
-            messageAdapter = new BombRecyclerAdapter();
+            messageAdapter = new BombRecyclerAdapter(errorDrawable);
             bombList.setAdapter(messageAdapter);
         }
 

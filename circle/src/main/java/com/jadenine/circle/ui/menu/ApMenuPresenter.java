@@ -17,6 +17,7 @@ import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 import com.umeng.message.PushAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import flow.Flow;
@@ -172,7 +173,8 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (UserAp ap : userAps) {
+                List<UserAp> tmpUserAps = new ArrayList<>(userAps);
+                for (UserAp ap : tmpUserAps) {
                     addTag(ap.getAP());
                 }
             }

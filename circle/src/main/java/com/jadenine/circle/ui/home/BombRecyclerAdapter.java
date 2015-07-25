@@ -33,7 +33,8 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<BombGroupItemViewH
 
     @Override
     public void onBindViewHolder(BombGroupItemViewHolder holder, int position) {
-        holder.bind(bombGroups.get(position), errorDrawable);
+        Group<Bomb> bombGroup = bombGroups.get(position);
+        holder.bind(bombGroup.getRoot(), bombGroup.getCount(), errorDrawable);
     }
 
     @Override

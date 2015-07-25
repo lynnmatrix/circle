@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.TimeFormatUtils;
 import com.squareup.picasso.Picasso;
@@ -48,12 +47,11 @@ public class TopicHeader extends LinearLayout {
         ButterKnife.inject(this);
     }
 
-    public void bind(Group<Bomb> bombGroup, Drawable errorDrawable) {
-        Bomb rootBomb = bombGroup.getRoot();
+    public void bind(Bomb rootBomb, int bombCount, Drawable errorDrawable) {
 
         dateView.setText(getFormattedTime(rootBomb.getTimestamp()));
         contentView.setText(rootBomb.getContent());
-        messageCountView.setText("" + bombGroup.getCount());
+        messageCountView.setText("" + bombCount);
         if(null != rootBomb.getImages() && rootBomb.getImages().length() > 0) {
             imageView.setVisibility(View.VISIBLE);
             Uri imageUri = Uri.parse(rootBomb.getImages());
