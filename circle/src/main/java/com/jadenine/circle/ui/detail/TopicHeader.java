@@ -47,12 +47,12 @@ public class TopicHeader extends LinearLayout {
         ButterKnife.inject(this);
     }
 
-    public void bind(Bomb rootBomb, int bombCount, Drawable errorDrawable) {
+    public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable) {
         setTag(rootBomb.getId());
 
         dateView.setText(getFormattedTime(rootBomb.getTimestamp()));
         contentView.setText(rootBomb.getContent());
-        messageCountView.setText("" + bombCount);
+        messageCountView.setText("" + commentCount);
         if(null != rootBomb.getImages() && rootBomb.getImages().length() > 0) {
             imageView.setVisibility(View.VISIBLE);
             Uri imageUri = Uri.parse(rootBomb.getImages());

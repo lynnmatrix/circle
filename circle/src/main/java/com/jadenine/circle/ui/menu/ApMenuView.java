@@ -45,7 +45,6 @@ public class ApMenuView extends NavigationView {
         menuView.setHasFixedSize(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         menuView.setLayoutManager(linearLayoutManager);
-
         menuView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
                 RecyclerItemClickListener.OnItemClickListener() {
             @Override

@@ -15,12 +15,15 @@ import rx.Subscriber;
  * Created by linym on 7/22/15.
  */
 public class BombDBService {
-    public Observable<List<Bomb>> listMessage(final Long beforeId, final Long sinceId) {
+    public Observable<List<Bomb>> listMessage(final String ap, final Long beforeId, final Long sinceId) {
         return Observable.create(new Observable.OnSubscribe<List<Bomb>>() {
             @Override
             public void call(Subscriber<? super List<Bomb>> subscriber) {
                 Where<Bomb> where;
                 where = new Select().from(Bomb.class).where();
+                if(null != ap) {
+                    where.and(Condition.column(Bomb$Table.AP).eq(ap));
+                }
                 if (null != beforeId) {
                     where = where.and(Condition.column(Bomb$Table.MESSAGEID).lessThan(beforeId));
                 }

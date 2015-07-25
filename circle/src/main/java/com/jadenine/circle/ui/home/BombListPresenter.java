@@ -93,7 +93,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
     }
 
     void loadMore() {
-
+        //TODO
     }
 
     void onDetail(int position) {

@@ -50,6 +50,6 @@ public class BombLoader implements RangeLoader<Bomb> {
 
     @Override
     public Observable<List<Bomb>> loadTimelineRange(Long top, Long bottom) {
-        return dbService.listMessage(bottom + 1, top - 1);
+        return dbService.listMessage(ap, bottom + 1, top - 1);
     }
 }

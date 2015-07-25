@@ -59,14 +59,18 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     }
 
     public void onApSelected(int position) {
-        UserAp userAp = getAdapter().getAp(position);
-        onApSelected(userAp);
+        if(position > 0) {
+            UserAp userAp = getAdapter().getAp(position);
+            getAdapter().setSelected(position);
+            onApSelected(userAp);
+        }
     }
 
     private void onApSelected(@NonNull UserAp userAp) {
         if(null == userAp) {
             return;
         }
+
         getView().drawerLayout.closeDrawer(GravityCompat.START);
 
 //        Path top = Path.get(getContext());

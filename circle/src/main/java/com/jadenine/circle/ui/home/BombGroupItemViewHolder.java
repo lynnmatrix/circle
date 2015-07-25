@@ -17,7 +17,7 @@ public class BombGroupItemViewHolder extends RecyclerView.ViewHolder {
         this.topicHeader = topicHeader;
     }
 
-    public void bind(Bomb rootBomb, int groupSize, Drawable errorDrawable) {
-        topicHeader.bind(rootBomb, groupSize, errorDrawable);
+    public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable) {
+        topicHeader.bind(rootBomb, commentCount, errorDrawable);
     }
 }
