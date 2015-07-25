@@ -1,7 +1,6 @@
 package com.jadenine.circle.ui.detail;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -30,13 +29,11 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
     private final Group<Bomb> bombGroup;
     private final Bomb rootBomb;
 
-    private final Drawable errorDrawable;
     private String replyTo;
 
-    public BombGroupPresenter(UserAp userAp, Group<Bomb> bombGroup, Drawable errorDrawable) {
+    public BombGroupPresenter(UserAp userAp, Group<Bomb> bombGroup) {
         this.userAp = userAp;
         this.bombGroup = bombGroup;
-        this.errorDrawable = errorDrawable;
         this.rootBomb = bombGroup.getRoot();
         this.replyTo = rootBomb.getRootUser();
     }

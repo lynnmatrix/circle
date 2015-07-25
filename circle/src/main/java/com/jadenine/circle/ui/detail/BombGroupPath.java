@@ -1,7 +1,5 @@
 package com.jadenine.circle.ui.detail;
 
-import android.graphics.drawable.Drawable;
-
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Group;
@@ -60,9 +58,8 @@ public class BombGroupPath extends Path implements ScreenComponentFactory{
 
         @DaggerScope(BombGroupPresenter.class)
         @Provides
-        BombGroupPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup, Drawable
-                errorDrawable) {
-            return new BombGroupPresenter(userAp, bombGroup, errorDrawable);
+        BombGroupPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup) {
+            return new BombGroupPresenter(userAp, bombGroup);
         }
     }
 }

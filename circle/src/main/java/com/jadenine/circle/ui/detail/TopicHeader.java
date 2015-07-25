@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by linym on 7/24/15.
@@ -38,8 +39,18 @@ public class TopicHeader extends LinearLayout {
     @InjectView(R.id.message_count)
     TextView messageCountView;
 
+    private OnAvatarClickListener avatarClickListener;
+
+    public interface OnAvatarClickListener{
+        void onClick();
+    }
+
     public TopicHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setOnAvatarClickListener(OnAvatarClickListener listener) {
+        this.avatarClickListener = listener;
     }
 
     @Override
@@ -68,5 +79,12 @@ public class TopicHeader extends LinearLayout {
 
     private String getFormattedTime(long timestamp) {
         return TimeFormatUtils.getFormattedTime(timestamp);
+    }
+
+    @OnClick(R.id.avatar)
+    public void onAvatarClicked(){
+        if(null != avatarClickListener) {
+            avatarClickListener.onClick();
+        }
     }
 }

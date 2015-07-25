@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.home.BombGroupItemViewHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +49,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(TYPE_HEADER == viewType) {
             TopicHeader topicHeader = (TopicHeader) LayoutInflater.from(parent.getContext()).inflate(R.layout.topic_header,
                     parent, false);
-            viewHolder = new BombGroupItemViewHolder(topicHeader);
+            viewHolder = new TopicHeaderViewHolder(topicHeader);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message,
                     parent, false);
@@ -63,7 +62,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()){
             case TYPE_HEADER:
-                ((BombGroupItemViewHolder) holder).bind(rootBomb, getItemCount() - 1,
+                ((TopicHeaderViewHolder) holder).bind(rootBomb, getItemCount() - 1,
                         errorDrawable, avatarBinder);
                 break;
             case TYPE_REPLY:
