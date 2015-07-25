@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.home.BombGroupItemViewHolder;
 
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by linym on 7/24/15.
@@ -22,9 +26,13 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Bomb> bombs = Collections.emptyList();
     private Bomb rootBomb;
     private Drawable errorDrawable;
+    private final AvatarBinder avatarBinder;
 
-    public BombRecyclerAdapter(Drawable errorDrawable) {
+    @Inject
+    @Singleton
+    public BombRecyclerAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
         this.errorDrawable = errorDrawable;
+        this.avatarBinder = avatarBinder;
     }
 
     @Override
@@ -55,7 +63,8 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()){
             case TYPE_HEADER:
-                ((BombGroupItemViewHolder) holder).bind(rootBomb, getItemCount() - 1, errorDrawable);
+                ((BombGroupItemViewHolder) holder).bind(rootBomb, getItemCount() - 1,
+                        errorDrawable, avatarBinder);
                 break;
             case TYPE_REPLY:
                 ((BombItemViewHolder)holder).bind(bombs.get(position), position);

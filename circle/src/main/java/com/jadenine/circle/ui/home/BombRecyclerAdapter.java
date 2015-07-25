@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.detail.TopicHeader;
 
 import java.util.Collections;
@@ -19,8 +20,10 @@ import java.util.List;
 public class BombRecyclerAdapter extends RecyclerView.Adapter<BombGroupItemViewHolder>{
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
     private final Drawable errorDrawable;
-    public BombRecyclerAdapter(Drawable errorDrawable) {
+    private final AvatarBinder avatarBinder;
+    public BombRecyclerAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
         this.errorDrawable = errorDrawable;
+        this.avatarBinder = avatarBinder;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<BombGroupItemViewH
     public void onBindViewHolder(BombGroupItemViewHolder holder, int position) {
         Group<Bomb> bombGroup = bombGroups.get(position);
         //TODO handle invisible group
-        holder.bind(bombGroup.getRoot(), bombGroup.getCount() - 1, errorDrawable);
+        holder.bind(bombGroup.getRoot(), bombGroup.getCount() - 1, errorDrawable, avatarBinder);
     }
 
     @Override

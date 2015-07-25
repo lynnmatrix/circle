@@ -15,6 +15,7 @@ import com.jadenine.circle.domain.dagger.DomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainModule;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.utils.Device;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
@@ -26,6 +27,7 @@ import com.umeng.message.entity.UMessage;
 import javax.inject.Inject;
 
 import dagger.Module;
+import dagger.Provides;
 import mortar.MortarScope;
 import timber.log.Timber;
 
@@ -125,6 +127,7 @@ public class CircleApplication extends Application {
     public interface AppComponent {
         void inject(CircleApplication app);
         Account account();
+        AvatarBinder avatarBinder();
     }
 
     @Module
@@ -133,6 +136,12 @@ public class CircleApplication extends Application {
         private final Context appContext;
         public AppModule(Application application){
             this.appContext = application;
+        }
+
+        @Provides
+        @DaggerScope(CircleApplication.class)
+        AvatarBinder provideAvatarBinder() {
+            return new AvatarBinder(appContext);
         }
 
     }

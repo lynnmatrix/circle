@@ -51,6 +51,9 @@ public class BombGroupDetailView extends LinearLayout{
     @Inject
     Drawable errorDrawable;
 
+    @Inject
+    BombRecyclerAdapter bombRecyclerAdapter;
+
     public BombGroupDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
         DaggerService.<BombGroupPath.Component>getDaggerComponent(context).inject(this);
@@ -76,6 +79,7 @@ public class BombGroupDetailView extends LinearLayout{
                     }
                 }));
 
+        bombList.setAdapter(bombRecyclerAdapter);
         configToolbar();
         getBombAdapter();
     }
@@ -105,13 +109,7 @@ public class BombGroupDetailView extends LinearLayout{
     }
 
     BombRecyclerAdapter getBombAdapter() {
-        BombRecyclerAdapter messageAdapter = (BombRecyclerAdapter) bombList.getAdapter();
-        if(null == messageAdapter) {
-            messageAdapter = new BombRecyclerAdapter(errorDrawable);
-            bombList.setAdapter(messageAdapter);
-        }
-
-        return messageAdapter;
+        return bombRecyclerAdapter;
     }
 
 }

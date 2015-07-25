@@ -19,6 +19,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
 import com.jadenine.circle.ui.widgets.DividerItemDecoration;
@@ -54,6 +55,9 @@ public class BombListView extends RelativeLayout implements HandlesBack {
 
     @Inject
     Activity activity;
+
+    @Inject
+    AvatarBinder avatarBinder;
 
     public BombListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -132,7 +136,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     BombRecyclerAdapter getAdapter() {
         BombRecyclerAdapter adapter = (BombRecyclerAdapter) recyclerView.getAdapter();
         if(null == adapter) {
-            adapter = new BombRecyclerAdapter(errorDrawable);
+            adapter = new BombRecyclerAdapter(errorDrawable, avatarBinder);
             recyclerView.setAdapter(adapter);
         }
         return adapter;

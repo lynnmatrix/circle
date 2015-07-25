@@ -1,4 +1,4 @@
-package com.jadenine.circle.welcome;
+package com.jadenine.circle.ui.welcome;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.ScreenComponentFactory;

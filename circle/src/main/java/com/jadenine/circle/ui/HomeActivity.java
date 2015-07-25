@@ -10,7 +10,7 @@ import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
 import com.jadenine.circle.ui.menu.ApMenuView;
-import com.jadenine.circle.welcome.WelcomePath;
+import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.umeng.common.message.Log;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.detail.TopicHeader;
 
 /**
@@ -17,7 +18,7 @@ public class BombGroupItemViewHolder extends RecyclerView.ViewHolder {
         this.topicHeader = topicHeader;
     }
 
-    public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable) {
-        topicHeader.bind(rootBomb, commentCount, errorDrawable);
+    public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
+        topicHeader.bind(rootBomb, commentCount, errorDrawable, avatarBinder);
     }
 }

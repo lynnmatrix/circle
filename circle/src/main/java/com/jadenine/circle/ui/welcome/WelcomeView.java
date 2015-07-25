@@ -1,4 +1,4 @@
-package com.jadenine.circle.welcome;
+package com.jadenine.circle.ui.welcome;
 
 import android.content.Context;
 import android.util.AttributeSet;
