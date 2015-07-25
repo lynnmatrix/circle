@@ -113,6 +113,10 @@ public class UserAp implements Updatable<UserApEntity>{
         return timeline.refresh();
     }
 
+    public Observable<List<TimelineRange<Bomb>>> loadMoreBomb() {
+        return timeline.loadMore();
+    }
+
     public Observable<Bomb> publish(final Bomb bomb) {
         Observable<Bomb> observable = bombComposer.send(bomb)
                 .map(new Func1<Bomb, Bomb>() {
@@ -133,4 +137,5 @@ public class UserAp implements Updatable<UserApEntity>{
     public Group<Bomb> getBombGroup(Long groupId) {
         return timeline.getRange(groupId).getGroup(groupId);
     }
+
 }

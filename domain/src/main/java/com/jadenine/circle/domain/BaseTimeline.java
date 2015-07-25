@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import rx.Observable;
 import rx.android.internal.Preconditions;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 /**
  * Created by linym on 7/15/15.
@@ -151,8 +152,10 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
     @Override
     public @NotNull Observable<List<TimelineRange<T>>> loadMore() {
         if(!cursorDBLoaded.get()) {
-            throw new IllegalStateException("TimelineCursor should be loaded before loading more.");
+            Timber.w("TimelineCursor should be loaded before loading more.");
+            return Observable.empty();
         }
+
         TimelineRange<T> rangeToLoadMore = null;
         for(TimelineRange range : rangeList) {
             if(!range.isDBLoaded()){

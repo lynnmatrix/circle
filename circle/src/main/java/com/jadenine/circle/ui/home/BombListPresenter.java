@@ -57,6 +57,10 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
     }
 
     void refresh() {
+        if(!refreshSubscription.isUnsubscribed()){
+            return;
+        }
+
         Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.refresh()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -82,18 +86,49 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
                 Timber.i("hasView():%b", hasView());
                 if (!hasView()) return;
 
-                List<Group<Bomb>> bombGroupList = new LinkedList<>();
-                for(TimelineRange<Bomb> range: ranges) {
-                    bombGroupList.addAll(range.getAllGroups());
-                }
-
-                getView().getAdapter().setBombGroups(bombGroupList);
+                updateBombGroups(ranges);
             }
         });
     }
 
+    private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
+        List<Group<Bomb>> bombGroupList = new LinkedList<>();
+        for(TimelineRange<Bomb> range: ranges) {
+            bombGroupList.addAll(range.getAllGroups());
+        }
+
+        getView().getAdapter().setBombGroups(bombGroupList);
+    }
+
     void loadMore() {
-        //TODO
+        if(!loadingMoreSubscription.isUnsubscribed()) {
+            return;
+        }
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMoreBomb()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+            @Override
+            public void onCompleted() {
+                loadingMoreSubscription = Subscriptions.empty();
+                loadingMoreSubscription.unsubscribe();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "Failed to load more topics.");
+                loadingMoreSubscription = Subscriptions.empty();
+                loadingMoreSubscription.unsubscribe();
+            }
+
+            @Override
+            public void onNext(List<TimelineRange<Bomb>> ranges) {
+                if (!hasView()) return;
+
+                updateBombGroups(ranges);
+            }
+        });
     }
 
     void onDetail(int position) {
