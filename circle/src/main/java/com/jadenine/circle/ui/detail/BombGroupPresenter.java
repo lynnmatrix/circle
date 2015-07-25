@@ -54,6 +54,7 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
             getView().replyEditor.setSelection(content.length());
         }
 
+        getView().toolbar.setTitle(userAp.getSSID());
         updateHint();
 
         loadMessages();

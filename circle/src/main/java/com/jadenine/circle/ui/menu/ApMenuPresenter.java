@@ -64,6 +64,9 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     }
 
     private void onApSelected(@NonNull UserAp userAp) {
+        if(null == userAp) {
+            return;
+        }
         getView().drawerLayout.closeDrawer(GravityCompat.START);
 
 //        Path top = Path.get(getContext());
@@ -145,7 +148,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "Failed to load aps.");
+                Timber.w(e, "Failed to load aps.");
                 openDefaultApIfNeed();
             }
 

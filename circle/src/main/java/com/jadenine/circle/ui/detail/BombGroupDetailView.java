@@ -16,6 +16,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
@@ -92,6 +93,7 @@ public class BombGroupDetailView extends LinearLayout{
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftKeyboardToggler.toggleInputMethod(replyEditor, false);
                 Flow.get(getContext()).goBack();
             }
         });

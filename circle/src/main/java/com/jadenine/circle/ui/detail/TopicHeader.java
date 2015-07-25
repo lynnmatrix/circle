@@ -48,6 +48,7 @@ public class TopicHeader extends LinearLayout {
     }
 
     public void bind(Bomb rootBomb, int bombCount, Drawable errorDrawable) {
+        setTag(rootBomb.getId());
 
         dateView.setText(getFormattedTime(rootBomb.getTimestamp()));
         contentView.setText(rootBomb.getContent());
