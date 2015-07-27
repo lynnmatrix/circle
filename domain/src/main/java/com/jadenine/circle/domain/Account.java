@@ -100,7 +100,7 @@ public class Account {
                 if(messages.size() > 0) {
                     DirectMessageEntity firstMessage = messages.get(0);
                     if(firstMessage.getAp().equals(ap)
-                            && firstMessage.getTopicId().equals(bombGroupId)
+                            && Long.valueOf(firstMessage.getTopicId()).equals(bombGroupId)
                             && firstMessage.getRootUser().equals(rootUser)){
                         return group;
                     }
