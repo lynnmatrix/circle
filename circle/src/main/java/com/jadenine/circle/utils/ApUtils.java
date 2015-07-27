@@ -17,7 +17,15 @@ public class ApUtils {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         if (null != wifiInfo && null != wifiInfo.getBSSID()) {
-            return new AP(wifiInfo.getBSSID(), wifiInfo.getSSID());
+            String ssid = wifiInfo.getSSID();
+            if(ssid.startsWith("\"")) {
+                ssid = ssid.substring(1);
+            }
+
+            if(ssid.endsWith("\"")) {
+                ssid = ssid.substring(0, ssid.length() - 1);
+            }
+            return new AP(wifiInfo.getBSSID(), ssid);
         }
         return null;
     }

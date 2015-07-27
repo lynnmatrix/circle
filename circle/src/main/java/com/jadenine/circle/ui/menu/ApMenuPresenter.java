@@ -72,13 +72,6 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             return;
         }
 
-//        Path top = Path.get(getContext());
-//        if(top instanceof BombListPath) {
-//            if(((BombListPath) top).getAp().equals(userAp.getAP())){
-//                return;
-//            }
-//        }
-
         History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
         historyBuilder.pop();
         historyBuilder.push(new BombListPath(userAp.getAP()));
