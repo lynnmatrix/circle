@@ -91,7 +91,7 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
             chatMessage.setRootMessageId(String.valueOf(chatGroup.getGroupId()));
             if(messages.size() > 0) {
                 DirectMessageEntity anyMessage = chatGroup.getEntities().get(0);
-                chatMessage.setRootUser(anyMessage.getRootMessageId());
+                chatMessage.setRootUser(anyMessage.getRootUser());
             }
         }
         account.publish(chatMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<DirectMessageEntity>() {

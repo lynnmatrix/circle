@@ -53,18 +53,6 @@ public class ChatPath extends Path implements ScreenComponentFactory {
     @dagger.Module
     class Module{
 
-     /*   @DaggerScope(ChatPath.class)
-        @Provides
-        UserAp provideUserAp(Account account) {
-            return account.getUserAp(ap);
-        }
-
-        @DaggerScope(ChatPath.class)
-        @Provides
-        Group<Bomb> provideTopic(UserAp userAp) {
-            return userAp.getBombGroup(bombGroupId);
-        }
-*/
         @DaggerScope(ChatPath.class)
         @Provides
         @Nullable
