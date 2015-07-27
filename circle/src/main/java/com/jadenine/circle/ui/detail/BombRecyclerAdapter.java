@@ -53,7 +53,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     parent, false);
             viewHolder = new TopicHeaderViewHolder(topicHeader);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message,
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bomb,
                     parent, false);
             viewHolder = new BombItemViewHolder(view);
         }
