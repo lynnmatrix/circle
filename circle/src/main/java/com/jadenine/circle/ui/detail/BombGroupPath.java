@@ -55,11 +55,5 @@ public class BombGroupPath extends Path implements ScreenComponentFactory{
         Group<Bomb> provideBombGroup(UserAp userAp) {
             return userAp.getBombGroup(groupId);
         }
-
-        @DaggerScope(BombGroupPresenter.class)
-        @Provides
-        BombGroupPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup) {
-            return new BombGroupPresenter(userAp, bombGroup);
-        }
     }
 }

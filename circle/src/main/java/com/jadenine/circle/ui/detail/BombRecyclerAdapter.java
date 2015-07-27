@@ -28,6 +28,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final AvatarBinder avatarBinder;
 
     private TopicHeader.OnAvatarClickListener onAvatarClickListener;
+    private OnBombItemClickListener onBombItemClick;
 
     @Inject
     @Singleton
@@ -61,7 +62,7 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         switch (holder.getItemViewType()){
             case TYPE_HEADER:
                 TopicHeaderViewHolder headerViewHolder = (TopicHeaderViewHolder) holder;
@@ -74,6 +75,15 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((BombItemViewHolder)holder).bind(bombs.get(position), position, avatarBinder);
                 break;
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(null != onBombItemClick) {
+                    onBombItemClick.onBombItemClicked(bombs.get(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -90,4 +100,13 @@ public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setOnAvatarClickListener(TopicHeader.OnAvatarClickListener onAvatarClickListener) {
         this.onAvatarClickListener = onAvatarClickListener;
     }
+
+    public void setOnBombItemClick(OnBombItemClickListener onBombItemClick) {
+        this.onBombItemClick = onBombItemClick;
+    }
+
+    public interface OnBombItemClickListener{
+        boolean onBombItemClicked(Bomb bomb);
+    }
 }
+

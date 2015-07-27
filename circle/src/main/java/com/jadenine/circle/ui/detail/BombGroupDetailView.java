@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
-import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.ToolbarColorizer;
 
@@ -68,19 +67,8 @@ public class BombGroupDetailView extends LinearLayout{
         bombList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         bombList.setLayoutManager(linearLayoutManager);
-
-        bombList.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-
-                    @Override
-                    public boolean onItemClick(View view, int position) {
-                        Long bombId = (Long) view.getTag();
-                        presenter.setReplyTo(bombId);
-                        return true;
-                    }
-                }));
-
         bombList.setAdapter(bombRecyclerAdapter);
+
         configToolbar();
     }
 
