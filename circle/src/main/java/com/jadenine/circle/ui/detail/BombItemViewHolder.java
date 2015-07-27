@@ -1,6 +1,5 @@
 package com.jadenine.circle.ui.detail;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,9 +8,9 @@ import android.widget.TextView;
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.utils.TimeFormatUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,14 +52,10 @@ public class BombItemViewHolder extends RecyclerView.ViewHolder{
 
         fromView.setText(String.format("%s", isOwner ? fromView.getContext().getString(R.string
                 .topic_owner) : "User" + (bomb.getFrom() + bomb.getRootMessageId()).hashCode()));
-        dateView.setText(getFormattedTime(bomb.getTimestamp()));
+        dateView.setText(TimeFormatUtils.getFormattedTime(bomb.getTimestamp()));
         contentView.setText(bomb.getContent());
 
         itemView.setTag(bomb.getId());
     }
 
-    @NonNull
-    private String getFormattedTime(long timestamp) {
-        return dateFormat.format(new Date(timestamp));
-    }
 }
