@@ -8,12 +8,14 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.chat.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidater;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 
 import java.util.Collections;
 import java.util.List;
 
+import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -55,6 +57,14 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
         updateHint();
 
         loadMessages();
+        getView().getBombAdapter().setOnAvatarClickListener(new TopicHeader.OnAvatarClickListener() {
+            @Override
+            public void onClick() {
+                ChatPath chatPath = new ChatPath(userAp.getAP(), bombGroup.getGroupId(), userAp
+                        .getUser(), bombGroup.getRoot().getFrom());
+                Flow.get(getView()).set(chatPath);
+            }
+        });
     }
 
     @Override

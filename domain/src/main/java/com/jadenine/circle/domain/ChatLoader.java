@@ -18,25 +18,25 @@ import rx.Observable;
  */
 public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     private final int pageCount;
-    @Inject
-    Account account;
+    private final String account;
     @Inject
     DirectMessageService messageService;
     @Inject DirectMessageDBService messageDBService;
     @Inject TimelineCursorDBService cursorDBService;
 
-    public ChatLoader(int pageCount) {
+    public ChatLoader(String account, int pageCount) {
+        this.account = account;
         this.pageCount = pageCount;
     }
 
     @Override
     public Observable<JSONListWrapper<DirectMessageEntity>> refresh(Long top) {
-        return messageService.listMessages(account.getDeviceId(), pageCount, top, null);
+        return messageService.listMessages(account, pageCount, top, null);
     }
 
     @Override
     public Observable<JSONListWrapper<DirectMessageEntity>> loadMore(Long bottom) {
-        return messageService.listMessages(account.getDeviceId(), pageCount, null, bottom);
+        return messageService.listMessages(account, pageCount, null, bottom);
     }
 
     @Override

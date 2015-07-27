@@ -44,7 +44,7 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         return rangeList.size();
     }
 
-    private @NotNull List<TimelineRange<T>> getAllRanges(){
+    public @NotNull List<TimelineRange<T>> getAllRanges(){
         return new ArrayList<>(rangeList);
     }
 

@@ -77,7 +77,6 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     @NonNull
     @Override
     public Long getId() {
-        //TODO avoid convert it every time called
         return Long.valueOf(getMessageId());
     }
 

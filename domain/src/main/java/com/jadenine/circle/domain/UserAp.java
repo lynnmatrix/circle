@@ -46,7 +46,6 @@ public class UserAp implements Updatable<UserApEntity>{
 
         DaggerService.getDomainComponent().inject(this);
         DaggerService.getDomainComponent().inject(topicTimeline);
-
     }
 
     public UserApEntity getEntity() {

@@ -9,21 +9,20 @@ import com.jadenine.circle.ui.avatar.AvatarBinder;
 /**
  * Created by linym on 7/25/15.
  */
-public class TopicHeaderViewHolder extends RecyclerView.ViewHolder implements TopicHeader.OnAvatarClickListener{
+public class TopicHeaderViewHolder extends RecyclerView.ViewHolder {
     private final TopicHeader topicHeader;
 
     public TopicHeaderViewHolder(TopicHeader itemView) {
         super(itemView);
         this.topicHeader = itemView;
-        topicHeader.setOnAvatarClickListener(this);
+
     }
 
     public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
         topicHeader.bind(rootBomb, commentCount, errorDrawable, avatarBinder);
     }
 
-    @Override
-    public void onClick() {
-        //TODO
+    public void setOnAvatarClickListener(TopicHeader.OnAvatarClickListener listener) {
+        topicHeader.setOnAvatarClickListener(listener);
     }
 }

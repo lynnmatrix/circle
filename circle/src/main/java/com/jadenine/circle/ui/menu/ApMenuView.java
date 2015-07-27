@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
@@ -60,7 +61,14 @@ public class ApMenuView extends NavigationView {
         presenter.takeView(this);
     }
 
-     ApMenuAdapter getAdapter() {
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        presenter.dropView(this);
+        CircleApplication.getRefWatcher(getContext()).watch(this);
+    }
+
+    ApMenuAdapter getAdapter() {
          ApMenuAdapter adapter = (ApMenuAdapter) menuView.getAdapter();
         if(null == adapter) {
             adapter = new ApMenuAdapter();

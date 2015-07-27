@@ -1,9 +1,8 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.chat;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +14,6 @@ import android.widget.LinearLayout;
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
-import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.ToolbarColorizer;
 
@@ -27,14 +25,15 @@ import butterknife.OnClick;
 import flow.Flow;
 
 /**
- * Created by linym on 7/24/15.
+ * Created by linym on 7/25/15.
  */
-public class BombGroupDetailView extends LinearLayout{
-    @InjectView(R.id.recycler_view)
-    RecyclerView bombList;
+public class ChatView extends LinearLayout {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+
+    @InjectView(R.id.recycler_view)
+    RecyclerView messageList;
 
     @InjectView(R.id.reply_toolbar)
     Toolbar replyToolbar;
@@ -46,40 +45,29 @@ public class BombGroupDetailView extends LinearLayout{
     Activity activity;
 
     @Inject
-    BombGroupPresenter presenter;
+    ChatAdapter chatAdapter;
 
     @Inject
-    Drawable errorDrawable;
+    ChatPresenter presenter;
 
-    @Inject
-    BombRecyclerAdapter bombRecyclerAdapter;
-
-    public BombGroupDetailView(Context context, AttributeSet attrs) {
+    public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<BombGroupPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<DaggerChatPath_Component>getDaggerComponent(context).inject(this);
     }
 
     @Override
-    public void onAttachedToWindow() {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
         presenter.takeView(this);
 
-        bombList.setHasFixedSize(false);
+
+        messageList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        bombList.setLayoutManager(linearLayoutManager);
+        messageList.setLayoutManager(linearLayoutManager);
 
-        bombList.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
-                new RecyclerItemClickListener.OnItemClickListener() {
+        messageList.setAdapter(chatAdapter);
 
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Long bombId = (Long) view.getTag();
-                        presenter.setReplyTo(bombId);
-                    }
-                }));
-
-        bombList.setAdapter(bombRecyclerAdapter);
         configToolbar();
     }
 
@@ -92,6 +80,7 @@ public class BombGroupDetailView extends LinearLayout{
 
     protected void configToolbar() {
         ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
+        toolbar.setTitle(R.string.title_private_chat);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
@@ -102,13 +91,12 @@ public class BombGroupDetailView extends LinearLayout{
         });
     }
 
+    public ChatAdapter getChatAdapter() {
+        return chatAdapter;
+    }
+
     @OnClick(R.id.send)
     public void onSend(){
         presenter.send();
     }
-
-    BombRecyclerAdapter getBombAdapter() {
-        return bombRecyclerAdapter;
-    }
-
 }

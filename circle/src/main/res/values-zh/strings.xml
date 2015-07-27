@@ -9,5 +9,6 @@
     <string name="notification_title_new_topic">号外</string>
     <string name="reply_type_private">私信</string>
     <string name="action_add_image">附图</string>
+    <string name="title_private_chat">私聊</string>
 
 </resources>
