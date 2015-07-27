@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import rx.Observable;
 import rx.android.internal.Preconditions;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -110,7 +111,7 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
                     cursorDBLoaded.set(true);
                     return innerRefresh();
                 }
-            });
+            }).subscribeOn(Schedulers.io());
         } else {
             return innerRefresh();
         }
@@ -146,7 +147,7 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
                 }
                 return Observable.just(getAllRanges());
             }
-        });
+        }).subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -187,7 +188,7 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
 
                 return Observable.just(getAllRanges());
             }
-        });
+        }).subscribeOn(Schedulers.io());
     }
 
     @Override

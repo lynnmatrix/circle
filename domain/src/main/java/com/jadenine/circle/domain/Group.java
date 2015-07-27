@@ -59,4 +59,8 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
     public int getCount() {
         return entities.size();
     }
+
+    public T getLatest() {
+        return entities.getAt(0);
+    }
 }

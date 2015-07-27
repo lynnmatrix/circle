@@ -50,8 +50,8 @@ public class ApMenuView extends NavigationView {
         menuView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
                 RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                presenter.onApSelected(position);
+            public boolean onItemClick(View view, int position) {
+                return presenter.onApSelected(position);
             }
         }));
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),

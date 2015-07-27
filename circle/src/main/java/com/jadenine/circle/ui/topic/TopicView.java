@@ -55,8 +55,9 @@ public class TopicView extends CoordinatorLayout{
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
                 RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public boolean onItemClick(View view, int position) {
                 presenter.onOpenTopic(position);
+                return true;
             }
         }));
 

@@ -18,7 +18,6 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
@@ -62,7 +61,6 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
         }
 
         Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.refresh()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         refreshSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
@@ -105,7 +103,6 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
             return;
         }
         Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMoreBomb()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {

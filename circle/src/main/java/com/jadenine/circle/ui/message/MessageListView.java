@@ -76,8 +76,9 @@ public class MessageListView extends CoordinatorLayout{
                 new RecyclerItemClickListener.OnItemClickListener() {
 
             @Override
-            public void onItemClick(View view, int position) {
+            public boolean onItemClick(View view, int position) {
                 presenter.setReplyTo(position);
+                return true;
             }
         }));
 

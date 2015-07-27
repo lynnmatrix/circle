@@ -1,9 +1,8 @@
-package com.jadenine.circle.ui.home;
+package com.jadenine.circle.ui.widgets;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,16 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
-import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.mortar.DaggerService;
-import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
 import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
-import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
 
@@ -30,45 +25,36 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
- * Created by linym on 7/22/15.
+ * Created by linym on 7/27/15.
  */
-@DaggerScope(BombListPresenter.class)
-public class BombListView extends RelativeLayout implements HandlesBack {
-    @InjectView(R.id.scrollable_view)
-    RecyclerView recyclerView;
+public abstract class RefreshableHomeView extends LinearLayout implements HandlesBack {
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @InjectView(R.id.scrollable_view)
+    RecyclerView recyclerView;
+
     @Inject
     DrawerLayout drawerLayout;
 
     @Inject
-    BombListPresenter presenter;
-
-    @Inject
-    Drawable errorDrawable;
-
-    @Inject
     Activity activity;
 
-    @Inject
-    AvatarBinder avatarBinder;
+    private RefreshableHomeListener refreshableHomeListener;
 
-    public BombListView(Context context, AttributeSet attrs) {
+    public RefreshableHomeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<BombListPath.Component>getDaggerComponent(context).inject(this);
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
-        presenter.takeView(this);
 
         recyclerView.setHasFixedSize(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -77,19 +63,24 @@ public class BombListView extends RelativeLayout implements HandlesBack {
                 LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
                 RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position) {
-                presenter.onDetail(position);
-                return true;
-            }
-        }));
+                    @Override
+                    public boolean onItemClick(View view, int position) {
+                        if(null != refreshableHomeListener) {
+                            return refreshableHomeListener.onRowClick(position);
+                        }
+                        return false;
+                    }
+                }));
 
         recyclerView.addOnScrollListener(new AutoLoadMoreListener(linearLayoutManager) {
             @Override
             public void onLoadMore() {
-                presenter.loadMore();
+                if(null != refreshableHomeListener) {
+                    refreshableHomeListener.onLoadMore();
+                }
             }
         });
 
@@ -99,23 +90,22 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.refresh();
+                if(null != refreshableHomeListener) {
+                    refreshableHomeListener.onRefresh();
+                }
             }
         });
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         configToolbar();
-
-        getAdapter();
     }
 
     @Override
     public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        presenter.dropView(this);
         CircleApplication.getRefWatcher(getContext()).watch(this);
+        super.onDetachedFromWindow();
     }
 
     protected void configToolbar() {
@@ -129,20 +119,6 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         });
     }
 
-    @OnClick(R.id.fab_add_bomb)
-    public void onAddBomb(){
-        presenter.addBomb();
-    }
-
-    BombRecyclerAdapter getAdapter() {
-        BombRecyclerAdapter adapter = (BombRecyclerAdapter) recyclerView.getAdapter();
-        if(null == adapter) {
-            adapter = new BombRecyclerAdapter(errorDrawable, avatarBinder);
-            recyclerView.setAdapter(adapter);
-        }
-        return adapter;
-    }
-
     @Override
     public boolean onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -152,4 +128,25 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         return false;
     }
 
+    protected void setRefreshableListener(RefreshableHomeListener listener) {
+        this.refreshableHomeListener = listener;
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    public void stopRefreshing() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    protected void setAdapter(RecyclerView.Adapter adapter) {
+        recyclerView.setAdapter(adapter);
+    }
+
+    public interface RefreshableHomeListener{
+        void onRefresh();
+        void onLoadMore();
+        boolean onRowClick(int position);
+    }
 }

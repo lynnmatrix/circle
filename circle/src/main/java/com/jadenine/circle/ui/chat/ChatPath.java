@@ -29,7 +29,7 @@ public class ChatPath extends Path implements ScreenComponentFactory {
         this(ap, bombGroupId, rootUser, rootTo, null);
     }
 
-    private ChatPath(String ap, Long bombGroupId, String rootUser, String rootTo, Long
+    public ChatPath(String ap, Long bombGroupId, String rootUser, String rootTo, Long
             rootMessageId) {
         this.ap = ap;
         this.bombGroupId = bombGroupId;

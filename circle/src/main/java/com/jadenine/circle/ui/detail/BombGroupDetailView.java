@@ -73,9 +73,10 @@ public class BombGroupDetailView extends LinearLayout{
                 new RecyclerItemClickListener.OnItemClickListener() {
 
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public boolean onItemClick(View view, int position) {
                         Long bombId = (Long) view.getTag();
                         presenter.setReplyTo(bombId);
+                        return true;
                     }
                 }));
 

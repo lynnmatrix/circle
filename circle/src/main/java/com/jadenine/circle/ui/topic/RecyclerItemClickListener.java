@@ -14,7 +14,10 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     private boolean disallowIntercept = false;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        /**
+         * @return {@code true} if handled.
+         */
+        boolean onItemClick(View view, int position);
     }
 
     GestureDetector mGestureDetector;
@@ -37,8 +40,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
         }
         View childView = view.findChildViewUnder(e.getX(), e.getY());
         if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-            mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
-            return true;
+            return mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
         }
         return false;
     }

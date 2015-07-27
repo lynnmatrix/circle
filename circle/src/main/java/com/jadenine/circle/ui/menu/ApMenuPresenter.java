@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
 
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
@@ -58,20 +57,20 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         loadAPList();
     }
 
-    public void onApSelected(int position) {
-        if(position > 0) {
+    public boolean onApSelected(int position) {
+        boolean validApPosition = position >= ApMenuAdapter.NON_AP_ITEM_COUNT;
+        if(validApPosition) {
             UserAp userAp = getAdapter().getAp(position);
             getAdapter().setSelected(position);
             onApSelected(userAp);
         }
+        return validApPosition;
     }
 
     private void onApSelected(@NonNull UserAp userAp) {
         if(null == userAp) {
             return;
         }
-
-        getView().drawerLayout.closeDrawer(GravityCompat.START);
 
 //        Path top = Path.get(getContext());
 //        if(top instanceof BombListPath) {

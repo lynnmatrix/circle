@@ -35,6 +35,13 @@ class SortedCollection<K, T extends Identifiable<K>> {
         return item;
     }
 
+    public synchronized T getAt(int index) {
+        if(index <0 || index >= size()) {
+            throw new ArrayIndexOutOfBoundsException("Index "+index +", count " + size());
+        }
+        return entityList.get(index);
+    }
+
     public synchronized boolean contains(T entry) {
         K key = entry.getId();
         return entityMap.get(key) != null;

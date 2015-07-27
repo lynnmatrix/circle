@@ -40,7 +40,7 @@ public class BaseTimelineTest {
         DaggerService.setComponent(DaggerTestDomainComponent.builder().testDomainModule(new
                 TestDomainModule(DEVICE_ID)).build());
 
-        ChatLoader loader = new ChatLoader(2);
+        ChatLoader loader = new ChatLoader(DEVICE_ID, 2);
         DaggerService.getDomainComponent().inject(loader);
         timeline = new BaseTimeline("TEST", loader);
     }
