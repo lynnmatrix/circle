@@ -161,7 +161,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             }
 
             private void openDefaultApIfNeed() {
-                if(!hasView()) return;
+                if (!hasView()) return;
                 if (null == currentAp) {
                     onApSelected(account.getDefaultAp());
                 }
@@ -181,12 +181,12 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         });
     }
 
-    private void addTag(String ap) {
+    private void addTag(String tag) {
         if(!hasView()) {
             return;
         }
         try {
-            PushAgent.getInstance(getContext()).getTagManager().add(ap);
+            PushAgent.getInstance(getContext()).getTagManager().add(tag);
         } catch (Exception e) {
             e.printStackTrace();
         }
