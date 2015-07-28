@@ -4,21 +4,23 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by linym on 7/28/15.
  */
-public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter {
+public abstract class SectionedRecyclerViewAdapter<S, T> extends RecyclerView
+        .Adapter {
     private static final int TYPE_SECTION_HEADER = 0;
     private static final int TYPE_SECTION_FOOTER = 1;
     private static final int SECTION_TYPE_COUNT = 2;
 
-    private final RecyclerView.Adapter dataAdapter;
-    private SparseArray<Section> sections = new SparseArray<>();
+    private final ItemAdapter<T> dataAdapter;
+    private SparseArray<Section<S>> sections = new SparseArray<>();
 
-    public SectionedRecyclerViewAdapter(RecyclerView.Adapter dataAdapter) {
+    public SectionedRecyclerViewAdapter(ItemAdapter<T> dataAdapter) {
         this.dataAdapter = dataAdapter;
 
         dataAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -73,17 +75,22 @@ public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(isSectionFooter(position)) {
-            onBindSectionFooter(position, sections.get(position));
+            onBindSectionFooter(holder, position, sections.get(position));
         } else {
             dataAdapter.onBindViewHolder(holder, sectionedPositionToListPosition(position));
         }
     }
 
-    protected abstract void onBindSectionFooter(int position, Section section);
+    protected abstract void onBindSectionFooter(RecyclerView.ViewHolder viewHolder, int position,
+                                                Section<S> section);
 
     @Override
     public int getItemCount() {
-        return dataAdapter.getItemCount() + sections.size();
+        int itemCount = dataAdapter.getItemCount() + sections.size();
+        if(sections.size() > 0) {
+            itemCount--;
+        }
+        return itemCount;
     }
 
     @Override
@@ -98,8 +105,8 @@ public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter 
     }
 
 
-    public void setSections(Section[] sections) {
-        Arrays.sort(sections, new Comparator<Section>() {
+    public void setSections(List<Section<S>> sections, List<T> items) {
+        Collections.sort(sections, new Comparator<Section>() {
             @Override
             public int compare(Section lhs, Section rhs) {
                 return lhs.firstPosition - rhs.firstPosition;
@@ -107,13 +114,15 @@ public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter 
         });
 
         int offset = 0;
-        SparseArray<Section> tmpSections = new SparseArray<>(sections.length);
+        SparseArray<Section<S>> tmpSections = new SparseArray<>(sections.size());
         for(Section section : sections) {
             section.sectionedPosition = section.firstPosition + offset;
-            tmpSections.append(section.sectionedPosition, section);
+            tmpSections.append(section.sectionedPosition + section.count, section);
         }
 
         this.sections = tmpSections;
+
+        dataAdapter.setItems(items);
 
         notifyDataSetChanged();
     }
@@ -126,7 +135,8 @@ public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter 
 
         int offset = 0;
         for (int i = 0;i< sections.size(); i++) {
-            if(sections.valueAt(i).sectionedPosition > sectionedPosition){
+            Section section = sections.valueAt(i);
+            if (section.sectionedPosition + section.count >= sectionedPosition) {
                 break;
             }
             offset++;
@@ -152,12 +162,35 @@ public abstract class SectionedRecyclerViewAdapter extends RecyclerView.Adapter 
 
     public static class Section<T> {
         int firstPosition;
+        int count;
         int sectionedPosition;
+        boolean hasMore;
         T data;
 
-        public Section(int firstPosition, T data) {
+        public Section(int firstPosition, int count, boolean hasMore, T data) {
             this.firstPosition = firstPosition;
+            this.count = count;
+            this.hasMore = hasMore;
             this.data = data;
         }
+
+        public int getFirstPosition(){
+            return firstPosition;
+        }
+
+        public T getData(){
+            return data;
+        }
+
+        public boolean hasMore() {
+            return hasMore;
+        }
     }
+
+    public static abstract class ItemAdapter<T> extends
+            RecyclerView.Adapter{
+        public abstract void setItems(List<T> items);
+        public abstract T getItem(int position);
+    }
+
 }

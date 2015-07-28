@@ -132,8 +132,16 @@ public class  TimelineRange<T extends Identifiable<Long>> {
         return new ArrayList<>(list);
     }
 
+    public int getCount() {
+        return list.size();
+    }
+
     public List<Group<T>> getAllGroups() {
         return groupList.getAll();
+    }
+
+    public int getGroupCount() {
+        return groupList.size();
     }
 
     public Group<T> getGroup(Long groupId) {
@@ -189,5 +197,4 @@ public class  TimelineRange<T extends Identifiable<Long>> {
     boolean isDBLoaded() {
         return dbLoaded.get();
     }
-
 }

@@ -145,6 +145,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             @Override
             public void onError(Throwable e) {
                 Timber.w(e, "Failed to load aps.");
+                getAdapter().setUserAps(account.getUserAps());
                 openDefaultApIfNeed();
             }
 

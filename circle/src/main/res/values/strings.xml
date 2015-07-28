@@ -25,4 +25,6 @@
     <string name="reply_type_private">whisper to </string>
     <string name="action_add_image">Pick image</string>
     <string name="title_private_chat">Private chat</string>
+    <string name="loading_more">Load more</string>
+    <string name="error_load_more">Failed to load more</string>
 </resources>

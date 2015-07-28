@@ -1,11 +1,14 @@
 package com.jadenine.circle.ui.home;
 
+import android.graphics.drawable.Drawable;
+
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -53,6 +56,14 @@ public class BombListPath extends Path implements ScreenComponentFactory {
         @Provides
         BombListPresenter providePresenter(UserAp userAp) {
             return new BombListPresenter(userAp);
+        }
+
+        @DaggerScope(BombListPresenter.class)
+        @Provides
+        SectionedBombGroupRecyclerAdapter provideAdapter(AvatarBinder binder, Drawable
+                errorDrawable) {
+            return new SectionedBombGroupRecyclerAdapter(new BombRecyclerAdapter(errorDrawable,
+                    binder));
         }
     }
 }

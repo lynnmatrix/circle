@@ -6,9 +6,10 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.composer.BombComposerPath;
-import com.jadenine.circle.ui.detail.BombGroupPath;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
             public void onCompleted() {
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
+                if(!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -76,7 +78,9 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
                 Timber.e(e, "Failed to load topics.");
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
+                if(!hasView()) return;
                 getView().swipeRefreshLayout.setRefreshing(false);
+                updateBombGroups(userAp.getAllTimelineRanges());
             }
 
             @Override
@@ -91,15 +95,27 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
 
     private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
         List<Group<Bomb>> bombGroupList = new LinkedList<>();
+        List<SectionedRecyclerViewAdapter.Section<TimelineRange<Bomb>>> sections = new
+                ArrayList<>(ranges.size());
+        int offset = 0;
+        int sectionOffset = 0;
         for(TimelineRange<Bomb> range: ranges) {
+            SectionedRecyclerViewAdapter.Section<TimelineRange<Bomb>> section = new
+                    SectionedRecyclerViewAdapter.Section<>(offset, range.getGroupCount(), range
+                    .hasMore(), range);
+
+            sections.add(sectionOffset++, section);
+
+            offset += range.getGroupCount();
+
             bombGroupList.addAll(range.getAllGroups());
         }
 
-        getView().getAdapter().setBombGroups(bombGroupList);
+        getView().getAdapter().setSections(sections, bombGroupList);
     }
 
     void loadMore() {
-        if(!loadingMoreSubscription.isUnsubscribed()) {
+        if(!loadingMoreSubscription.isUnsubscribed() || !userAp.hasMore()) {
             return;
         }
         Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMoreBomb()
@@ -114,7 +130,7 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "Failed to load more topics.");
+                Timber.w(e, "Failed to load more topics.");
                 loadingMoreSubscription = Subscriptions.empty();
                 loadingMoreSubscription.unsubscribe();
             }
@@ -128,12 +144,28 @@ public class BombListPresenter extends ViewPresenter<BombListView>{
         });
     }
 
-    void onDetail(int position) {
-        Group<Bomb> topic= getView().getAdapter().getBombGroup(position);
-        Flow.get(getView().getContext()).set(new BombGroupPath(userAp.getAP(), topic.getGroupId()));
-    }
-
     void addBomb() {
         Flow.get(getView().getContext()).set(new BombComposerPath(userAp.getAP()));
+    }
+
+    public void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
+        loadMoreViewHolder.startLoading();
+        userAp.loadMoreBomb(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+
+            @Override
+            public void onCompleted() {
+                loadMoreViewHolder.endLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                loadMoreViewHolder.setError();
+            }
+
+            @Override
+            public void onNext(List<TimelineRange<Bomb>> ranges) {
+                updateBombGroups(ranges);
+            }
+        });
     }
 }

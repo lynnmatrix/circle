@@ -24,5 +24,7 @@
     <string name="title_activity_topic_composer">撰写</string>
     <string name="topic_edit_hint">说点什么</string>
     <string name="topic_owner">嘈主</string>
+    <string name="loading_more">加载更多</string>
+    <string name="error_load_more">加载失败</string>
 
 </resources>

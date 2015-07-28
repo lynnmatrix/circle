@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
@@ -11,6 +12,7 @@ import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransact
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,6 +95,19 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         return result;
     }
 
+    private @Nullable TimelineRange<T> getPreviousRange(TimelineRange<T> range) {
+        TimelineRange previous = null;
+        Iterator<TimelineRange<T>> rangeIterator = rangeList.descendingIterator();
+        while (rangeIterator.hasNext()){
+            TimelineRange currentRange = rangeIterator.next();
+            if( currentRange == range) {
+                return previous;
+            }
+            previous = rangeIterator.next();
+        }
+        return null;
+    }
+
     protected String getTimelineId() {
         return this.timeline;
     }
@@ -157,6 +172,12 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
             return Observable.empty();
         }
 
+        TimelineRange<T> rangeToLoadMore = getRangeToLoadMore();
+
+        return loadMore(rangeToLoadMore);
+    }
+
+    private TimelineRange<T> getRangeToLoadMore() {
         TimelineRange<T> rangeToLoadMore = null;
         for(TimelineRange range : rangeList) {
             if(!range.isDBLoaded()){
@@ -167,33 +188,49 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         if(null == rangeToLoadMore){
             rangeToLoadMore = getLastRange();
         }
-        final Long originalBottom = rangeToLoadMore.cursor.getBottom();
+        return rangeToLoadMore;
+    }
 
-        return rangeToLoadMore.loadMore().flatMap(new Func1<TimelineRange<T>,
-                Observable<List<TimelineRange<T>>>>() {
-            @Override
-            public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
-                if (range.cursor.getBottom() > originalBottom) {
-                    List<T> entities = range.getSubRange(originalBottom, range.cursor.getBottom()
-                            + 1);
-                    for (T entity : entities) {
-                        range.group(entity);
-                    }
-                    TransactionManager.getInstance().addTransaction(new SaveModelTransaction
-                            (ProcessModelInfo.withModels(range.cursor)));
+    public  @NotNull Observable<List<TimelineRange<T>>> loadMore(TimelineRange<T> range) {
+        final Long originalBottom = range.cursor.getBottom();
+        final boolean rangeDbLoaded = range.isDBLoaded();
 
-                    TransactionManager.getInstance().addTransaction(new SaveModelTransaction
-                            (ProcessModelInfo.withModels(entities)));
-                }
+       return range.loadMore().flatMap(new Func1<TimelineRange<T>,
+               Observable<List<TimelineRange<T>>>>() {
+           @Override
+           public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
+               if (range.cursor.getBottom() > originalBottom) {
+                   List<T> entities = range.getSubRange(originalBottom, range.cursor.getBottom()
+                           + 1);
+                   for (T entity : entities) {
+                       range.group(entity);
+                   }
+                   if (!range.hasMore()) {
+                       TimelineRange<T> previousRange = getPreviousRange(range);
+                       if (null != previousRange) {
+                           range.contact(previousRange);
+                           previousRange.cursor.delete();
+                       }
+                   }
+                   TransactionManager.getInstance().addTransaction(new SaveModelTransaction
+                           (ProcessModelInfo.withModels(range.cursor)));
 
-                return Observable.just(getAllRanges());
-            }
-        }).subscribeOn(Schedulers.io());
+                   TransactionManager.getInstance().addTransaction(new SaveModelTransaction
+                           (ProcessModelInfo.withModels(entities)));
+               } else if (!rangeDbLoaded) {
+                   for (T entity : range.getAll()) {
+                       range.group(entity);
+                   }
+               }
+
+               return Observable.just(getAllRanges());
+           }
+       }).subscribeOn(Schedulers.io());
     }
 
     @Override
     public boolean hasMore() {
-        return getLastRange().hasMore();
+        return getRangeToLoadMore().hasMore();
     }
 
     private void group(Collection<T> entities, boolean fromRest) {
@@ -215,4 +252,5 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
     public void addPublished(T entity) {
         //TODO
     }
+
 }

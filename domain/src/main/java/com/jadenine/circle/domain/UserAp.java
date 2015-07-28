@@ -112,8 +112,16 @@ public class UserAp implements Updatable<UserApEntity>{
         return timeline.refresh();
     }
 
+    public List<TimelineRange<Bomb>> getAllTimelineRanges() {
+        return timeline.getAllRanges();
+    }
+
     public Observable<List<TimelineRange<Bomb>>> loadMoreBomb() {
         return timeline.loadMore();
+    }
+
+    public Observable<List<TimelineRange<Bomb>>> loadMoreBomb(TimelineRange range) {
+        return timeline.loadMore(range);
     }
 
     public Observable<Bomb> publish(final Bomb bomb) {
@@ -137,4 +145,7 @@ public class UserAp implements Updatable<UserApEntity>{
         return timeline.getRange(groupId).getGroup(groupId);
     }
 
+    public boolean hasMore() {
+        return timeline.hasMore();
+    }
 }

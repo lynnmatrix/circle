@@ -17,11 +17,11 @@ import android.widget.RelativeLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
+import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
-import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
 import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
@@ -59,6 +59,9 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     @Inject
     AvatarBinder avatarBinder;
 
+    @Inject
+    SectionedBombGroupRecyclerAdapter sectionedBombGroupRecyclerAdapter;
+
     public BombListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         DaggerService.<BombListPath.Component>getDaggerComponent(context).inject(this);
@@ -77,19 +80,22 @@ public class BombListView extends RelativeLayout implements HandlesBack {
                 LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
-                RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position) {
-                presenter.onDetail(position);
-                return true;
-            }
-        }));
 
         recyclerView.addOnScrollListener(new AutoLoadMoreListener(linearLayoutManager) {
             @Override
             public void onLoadMore() {
                 presenter.loadMore();
+            }
+        });
+
+        recyclerView.setAdapter(sectionedBombGroupRecyclerAdapter);
+
+        sectionedBombGroupRecyclerAdapter.setLoadMoreListener(new SectionedBombGroupRecyclerAdapter.OnFooterClickListener() {
+
+            @Override
+            public void onFooterClicked(TimelineRange range, LoadMoreViewHolder
+                    loadMoreViewHolder) {
+                presenter.loadMore(range, loadMoreViewHolder);
             }
         });
 
@@ -106,8 +112,6 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         configToolbar();
-
-        getAdapter();
     }
 
     @Override
@@ -134,13 +138,8 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         presenter.addBomb();
     }
 
-    BombRecyclerAdapter getAdapter() {
-        BombRecyclerAdapter adapter = (BombRecyclerAdapter) recyclerView.getAdapter();
-        if(null == adapter) {
-            adapter = new BombRecyclerAdapter(errorDrawable, avatarBinder);
-            recyclerView.setAdapter(adapter);
-        }
-        return adapter;
+    SectionedBombGroupRecyclerAdapter getAdapter() {
+        return sectionedBombGroupRecyclerAdapter;
     }
 
     @Override
