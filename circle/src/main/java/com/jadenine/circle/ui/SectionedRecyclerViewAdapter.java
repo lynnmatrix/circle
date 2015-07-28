@@ -11,8 +11,7 @@ import java.util.List;
 /**
  * Created by linym on 7/28/15.
  */
-public abstract class SectionedRecyclerViewAdapter<S, T> extends RecyclerView
-        .Adapter {
+public abstract class SectionedRecyclerViewAdapter<S, T> extends RecyclerView.Adapter {
     private static final int TYPE_SECTION_HEADER = 0;
     private static final int TYPE_SECTION_FOOTER = 1;
     private static final int SECTION_TYPE_COUNT = 2;
@@ -103,7 +102,6 @@ public abstract class SectionedRecyclerViewAdapter<S, T> extends RecyclerView
         }
         return itemId;
     }
-
 
     public void setSections(List<Section<S>> sections, List<T> items) {
         Collections.sort(sections, new Comparator<Section>() {

@@ -131,6 +131,10 @@ public class Account {
         return observable;
     }
 
+    public List<TimelineRange<DirectMessageEntity>> getAllChats() {
+        return chatTimeline.getAllRanges();
+    }
+
     private class UserApMapperDelegate implements MapperDelegate<UserApEntity, UserAp> {
         @Override
         public UserAp find(UserApEntity userApEntity) {

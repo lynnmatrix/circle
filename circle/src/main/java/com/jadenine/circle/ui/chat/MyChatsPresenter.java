@@ -81,6 +81,7 @@ public class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refr
                             return;
                         }
                         getView().stopRefreshing();
+                        updateChats(account.getAllChats());
                     }
 
                     @Override

@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Group;
+import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.utils.ContentValidater;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
@@ -18,6 +19,7 @@ import java.util.List;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by linym on 7/25/15.
@@ -29,12 +31,13 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
     private String topicId;
     private String from, to;
 
-    private @Nullable Group<DirectMessageEntity> chatGroup;
+    private
+    @Nullable
+    Group<DirectMessageEntity> chatGroup;
     private Account account;
 
-    public ChatPresenter(Account account, String ap, @NotNull String topicId, @NotNull String from,
-                         @NotNull
-    String to, @Nullable Group<DirectMessageEntity> chatGroup) {
+    public ChatPresenter(Account account, String ap, @NotNull String topicId, @NotNull String
+            from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup) {
         this.account = account;
         this.ap = ap;
         this.topicId = topicId;
@@ -46,9 +49,9 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
-        if(!hasView()) return;
+        if (!hasView()) return;
 
-        if(null != savedInstanceState) {
+        if (null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
 
             getView().replyEditor.setText(content);
@@ -67,7 +70,7 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
     void loadMessages() {
         if (hasView()) {
             List<DirectMessageEntity> chatMessages = Collections.emptyList();
-            if(null != chatGroup) {
+            if (null != chatGroup) {
                 chatMessages = chatGroup.getEntities();
                 Collections.reverse(chatMessages);
             }
@@ -86,16 +89,15 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
         final DirectMessageEntity chatMessage = new DirectMessageEntity(ap, topicId, from, to);
 
         chatMessage.setContent(content);
-        if(null != chatGroup) {
+        if (null != chatGroup) {
             List<DirectMessageEntity> messages = chatGroup.getEntities();
             chatMessage.setRootMessageId(String.valueOf(chatGroup.getGroupId()));
-            if(messages.size() > 0) {
+            if (messages.size() > 0) {
                 DirectMessageEntity anyMessage = chatGroup.getEntities().get(0);
                 chatMessage.setRootUser(anyMessage.getRootUser());
             }
         }
         account.publish(chatMessage).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<DirectMessageEntity>() {
-
             @Override
             public void onCompleted() {
                 if (!hasView()) return;
@@ -103,7 +105,14 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
 
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
-                loadMessages();
+                account.refreshChats().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<TimelineRange<DirectMessageEntity>>>() {
+
+                    @Override
+                    public void call(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
+
+                        loadMessages();
+                    }
+                });
             }
 
             @Override
