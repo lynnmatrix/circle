@@ -105,7 +105,6 @@ public class Account {
                         return group;
                     }
                 }
-
             }
         }
         return null;
