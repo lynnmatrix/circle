@@ -1,4 +1,4 @@
-package com.jadenine.circle.model.db.impl;
+package com.jadenine.circle.model.db;
 
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.DirectMessageEntity$Table;

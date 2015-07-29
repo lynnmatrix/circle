@@ -28,8 +28,7 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/15/15.
  */
-public class BaseTimeline<T extends IdentifiableEntity> implements
-        Loadable<TimelineRange<T>> {
+public class BaseTimeline<T extends IdentifiableEntity>{
 
     private final LinkedList<TimelineRange<T>> rangeList = new LinkedList<>();
 
@@ -112,7 +111,6 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         return this.timeline;
     }
 
-    @Override
     public @NotNull Observable<List<TimelineRange<T>>> refresh() {
         if(!cursorDBLoaded.get()) {
             return loader.loadTimelineRangeCursors(getTimelineId()).flatMap(new Func1<List<TimelineRangeCursor>, Observable<List<TimelineRange<T>>>>() {
@@ -165,7 +163,6 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
         }).subscribeOn(Schedulers.io());
     }
 
-    @Override
     public @NotNull Observable<List<TimelineRange<T>>> loadMore() {
         if(!cursorDBLoaded.get()) {
             Timber.w("TimelineCursor should be loaded before loading more.");
@@ -228,7 +225,6 @@ public class BaseTimeline<T extends IdentifiableEntity> implements
        }).subscribeOn(Schedulers.io());
     }
 
-    @Override
     public boolean hasMore() {
         return getRangeToLoadMore().hasMore();
     }

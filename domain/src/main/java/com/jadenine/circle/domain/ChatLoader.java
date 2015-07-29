@@ -1,10 +1,10 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.db.impl.DirectMessageDBService;
-import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
+import com.jadenine.circle.model.db.DirectMessageDBService;
+import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.rest.DirectMessageService;
-import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 
 import java.util.List;
@@ -30,12 +30,12 @@ public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     }
 
     @Override
-    public Observable<JSONListWrapper<DirectMessageEntity>> refresh(Long top) {
+    public Observable<TimelineRangeResult<DirectMessageEntity>> refresh(Long top) {
         return messageService.listMessages(account, pageCount, top, null);
     }
 
     @Override
-    public Observable<JSONListWrapper<DirectMessageEntity>> loadMore(Long bottom) {
+    public Observable<TimelineRangeResult<DirectMessageEntity>> loadMore(Long bottom) {
         return messageService.listMessages(account, pageCount, null, bottom);
     }
 

@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by linym on 6/2/15.
  */
-public class JSONListWrapper<T> {
+public class TimelineRangeResult<T> {
     private List<T> itemList;
     private boolean hasMore;
     private String nextId;
 
-    public JSONListWrapper(){}
+    public TimelineRangeResult(){}
 
-    public JSONListWrapper(List<T> itemList, boolean hasMore, String nextId) {
+    public TimelineRangeResult(List<T> itemList, boolean hasMore, String nextId) {
         this.itemList = itemList;
         this.hasMore = hasMore;
         this.nextId = nextId;

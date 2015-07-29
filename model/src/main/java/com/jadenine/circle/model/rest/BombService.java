@@ -24,7 +24,7 @@ public interface BombService {
      * @param beforeId (optional) Returns results with an ID greater than (that is, older than) to the specified ID.
      */
     @POST("/bomb/list")
-    Observable<JSONListWrapper<Bomb>> list(@Query("ap") String ap,
+    Observable<TimelineRangeResult<Bomb>> list(@Query("ap") String ap,
                                           @Query("count") Integer count,
                                           @Query("since_id") Long sinceId,
                                           @Query("before_id") Long beforeId);

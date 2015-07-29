@@ -7,23 +7,15 @@ import com.google.gson.GsonBuilder;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.BuildConfig;
 import com.jadenine.circle.model.db.ApDBService;
-import com.jadenine.circle.model.db.MessageDBService;
-import com.jadenine.circle.model.db.TopicDBService;
-import com.jadenine.circle.model.db.impl.ApDBServiceImpl;
-import com.jadenine.circle.model.db.impl.BombDBService;
-import com.jadenine.circle.model.db.impl.DirectMessageDBService;
-import com.jadenine.circle.model.db.impl.MessageDBServiceImpl;
-import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
-import com.jadenine.circle.model.db.impl.TimelineStateDBService;
-import com.jadenine.circle.model.db.impl.TopicDBServiceImpl;
+import com.jadenine.circle.model.db.BombDBService;
+import com.jadenine.circle.model.db.DirectMessageDBService;
+import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.BombService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
-import com.jadenine.circle.model.rest.MessageService;
-import com.jadenine.circle.model.rest.TopicService;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import javax.inject.Singleton;
@@ -92,18 +84,6 @@ public class DomainModule {
 
     @Provides
     @Singleton
-    TopicService provideTopicRestService(RestAdapter restAdapter) {
-        return restAdapter.create(TopicService.class);
-    }
-
-    @Provides
-    @Singleton
-    MessageService provideMessageService(RestAdapter restAdapter) {
-        return restAdapter.create(MessageService.class);
-    }
-
-    @Provides
-    @Singleton
     DirectMessageService provideChatService(RestAdapter restAdapter) {
         return restAdapter.create(DirectMessageService.class);
     }
@@ -129,19 +109,7 @@ public class DomainModule {
     @Provides
     @Singleton
     ApDBService provideApDBService(){
-        return new ApDBServiceImpl();
-    }
-
-    @Provides
-    @Singleton
-    TopicDBService provideTopicDBService(){
-        return new TopicDBServiceImpl();
-    }
-
-    @Provides
-    @Singleton
-    MessageDBService provideMessageDBService(){
-        return new MessageDBServiceImpl();
+        return new ApDBService();
     }
 
     @Provides
@@ -161,18 +129,6 @@ public class DomainModule {
     TimelineCursorDBService provideTimelineCursorDBService() {
         return new TimelineCursorDBService();
     }
-
-    @Provides
-    @Singleton
-    TimelineStateDBService provideTimelineStateService(){
-        return new TimelineStateDBService();
-    }
-
-//    @Provides
-//    @Singleton
-//    BombComposer provideBombComposer(ImageService messageService, AzureBlobUploader blobUploader) {
-//        return new BombComposer(messageService, blobUploader);
-//    }
 
 }
 

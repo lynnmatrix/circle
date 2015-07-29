@@ -1,4 +1,4 @@
-package com.jadenine.circle.model.db.impl;
+package com.jadenine.circle.model.db;
 
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.Bomb$Table;

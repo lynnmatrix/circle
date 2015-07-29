@@ -12,8 +12,8 @@ import rx.Observable;
  */
 public interface ApService {
     @POST("/ap/list")
-    Observable<JSONListWrapper<UserApEntity>> listAPs(@Query("user") String user);
+    Observable<TimelineRangeResult<UserApEntity>> listAPs(@Query("user") String user);
 
     @POST("/ap/add")
-    Observable<JSONListWrapper<UserApEntity>> addAP(@Body UserApEntity userApEntity);
+    Observable<TimelineRangeResult<UserApEntity>> addAP(@Body UserApEntity userApEntity);
 }

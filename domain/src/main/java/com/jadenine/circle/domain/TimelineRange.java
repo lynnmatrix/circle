@@ -3,7 +3,7 @@ package com.jadenine.circle.domain;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.model.Identifiable;
-import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
@@ -64,16 +64,16 @@ public class  TimelineRange<T extends Identifiable<Long>> {
         if(!isDBLoaded()) {
             return loadLocal();
         } else {
-            return loader.refresh(cursor.getTop()).flatMap(new Func1<JSONListWrapper<T>, Observable<TimelineRange<T>>>() {
+            return loader.refresh(cursor.getTop()).flatMap(new Func1<TimelineRangeResult<T>, Observable<TimelineRange<T>>>() {
 
                 @Override
-                public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
+                public Observable<TimelineRange<T>> call(TimelineRangeResult<T> timelineRangeResult) {
                     TimelineRange<T> range = TimelineRange.this;
-                    if (jsonListWrapper.hasMore() && null != cursor.getTop()) {
-                        TimelineRange nextRange = new TimelineRange(cursor.getTimeline(), jsonListWrapper.getAll(), loader);
+                    if (timelineRangeResult.hasMore() && null != cursor.getTop()) {
+                        TimelineRange nextRange = new TimelineRange(cursor.getTimeline(), timelineRangeResult.getAll(), loader);
                         range = nextRange;
-                    } else if (jsonListWrapper.getAll().size() > 0) {
-                        list.addAll(0, jsonListWrapper.getAll());
+                    } else if (timelineRangeResult.getAll().size() > 0) {
+                        list.addAll(0, timelineRangeResult.getAll());
                         cursor.setTop(list.get(0).getId());
                         cursor.setBottom(list.get(list.size() - 1).getId());
                     }
@@ -94,16 +94,16 @@ public class  TimelineRange<T extends Identifiable<Long>> {
         if(!isDBLoaded()) {
             return loadLocal();
         } else {
-            return loader.loadMore(cursor.getBottom()).flatMap(new Func1<JSONListWrapper<T>,
+            return loader.loadMore(cursor.getBottom()).flatMap(new Func1<TimelineRangeResult<T>,
                     Observable<TimelineRange<T>>>() {
 
                 @Override
-                public Observable<TimelineRange<T>> call(JSONListWrapper<T> jsonListWrapper) {
-                    if (jsonListWrapper.getAll().size() > 0) {
-                        list.addAll(jsonListWrapper.getAll());
+                public Observable<TimelineRange<T>> call(TimelineRangeResult<T> timelineRangeResult) {
+                    if (timelineRangeResult.getAll().size() > 0) {
+                        list.addAll(timelineRangeResult.getAll());
                         cursor.setBottom(list.get(list.size() - 1).getId());
                     }
-                    cursor.setHasMore(jsonListWrapper.hasMore());
+                    cursor.setHasMore(timelineRangeResult.hasMore());
                     return Observable.just(TimelineRange.this);
                 }
             });

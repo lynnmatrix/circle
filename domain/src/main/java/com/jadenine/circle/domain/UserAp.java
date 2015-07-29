@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.UserApEntity;
-import com.jadenine.circle.model.rest.TopicService;
 
 import java.io.InputStream;
 import java.util.List;
@@ -23,9 +22,6 @@ public class UserAp implements Updatable<UserApEntity>{
     public static final int BOMB_PAGE_COUNT = 200;
     private final UserApEntity entity;
     private final BaseTimeline<Bomb> timeline;
-
-    @Inject
-    TopicService topicRestService;
 
     @Inject
     BombComposer bombComposer;

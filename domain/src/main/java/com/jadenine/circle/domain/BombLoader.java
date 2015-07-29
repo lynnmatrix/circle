@@ -1,10 +1,10 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.db.impl.BombDBService;
-import com.jadenine.circle.model.db.impl.TimelineCursorDBService;
+import com.jadenine.circle.model.db.BombDBService;
+import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.rest.BombService;
-import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 
 import java.util.List;
@@ -34,12 +34,12 @@ public class BombLoader implements RangeLoader<Bomb> {
     }
 
     @Override
-    public Observable<JSONListWrapper<Bomb>> refresh(Long top) {
+    public Observable<TimelineRangeResult<Bomb>> refresh(Long top) {
         return restService.list(ap, pageCount, top, null);
     }
 
     @Override
-    public Observable<JSONListWrapper<Bomb>> loadMore(Long bottom) {
+    public Observable<TimelineRangeResult<Bomb>> loadMore(Long bottom) {
         return restService.list(ap, pageCount, null, bottom);
     }
 

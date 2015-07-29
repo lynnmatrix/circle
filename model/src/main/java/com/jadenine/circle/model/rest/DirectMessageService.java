@@ -25,7 +25,7 @@ public interface DirectMessageService {
      * @param beforeId (optional) Returns results with an ID greater than (that is, older than) to the specified ID.
      */
     @POST("/chat/list")
-    Observable<JSONListWrapper<DirectMessageEntity>> listMessages(@Query("auth") String auth,
+    Observable<TimelineRangeResult<DirectMessageEntity>> listMessages(@Query("auth") String auth,
                                                        @Query("count") Integer count,
                                                        @Query("since_id") Long sinceId,
                                                        @Query("before_id") Long beforeId);

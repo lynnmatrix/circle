@@ -1,6 +1,6 @@
 package com.jadenine.circle.domain;
 
-import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
 import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
@@ -12,7 +12,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 6/26/15.
  */
-class LoadMoreMapper<E, D extends Updatable<E>> implements Func1<JSONListWrapper<E>, List<D>> {
+class LoadMoreMapper<E, D extends Updatable<E>> implements Func1<TimelineRangeResult<E>, List<D>> {
     private final MapperDelegate mapperDelegate;
 
     public LoadMoreMapper(MapperDelegate mapperDelegate) {
@@ -20,7 +20,7 @@ class LoadMoreMapper<E, D extends Updatable<E>> implements Func1<JSONListWrapper
     }
 
     @Override
-    public List<D> call(JSONListWrapper<E> entities) {
+    public List<D> call(TimelineRangeResult<E> entities) {
 
         RestResultClassifier restResultClassifier = new RestResultClassifier(entities.getAll(),
                 mapperDelegate).invoke();

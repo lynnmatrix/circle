@@ -36,10 +36,10 @@ public class DirectMessageServiceTest {
 
     @Test
     public void testListMessages() throws Exception {
-        Observable<JSONListWrapper<DirectMessageEntity>> observable = service.listMessages
+        Observable<TimelineRangeResult<DirectMessageEntity>> observable = service.listMessages
                 ("test_to", null, null, null);
         final CountDownLatch latch = new CountDownLatch(1);
-        observable.subscribe(new Observer<JSONListWrapper<DirectMessageEntity>>() {
+        observable.subscribe(new Observer<TimelineRangeResult<DirectMessageEntity>>() {
             @Override
             public void onCompleted() {
                 latch.countDown();
@@ -50,9 +50,9 @@ public class DirectMessageServiceTest {
             }
 
             @Override
-            public void onNext(JSONListWrapper<DirectMessageEntity>
-                                       directMessageEntityJSONListWrapper) {
-                assertFalse(directMessageEntityJSONListWrapper.getAll().isEmpty());
+            public void onNext(TimelineRangeResult<DirectMessageEntity>
+                                       directMessageEntityTimelineRangeResult) {
+                assertFalse(directMessageEntityTimelineRangeResult.getAll().isEmpty());
             }
         });
         assertTrue(latch.await(10, TimeUnit.SECONDS));

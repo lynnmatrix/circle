@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
-import com.jadenine.circle.model.rest.JSONListWrapper;
+import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 
 import org.junit.Test;
@@ -211,12 +211,12 @@ public class TimelineRangeTest {
     private static class Loader implements RangeLoader<Id>{
 
         @Override
-        public Observable<JSONListWrapper<Id>> refresh(Long top) {
+        public Observable<TimelineRangeResult<Id>> refresh(Long top) {
             return null;
         }
 
         @Override
-        public Observable<JSONListWrapper<Id>> loadMore(Long bottom) {
+        public Observable<TimelineRangeResult<Id>> loadMore(Long bottom) {
             return null;
         }
 
