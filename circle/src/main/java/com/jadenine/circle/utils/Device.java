@@ -19,7 +19,6 @@ package com.jadenine.circle.utils;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,6 +26,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import timber.log.Timber;
 
 public class Device {
     private static final String TAG = Device.class.getSimpleName();
@@ -60,16 +61,16 @@ public class Device {
                     if (id == null) {
                         // It's very bad if we read a null device id; let's delete that file
                         if (!f.delete()) {
-                            Log.e(TAG, "Can't delete null deviceName file; try overwrite.");
+                            Timber.e(TAG, "Can't delete null deviceName file; try overwrite.");
                         }
                     } else {
                         return id;
                     }
                 } else {
-                    Log.w(TAG, f.getAbsolutePath() + ": File exists, but can't read?" +
+                    Timber.w(TAG, f.getAbsolutePath() + ": File exists, but can't read?" +
                             "  Trying to remove.");
                     if (!f.delete()) {
-                        Log.w(TAG, "Remove failed. Trying to overwrite.");
+                        Timber.w(TAG, "Remove failed. Trying to overwrite.");
                     }
                 }
             }
@@ -106,7 +107,7 @@ public class Device {
                 return null;
             }
         } catch (Exception e) {
-            Log.d(TAG, "Error in TelephonyManager.getDeviceId(): " + e.getMessage());
+            Timber.d(TAG, "Error in TelephonyManager.getDeviceId(): " + e.getMessage());
             return null;
         }
         return deviceId;

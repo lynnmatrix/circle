@@ -2,7 +2,6 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.MessageDBService;
@@ -25,6 +24,7 @@ import rx.Subscriber;
 import rx.android.internal.Preconditions;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/10/15.
@@ -122,7 +122,7 @@ public class Topic implements Updatable<TopicEntity>{
         for(MessageEntity messageEntity : topicEntity.getMessages()) {
             Message message = getMessage(messageEntity.getMessageId());
             if(null != message) {
-                Log.wtf("Entity", "No ");
+                Timber.wtf("Entity", "No ");
                 continue;
             }
             message = Message.build(messageEntity);
@@ -149,7 +149,7 @@ public class Topic implements Updatable<TopicEntity>{
             public Message call(MessageEntity messageEntity) {
                 Message msg = getMessage(messageEntity.getMessageId());
                 if(null != msg) {
-                    Log.wtf("Entity", "Message same as the new reply exists.");
+                    Timber.wtf("Entity", "Message same as the new reply exists.");
                     return msg;
                 }
                 msg = Message.build(messageEntity);

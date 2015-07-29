@@ -14,8 +14,6 @@ public class DeviceTest extends InstrumentationTestCase {
     public void testGetDeviceId() throws IOException {
         String deviceId = Device.getDeviceId(getInstrumentation().getTargetContext());
 
-        Log.i("TEST", "device id: " + deviceId);
-
         assertFalse(TextUtils.isEmpty(deviceId));
     }
 }

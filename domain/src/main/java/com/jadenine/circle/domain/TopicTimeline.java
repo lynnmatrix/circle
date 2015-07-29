@@ -2,7 +2,6 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.jadenine.circle.model.db.MessageDBService;
 import com.jadenine.circle.model.db.TopicDBService;
@@ -229,7 +228,7 @@ public class TopicTimeline implements Loadable<Topic> {
             for(TopicEntity topicEntity : topicResult.getUpdate()) {
                 topic = find(topicEntity.getTopicId());
                 if(null == topic) {
-                    Log.wtf("Entity", "No topic with id " + topicEntity.getTopicId() + " " +
+                    Timber.wtf("Entity", "No topic with id " + topicEntity.getTopicId() + " " +
                             "found for update");
                     continue;
                 }
@@ -265,7 +264,7 @@ public class TopicTimeline implements Loadable<Topic> {
                     if (null != nextTopic) {
                         upperIndexKept = topics.indexOf(nextTopic) + 1;
                     } else {
-                        Log.wtf("Entity", "No topic found which has updates");
+                        Timber.wtf("Entity", "No topic found which has updates");
                     }
                 }
             }

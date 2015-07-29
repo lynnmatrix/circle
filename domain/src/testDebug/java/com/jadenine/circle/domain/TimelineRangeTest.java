@@ -159,10 +159,8 @@ public class TimelineRangeTest {
         DaggerService.setComponent(DaggerTestDomainComponent.builder().testDomainModule(new
                 TestDomainModule(DEVICE_ID)).build());
         Account account = DaggerService.getDomainComponent().getAccount();
-        DirectMessageService messageService = DaggerService.getDomainComponent()
-                .getDirectMessageService();
 
-        ChatLoader loader = new ChatLoader(2);
+        ChatLoader loader = new ChatLoader(account.getDeviceId(), 2);
         DaggerService.getDomainComponent().inject(loader);
 
         TimelineRange<DirectMessageEntity> range = new TimelineRange<>(TIMELINE, new

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jadenine.circle.BuildConfig;
@@ -77,7 +76,7 @@ public class CircleApplication extends Application {
         UmengMessageHandler messageHandler = new UmengMessageHandler(){
             @Override
             public Notification getNotification(Context context, UMessage uMessage) {
-                Log.i("PUSH", uMessage.custom);
+                Timber.d("PUSH", uMessage.custom);
                 Toast.makeText(context, uMessage.custom, Toast.LENGTH_LONG).show();
                 uMessage.title = getString(R.string.notification_title_new_topic);
                 return super.getNotification(context, uMessage);
@@ -89,7 +88,7 @@ public class CircleApplication extends Application {
 
                     @Override
                     public void run() {
-                        Log.i("PUSH", msg.custom);
+                        Timber.d("PUSH", msg.custom);
                         Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
                     }
                 });

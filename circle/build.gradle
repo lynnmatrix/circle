@@ -77,8 +77,6 @@ dependencies {
 
     compile 'com.umeng.analytics:analytics:5.5.3'
 
-    compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
-
     androidTestCompile 'com.android.support:support-annotations:22.2.0'
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
