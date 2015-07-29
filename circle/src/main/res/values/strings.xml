@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Circle</string>
     <string name="title_activity_ap">Circle</string>
-    <string name="title_activity_topic">Topics</string>
-    <string name="title_activity_message">Message</string>
-    <string name="action_refresh">Refresh</string>
     <string name="title_activity_topic_composer">New Topic</string>
     <string name="message_edit_hint">new message</string>
     <string name="topic_edit_hint">new topic</string>
@@ -12,15 +9,12 @@
     <string name="message_invalid_size">Fail to  send message which is longer than %d!</string>
     <string name="message_send_success">Message sent.</string>
     <string name="message_send_fail">Fail to send message</string>
-    <string name="action_add">Add</string>
-    <string name="topic_owner">Owner</string>
     <string name="share">Share</string>
     <string name="share_wechat">Share to WeChat </string>
     <string name="wifi_scan">Wifi Scanner</string>
     <string name="share_message_description">df</string>
     <string name="share_link">www.jadenine.com/app/circle.apk</string>
     <string name="notification_title_new_topic">New topic</string>
-    <string name="reply_hint" translatable="false">%s%s</string>
     <string name="reply_type_public" translatable="false">\@</string>
     <string name="reply_type_private">whisper to </string>
     <string name="action_add_image">Pick image</string>

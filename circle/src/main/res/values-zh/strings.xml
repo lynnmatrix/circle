@@ -10,7 +10,6 @@
     <string name="reply_type_private">私信</string>
     <string name="action_add_image">附图</string>
     <string name="title_private_chat">私聊</string>
-    <string name="action_refresh">刷新</string>
     <string name="action_send">发送</string>
     <string name="app_name">到此一游</string>
     <string name="message_edit_hint">说点什么</string>
@@ -19,11 +18,8 @@
     <string name="message_send_fail">发送失败</string>
     <string name="message_send_success">发送成功</string>
     <string name="title_activity_ap">到此一游</string>
-    <string name="title_activity_message">消息</string>
-    <string name="title_activity_topic">话题</string>
     <string name="title_activity_topic_composer">撰写</string>
     <string name="topic_edit_hint">说点什么</string>
-    <string name="topic_owner">嘈主</string>
     <string name="loading_more">加载更多</string>
     <string name="error_load_more">加载失败</string>
 
