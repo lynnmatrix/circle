@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.model.entity.TopicEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.TopicService;
 
@@ -31,8 +30,6 @@ public class UserAp implements Updatable<UserApEntity>{
     @Inject
     BombComposer bombComposer;
 
-    private final TopicTimeline topicTimeline = new TopicTimeline(this);
-
     public static UserAp build(UserApEntity userApEntity) {
         return new UserAp(userApEntity);
     }
@@ -45,7 +42,6 @@ public class UserAp implements Updatable<UserApEntity>{
         this.timeline = new BaseTimeline<>(getAP(), loader);
 
         DaggerService.getDomainComponent().inject(this);
-        DaggerService.getDomainComponent().inject(topicTimeline);
     }
 
     public UserApEntity getEntity() {
@@ -77,35 +73,8 @@ public class UserAp implements Updatable<UserApEntity>{
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
 
-    public Observable<List<Topic>> refreshTopic(){
-        return topicTimeline.refresh();
-    }
-
-    public Observable<List<Topic>> loadMore(){
-        return topicTimeline.loadMore();
-    }
-
-    public boolean hasMoreTopic(){
-        return topicTimeline.hasMore();
-    }
-
-    public Topic getTopic(String topicId) {
-        return topicTimeline.find(topicId);
-    }
-
     public Observable<List<UserAp>> connect(Account account) {
         return account.addUserAp(this);
-    }
-    Observable<Topic> publish(final Topic topic) {
-        Observable<Topic> observable = topicRestService.addTopic(topic.getEntity())
-                .map(new Func1<TopicEntity, Topic>() {
-                    @Override
-                    public Topic call(TopicEntity topicEntity) {
-                        return topicTimeline.addPublishedTopic(topicEntity);
-                    }
-                });
-
-        return observable;
     }
 
     public Observable<List<TimelineRange<Bomb>>> refresh() {

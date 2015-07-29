@@ -97,10 +97,6 @@ public class Message implements Updatable<MessageEntity>, Identifiable<Long> {
         }
     }
 
-    public Observable<Message> reply(Topic topic) {
-        return topic.addReply(this);
-    }
-
     public Observable<Message> reply(Chat chat) {
         return chat.send(this);
     }
