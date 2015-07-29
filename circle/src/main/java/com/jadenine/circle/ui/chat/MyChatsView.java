@@ -1,11 +1,14 @@
 package com.jadenine.circle.ui.chat;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
+import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -19,6 +22,9 @@ public class MyChatsView extends RefreshableHomeView {
 
     @Inject
     MyChatsAdapter chatAdapter;
+
+    @Inject
+    Activity activity;
 
     @Inject
     public MyChatsView(Context context, AttributeSet attrs) {
@@ -36,6 +42,7 @@ public class MyChatsView extends RefreshableHomeView {
         setAdapter(chatAdapter);
 
         getToolbar().setTitle(R.string.title_private_chat);
+        ToolbarColorizer.colorizeToolbar(getToolbar(), Color.WHITE, activity);
     }
 
     @Override
