@@ -17,6 +17,9 @@ public class AvatarBinder {
 
     public int getAvatar(String user, String scope) {
         int index = (user + scope).hashCode()%AVATAR_COUNT;
+        if(index < 0) {
+            index += AVATAR_COUNT;
+        }
         return avatars[index];
     }
 
