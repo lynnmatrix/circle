@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
-import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.JSONListWrapper;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 

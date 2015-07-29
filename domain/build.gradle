@@ -19,8 +19,6 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.jakewharton.timber:timber:3.1.0'
 
-    compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
-
     testCompile "junit:junit:4.12"
     debugCompile "org.mockito:mockito-core:2.0.26-beta"
 //    debugCompile "org.powermock:powermock-module-junit4:1.6.2"

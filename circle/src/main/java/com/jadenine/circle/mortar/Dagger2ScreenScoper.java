@@ -1,12 +1,12 @@
 package com.jadenine.circle.mortar;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.jadenine.common.mortar.BasicScreenScoper;
 
 import flow.path.Path;
 import mortar.MortarScope;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/8/15.
@@ -18,7 +18,7 @@ public class Dagger2ScreenScoper extends BasicScreenScoper {
     @Override
     protected void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
         if (!(path instanceof ScreenComponentFactory)) {
-            Log.w(TAG, "Path must implement ComponentFactory");
+            Timber.w(TAG, "Path must implement ComponentFactory");
             return;
         }
 
