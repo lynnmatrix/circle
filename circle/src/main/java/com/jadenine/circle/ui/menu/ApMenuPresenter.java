@@ -177,6 +177,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
                 for (UserAp ap : tmpUserAps) {
                     addTag(ap.getAP());
                 }
+                addTag(account.getDeviceId());
             }
         });
     }
