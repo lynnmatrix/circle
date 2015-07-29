@@ -6,7 +6,7 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.SectionedRecyclerViewAdapter;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.composer.BombComposerPath;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-public class BombListPresenter extends ViewPresenter<BombListView>{
+class BombListPresenter extends ViewPresenter<BombListView>{
     private final UserAp userAp;
 
     private Subscription refreshSubscription = Subscriptions.empty();{

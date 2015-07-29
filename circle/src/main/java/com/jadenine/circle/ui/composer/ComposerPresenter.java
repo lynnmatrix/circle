@@ -19,7 +19,7 @@ import rx.subscriptions.Subscriptions;
 /**
  * Created by linym on 6/9/15.
  */
-public abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements PreferenceManager
+abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements PreferenceManager
         .OnActivityResultListener{
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final int PICK_IMAGE = 1;

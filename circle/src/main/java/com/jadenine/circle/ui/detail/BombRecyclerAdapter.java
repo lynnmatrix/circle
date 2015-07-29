@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 /**
  * Created by linym on 7/24/15.
  */
-public class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_REPLY = 1;
     private List<Bomb> bombs = Collections.emptyList();

@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
-import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
-import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.ui.utils.AutoLoadMoreListener;
+import com.jadenine.circle.ui.utils.RecyclerItemClickListener;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
 

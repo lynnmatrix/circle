@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui;
+package com.jadenine.circle.ui.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;

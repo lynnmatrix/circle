@@ -25,7 +25,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/27/15.
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>{
+class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>{
     private final static int TYPE_CHAT_NORMAL = 0;
     private final static int TYPE__CHAT_SELF = 1;
 

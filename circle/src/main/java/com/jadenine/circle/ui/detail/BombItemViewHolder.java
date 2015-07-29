@@ -18,7 +18,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/24/15.
  */
-public class BombItemViewHolder extends RecyclerView.ViewHolder{
+class BombItemViewHolder extends RecyclerView.ViewHolder{
 
     @InjectView(R.id.avatar)
     ImageView avatarView;

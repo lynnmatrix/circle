@@ -14,7 +14,7 @@ import flow.Flow;
 /**
  * Created by linym on 7/22/15.
  */
-public class BombGroupItemViewHolder extends RecyclerView.ViewHolder {
+class BombGroupItemViewHolder extends RecyclerView.ViewHolder {
 
     private final TopicHeader topicHeader;
     public BombGroupItemViewHolder(TopicHeader topicHeader) {

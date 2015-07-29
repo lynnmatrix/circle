@@ -24,7 +24,7 @@ import flow.History;
 /**
  * Created by linym on 7/22/15.
  */
-public class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_HEADER = 0;
     private final int TYPE_AP = 1;
     private final int TYPE_MY_CHAT = 2;

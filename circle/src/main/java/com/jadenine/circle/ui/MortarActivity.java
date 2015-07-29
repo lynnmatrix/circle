@@ -18,7 +18,7 @@ import mortar.bundler.BundleServiceRunner;
 /**
  * Created by linym on 6/8/15.
  */
-public abstract class MortarActivity extends Activity {
+abstract class MortarActivity extends Activity {
 
     private MortarScope mortarScope;
     protected FlowDelegate flowDelegate;

@@ -9,12 +9,12 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.SectionedRecyclerViewAdapter;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 
 /**
  * Created by linym on 7/28/15.
  */
-public class SectionedBombGroupRecyclerAdapter extends
+class SectionedBombGroupRecyclerAdapter extends
         SectionedRecyclerViewAdapter<TimelineRange<Bomb>, Group<Bomb>> {
     private OnFooterClickListener loadMoreListener;
 

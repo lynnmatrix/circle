@@ -30,7 +30,7 @@ import rx.functions.Action1;
 /**
  * Created by linym on 7/24/15.
  */
-public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
+class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final String BUNDLE_REPLY_TO = "reply_to";
 

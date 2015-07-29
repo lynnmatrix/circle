@@ -21,7 +21,7 @@ import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.topic.AutoLoadMoreListener;
+import com.jadenine.circle.ui.utils.AutoLoadMoreListener;
 import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;

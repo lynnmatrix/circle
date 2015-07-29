@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.SectionedRecyclerViewAdapter;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.detail.TopicHeader;
 
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by linym on 7/22/15.
  */
-public class BombRecyclerAdapter extends SectionedRecyclerViewAdapter
+class BombRecyclerAdapter extends SectionedRecyclerViewAdapter
         .ItemAdapter<Group<Bomb>> {
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
     private final Drawable errorDrawable;

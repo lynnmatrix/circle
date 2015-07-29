@@ -13,7 +13,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/22/15.
  */
-public class ApMenuItemViewHolder extends RecyclerView.ViewHolder{
+class ApMenuItemViewHolder extends RecyclerView.ViewHolder{
     @InjectView(R.id.ap_ssid)
     TextView ssidView;
 

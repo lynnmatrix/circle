@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.SectionedRecyclerViewAdapter;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.widgets.LoadingView;
 
 import butterknife.ButterKnife;
@@ -16,7 +16,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/28/15.
  */
-public class LoadMoreViewHolder extends RecyclerView.ViewHolder {
+class LoadMoreViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.progress)
     LoadingView loadingView;
 

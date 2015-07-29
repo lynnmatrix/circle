@@ -26,7 +26,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/27/15.
  */
-public class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewHolder> {
+class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewHolder> {
 
     private List<Group<DirectMessageEntity>> chatGroups = Collections.emptyList();
     private final AvatarBinder avatarBinder;

@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.topic;
+package com.jadenine.circle.ui.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

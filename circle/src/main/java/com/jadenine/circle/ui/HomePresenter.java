@@ -24,7 +24,7 @@ import mortar.bundler.BundleService;
 /**
  * Created by linym on 6/15/15.
  */
-public class HomePresenter extends Presenter<HomeActivity> {
+class HomePresenter extends Presenter<HomeActivity> {
 
     private static final String WX_APP_ID = "wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
     private IWXAPI wechatApi = null;

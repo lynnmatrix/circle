@@ -25,7 +25,7 @@ import rx.functions.Action1;
 /**
  * Created by linym on 7/25/15.
  */
-public class ChatPresenter extends ViewPresenter<ChatView> {
+class ChatPresenter extends ViewPresenter<ChatView> {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
     private String ap;

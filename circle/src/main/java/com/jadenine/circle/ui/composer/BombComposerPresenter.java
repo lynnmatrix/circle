@@ -20,7 +20,7 @@ import rx.subscriptions.Subscriptions;
 /**
  * Created by linym on 7/23/15.
  */
-public class BombComposerPresenter extends ComposerPresenter {
+class BombComposerPresenter extends ComposerPresenter {
 
     private final long CONTENT_MAX_LENGTH = 256;
 

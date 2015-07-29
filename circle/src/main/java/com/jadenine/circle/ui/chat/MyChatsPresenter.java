@@ -25,7 +25,7 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/27/15.
  */
-public class MyChatsPresenter extends ViewPresenter<MyChatsView> implements RefreshableHomeView
+class MyChatsPresenter extends ViewPresenter<MyChatsView> implements RefreshableHomeView
         .RefreshableHomeListener {
     private final Account account;
 

@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.topic;
+package com.jadenine.circle.ui.utils;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;

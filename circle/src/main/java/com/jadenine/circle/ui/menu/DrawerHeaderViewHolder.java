@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by linym on 7/25/15.
  */
-public class DrawerHeaderViewHolder extends RecyclerView.ViewHolder {
+class DrawerHeaderViewHolder extends RecyclerView.ViewHolder {
     public DrawerHeaderViewHolder(View itemView) {
         super(itemView);
     }

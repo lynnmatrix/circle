@@ -12,7 +12,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.HomeComponent;
-import com.jadenine.circle.ui.topic.RecyclerItemClickListener;
+import com.jadenine.circle.ui.utils.RecyclerItemClickListener;
 import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 
 import javax.inject.Inject;
