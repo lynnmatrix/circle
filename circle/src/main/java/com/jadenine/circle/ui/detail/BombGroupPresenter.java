@@ -1,15 +1,12 @@
 package com.jadenine.circle.ui.detail;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
+import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
@@ -28,6 +25,7 @@ import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by linym on 7/24/15.
@@ -116,21 +114,8 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
     private void updateHint() {
         Context context = getView().getContext();
 
-        int replyTypeStringId = R.string.reply_type_public;
-
-        String replyType = context.getString(replyTypeStringId);
-
-        Drawable avatarDrawable = context.getResources().getDrawable(avatarBinder.getAvatar
-                (replyTo, rootBomb.getRootMessageId()));
-        int textSize = (int)getView().replyEditor.getTextSize();
-        avatarDrawable.setBounds(0,0,textSize,textSize);
-
-        ImageSpan toAvatarSpan = new ImageSpan(avatarDrawable);
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(replyType + "  ");
-        builder.setSpan(toAvatarSpan, 1, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        getView().replyEditor.setHint(builder);
+        getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(context, avatarBinder.getAvatar
+                (replyTo, rootBomb.getRootMessageId()), getView().replyEditor.getTextSize()));
     }
 
     public void send() {
@@ -159,7 +144,13 @@ public class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
 
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
-                loadMessages();
+                userAp.refresh().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<TimelineRange<Bomb>>>() {
+
+                    @Override
+                    public void call(List<TimelineRange<Bomb>> ranges) {
+                        loadMessages();
+                    }
+                });
             }
 
             @Override

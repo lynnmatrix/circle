@@ -9,6 +9,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.ContentValidater;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -31,19 +32,22 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
     private String topicId;
     private String from, to;
 
-    private
+
     @Nullable
-    Group<DirectMessageEntity> chatGroup;
+    private Group<DirectMessageEntity> chatGroup;
     private Account account;
 
+    private AvatarBinder avatarBinder;
+
     public ChatPresenter(Account account, String ap, @NotNull String topicId, @NotNull String
-            from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup) {
+            from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup,  AvatarBinder avatarBinder) {
         this.account = account;
         this.ap = ap;
         this.topicId = topicId;
         this.from = from;
         this.to = to;
         this.chatGroup = chatGroup;
+        this.avatarBinder = avatarBinder;
     }
 
     @Override
@@ -57,6 +61,9 @@ public class ChatPresenter extends ViewPresenter<ChatView> {
             getView().replyEditor.setText(content);
             getView().replyEditor.setSelection(content.length());
         }
+
+        getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(getView().getContext(),
+                avatarBinder.getAvatar(to, topicId), getView().replyEditor.getTextSize()));
 
         loadMessages();
     }

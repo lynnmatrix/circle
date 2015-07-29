@@ -9,6 +9,7 @@ import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -63,14 +64,15 @@ public class ChatPath extends Path implements ScreenComponentFactory {
         @DaggerScope(ChatPath.class)
         @Provides
         ChatPresenter providePresenter(Account account, @Nullable Group<DirectMessageEntity>
-                chatGroup) {
+                chatGroup,  AvatarBinder avatarBinder) {
             String from = rootUser;
             String to = rootTo;
             if(!account.getDeviceId().equals(rootUser)) {
                 from = rootTo;
                 to = rootUser;
             }
-            return new ChatPresenter(account, ap, String.valueOf(bombGroupId), from, to, chatGroup);
+            return new ChatPresenter(account, ap, String.valueOf(bombGroupId), from, to,
+                    chatGroup, avatarBinder);
         }
     }
 }

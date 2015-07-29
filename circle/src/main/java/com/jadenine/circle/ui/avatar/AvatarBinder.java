@@ -2,6 +2,12 @@ package com.jadenine.circle.ui.avatar;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+
+import com.jadenine.circle.R;
 
 /**
  * Created by linym on 7/25/15.
@@ -21,6 +27,20 @@ public class AvatarBinder {
             index += AVATAR_COUNT;
         }
         return avatars[index];
+    }
+
+    public SpannableStringBuilder getAtAvatarSpan(Context context, int avatarResId, float textSize){
+        String replyType = context.getString(R.string.reply_type_public);
+
+        Drawable avatarDrawable = context.getResources().getDrawable(avatarResId);
+        avatarDrawable.setBounds(0, 0, (int)textSize, (int)textSize);
+
+        ImageSpan toAvatarSpan = new ImageSpan(avatarDrawable);
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(replyType + "  ");
+        builder.setSpan(toAvatarSpan, 1, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return builder;
     }
 
     private void prepare(Context context) {

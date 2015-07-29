@@ -1,6 +1,8 @@
 package com.jadenine.circle.ui.detail;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +40,18 @@ public class BombItemViewHolder extends RecyclerView.ViewHolder{
         avatarView.setImageResource(avatarBinder.getAvatar(bomb.getFrom(), bomb.getRootMessageId()));
 
         dateView.setText(TimeFormatUtils.getFormattedTime(bomb.getTimestamp()));
-        contentView.setText(bomb.getContent());
+
+        CharSequence content;
+        if(TextUtils.isEmpty(bomb.getTo())) {
+            content = bomb.getContent();
+        } else {
+            SpannableStringBuilder builder = avatarBinder.getAtAvatarSpan(itemView.getContext(),
+                    avatarBinder.getAvatar(bomb.getTo(), bomb.getRootMessageId()), contentView .getTextSize());
+
+            content = builder.append(bomb.getContent());
+        }
+
+        contentView.setText(content);
 
         itemView.setTag(bomb.getId());
     }
