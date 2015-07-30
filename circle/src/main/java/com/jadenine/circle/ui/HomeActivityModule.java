@@ -9,9 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.ui.menu.ApMenuPresenter;
 
 import dagger.Provides;
 
@@ -41,12 +39,6 @@ class HomeActivityModule {
     @Provides
     HomePresenter providePresenter(){
         return new HomePresenter();
-    }
-
-    @DaggerScope(HomeActivity.class)
-    @Provides
-    ApMenuPresenter provideMenuPresenter(Account account) {
-        return new ApMenuPresenter(account);
     }
 
     @DaggerScope(HomeActivity.class)

@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.widgets;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.chat;
+package com.jadenine.circle.ui.chat.detail;
 
 import android.app.Activity;
 import android.content.Context;
@@ -52,7 +52,7 @@ public class ChatView extends LinearLayout {
 
     public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<DaggerChatPath_Component>getDaggerComponent(context).inject(this);
+        DaggerService.<ChatPath.Component>getDaggerComponent(context).inject(this);
     }
 
     @Override

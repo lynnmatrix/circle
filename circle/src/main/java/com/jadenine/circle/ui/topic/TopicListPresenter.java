@@ -1,12 +1,12 @@
-package com.jadenine.circle.ui.home;
+package com.jadenine.circle.ui.topic;
 
 import android.os.Bundle;
 
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.composer.BombComposerPath;
-import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
+import com.jadenine.circle.ui.composer.ComposerPath;
+import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 
@@ -26,7 +26,7 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-class BombListPresenter extends ViewPresenter<BombListView> implements RefreshableHomeView
+class TopicListPresenter extends ViewPresenter<TopicListView> implements RefreshableHomeView
         .RefreshableHomeListener {
     private final UserAp userAp;
 
@@ -38,7 +38,7 @@ class BombListPresenter extends ViewPresenter<BombListView> implements Refreshab
     }
 
     @Inject
-    public BombListPresenter(UserAp userAp) {
+    public TopicListPresenter(UserAp userAp) {
         this.userAp = userAp;
     }
 
@@ -142,7 +142,7 @@ class BombListPresenter extends ViewPresenter<BombListView> implements Refreshab
     }
 
     void addBomb() {
-        Flow.get(getView().getContext()).set(new BombComposerPath(userAp.getAP()));
+        Flow.get(getView().getContext()).set(new ComposerPath(userAp.getAP()));
     }
 
     private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {

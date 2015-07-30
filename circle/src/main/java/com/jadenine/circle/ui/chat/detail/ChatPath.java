@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.chat;
+package com.jadenine.circle.ui.chat.detail;
 
 import android.support.annotation.Nullable;
 

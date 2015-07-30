@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.home;
+package com.jadenine.circle.ui.topic;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,10 +18,10 @@ import butterknife.OnClick;
 /**
  * Created by linym on 7/22/15.
  */
-@DaggerScope(BombListPresenter.class)
-public class BombListView extends RefreshableHomeView {
+@DaggerScope(TopicListPresenter.class)
+public class TopicListView extends RefreshableHomeView {
     @Inject
-    BombListPresenter presenter;
+    TopicListPresenter presenter;
 
     @Inject
     Activity activity;
@@ -29,9 +29,9 @@ public class BombListView extends RefreshableHomeView {
     @Inject
     SectionedLoadMoreRecyclerAdapter<Bomb> bombAdapter;
 
-    public BombListView(Context context, AttributeSet attrs) {
+    public TopicListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<BombListPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<TopicListPath.Component>getDaggerComponent(context).inject(this);
 
         setRefreshableListener(presenter);
     }

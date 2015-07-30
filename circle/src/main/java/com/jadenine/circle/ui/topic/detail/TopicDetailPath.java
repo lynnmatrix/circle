@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.topic.detail;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
@@ -18,40 +18,40 @@ import flow.path.Path;
  * Created by linym on 7/24/15.
  */
 @Layout(R.layout.screen_bomb_group)
-public class BombGroupPath extends Path implements ScreenComponentFactory{
+public class TopicDetailPath extends Path implements ScreenComponentFactory{
     private final String ap;
     private final Long groupId;
 
-    public BombGroupPath(@NotNull String ap, @NotNull Long groupId) {
+    public TopicDetailPath(@NotNull String ap, @NotNull Long groupId) {
         this.ap = ap;
         this.groupId = groupId;
     }
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerBombGroupPath_Component.builder().homeComponent((HomeComponent)
+        return DaggerTopicDetailPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
                 .module(new Module())
                 .build();
     }
 
-    @DaggerScope(BombGroupPresenter.class)
+    @DaggerScope(TopicDetailPresenter.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component {
-        void inject(BombGroupDetailView detailView);
+        void inject(TopicDetailView detailView);
     }
 
     @dagger.Module
     class Module{
 
         @Provides
-        @DaggerScope(BombGroupPresenter.class)
+        @DaggerScope(TopicDetailPresenter.class)
         UserAp provideUserAp(Account account){
             return account.getUserAp(ap);
         }
 
         @Provides
-        @DaggerScope(BombGroupPresenter.class)
+        @DaggerScope(TopicDetailPresenter.class)
         Group<Bomb> provideBombGroup(UserAp userAp) {
             return userAp.getBombGroup(groupId);
         }

@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.topic.detail;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,9 +11,10 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.chat.ChatPath;
-import com.jadenine.circle.ui.utils.ContentValidater;
+import com.jadenine.circle.ui.chat.detail.ChatPath;
+import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
+import com.jadenine.circle.ui.widgets.TopicHeader;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ import rx.functions.Action1;
 /**
  * Created by linym on 7/24/15.
  */
-class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
+class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final String BUNDLE_REPLY_TO = "reply_to";
 
@@ -42,9 +43,9 @@ class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
 
     private final AvatarBinder avatarBinder;
 
-    @DaggerScope(BombGroupPresenter.class)
+    @DaggerScope(TopicDetailPresenter.class)
     @Inject
-    public BombGroupPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
+    public TopicDetailPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
         this.userAp = userAp;
         this.bombGroup = bombGroup;
         this.rootBomb = bombGroup.getRoot();
@@ -78,7 +79,7 @@ class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
                 Flow.get(getView()).set(chatPath);
             }
         });
-        getView().getBombAdapter().setOnBombItemClick(new BombRecyclerAdapter.OnBombItemClickListener() {
+        getView().getBombAdapter().setOnBombItemClick(new BombListAdapter.OnBombItemClickListener() {
             @Override
             public boolean onBombItemClicked(Bomb bomb) {
                 setReplyTo(bomb);
@@ -120,7 +121,7 @@ class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
 
     public void send() {
         String content = getView().replyEditor.getText().toString();
-        if (!ContentValidater.validate(getView().getContext(), content)) {
+        if (!ContentValidator.validate(getView().getContext(), content)) {
             return;
         }
 
@@ -138,7 +139,7 @@ class BombGroupPresenter extends ViewPresenter<BombGroupDetailView> {
             public void onCompleted() {
                 if (!hasView()) return;
 
-                BombGroupPresenter.this.replyTo = bomb.getRootUser();
+                TopicDetailPresenter.this.replyTo = bomb.getRootUser();
                 updateHint();
                 getView().replyEditor.setText("");
 

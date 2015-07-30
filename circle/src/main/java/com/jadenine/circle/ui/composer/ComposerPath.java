@@ -15,17 +15,17 @@ import flow.path.Path;
  * Created by linym on 7/23/15.
  */
 @Layout(R.layout.screen_composer)
-public class BombComposerPath extends Path implements ScreenComponentFactory {
+public class ComposerPath extends Path implements ScreenComponentFactory {
 
         private final String ap;
 
-        public BombComposerPath(String ap) {
+        public ComposerPath(String ap) {
             this.ap = ap;
         }
 
         @Override
         public Object createComponent(Object... dependencies) {
-            return DaggerBombComposerPath_Component.builder().homeComponent((HomeComponent)
+            return DaggerComposerPath_Component.builder().homeComponent((HomeComponent)
                     dependencies[0]).module(new Module()).build();
         }
 
@@ -46,7 +46,7 @@ public class BombComposerPath extends Path implements ScreenComponentFactory {
             @DaggerScope(ComposerPresenter.class)
             @Provides
             ComposerPresenter providePresenter(UserAp userAp) {
-                return new BombComposerPresenter(userAp);
+                return new TopicComposerPresenter(userAp);
             }
         }
 }

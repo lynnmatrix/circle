@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.chat;
+package com.jadenine.circle.ui.chat.detail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.utils.ContentValidater;
+import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
@@ -87,7 +87,7 @@ class ChatPresenter extends ViewPresenter<ChatView> {
 
     public void send() {
         String content = getView().replyEditor.getText().toString();
-        if (!ContentValidater.validate(getView().getContext(), content)) {
+        if (!ContentValidator.validate(getView().getContext(), content)) {
             return;
         }
 

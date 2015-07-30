@@ -6,7 +6,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
+import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 

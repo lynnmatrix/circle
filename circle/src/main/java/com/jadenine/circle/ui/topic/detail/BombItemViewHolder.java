@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.topic.detail;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;

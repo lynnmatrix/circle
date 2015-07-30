@@ -13,6 +13,7 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 
 import java.util.Collections;
@@ -108,8 +109,9 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
                     @Override
                     public void onClick(View v) {
                         ChatPath chatPath = new ChatPath(lastMessage.getAp(), Long.valueOf
-                                (lastMessage.getTopicId()), lastMessage.getRootUser(), lastMessage
-                                .getRootUser(), Long.valueOf(lastMessage.getRootMessageId()));
+                                (lastMessage.getTopicId()), lastMessage.getRootUser(),
+                                lastMessage.getRootUser(), Long.valueOf(lastMessage
+                                .getRootMessageId()));
                         Flow.get(v).set(chatPath);
                     }
                 });

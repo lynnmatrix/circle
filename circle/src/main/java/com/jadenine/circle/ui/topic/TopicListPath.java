@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.home;
+package com.jadenine.circle.ui.topic;
 
 import android.graphics.drawable.Drawable;
 
@@ -20,10 +20,10 @@ import flow.path.Path;
  * Created by linym on 7/22/15.
  */
 @Layout(R.layout.screen_bomb_list)
-public class BombListPath extends Path implements ScreenComponentFactory {
+public class TopicListPath extends Path implements ScreenComponentFactory {
     private final String ap;
 
-    public BombListPath(String ap) {
+    public TopicListPath(String ap) {
         this.ap = ap;
     }
 
@@ -33,31 +33,31 @@ public class BombListPath extends Path implements ScreenComponentFactory {
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerBombListPath_Component.builder().homeComponent((HomeComponent)
+        return DaggerTopicListPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
                 .module(new Module())
                 .build();
     }
 
-    @DaggerScope(BombListPath.class)
+    @DaggerScope(TopicListPath.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component{
-        void inject(BombListView view);
+        void inject(TopicListView view);
     }
 
     @dagger.Module
     class Module {
-        @DaggerScope(BombListPath.class)
+        @DaggerScope(TopicListPath.class)
         @Provides
         UserAp provideUserAp(Account account) {
             return account.getUserAp(ap);
         }
 
-        @DaggerScope(BombListPath.class)
+        @DaggerScope(TopicListPath.class)
         @Provides
         SectionedLoadMoreRecyclerAdapter<Bomb> provideAdapter(AvatarBinder binder, Drawable
                 errorDrawable) {
-            return new SectionedLoadMoreRecyclerAdapter(new BombRecyclerAdapter(errorDrawable,
+            return new SectionedLoadMoreRecyclerAdapter(new TopicListAdapter(errorDrawable,
                     binder));
         }
     }

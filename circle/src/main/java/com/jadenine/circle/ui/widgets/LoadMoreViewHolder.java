@@ -1,11 +1,12 @@
-package com.jadenine.circle.ui.utils;
+package com.jadenine.circle.ui.widgets;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.ui.widgets.LoadingView;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,7 +26,7 @@ public class LoadMoreViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    void bind(final SectionedRecyclerViewAdapter.Section section, final
+    public void bind(final SectionedRecyclerViewAdapter.Section section, final
     SectionedLoadMoreRecyclerAdapter.OnFooterClickListener listener) {
 
         itemView.setOnClickListener(new View.OnClickListener() {

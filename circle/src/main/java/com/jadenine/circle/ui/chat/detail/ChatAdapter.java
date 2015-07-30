@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.chat;
+package com.jadenine.circle.ui.chat.detail;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

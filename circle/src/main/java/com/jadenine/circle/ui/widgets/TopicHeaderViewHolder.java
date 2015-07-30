@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.widgets;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import com.jadenine.circle.ui.avatar.AvatarBinder;
 /**
  * Created by linym on 7/25/15.
  */
-class TopicHeaderViewHolder extends RecyclerView.ViewHolder {
+public class TopicHeaderViewHolder extends RecyclerView.ViewHolder {
     private final TopicHeader topicHeader;
 
     public TopicHeaderViewHolder(TopicHeader itemView) {

@@ -9,7 +9,7 @@ import com.jadenine.circle.R;
 /**
  * Created by linym on 7/24/15.
  */
-public class ContentValidater {
+public class ContentValidator {
     private static final long CONTENT_MAX_LENGTH = 256;
 
     public static boolean validate(Context context, String content) {

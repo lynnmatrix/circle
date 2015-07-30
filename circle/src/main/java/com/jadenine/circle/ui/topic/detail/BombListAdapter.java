@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.topic.detail;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.widgets.TopicHeader;
+import com.jadenine.circle.ui.widgets.TopicHeaderViewHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +21,7 @@ import javax.inject.Singleton;
 /**
  * Created by linym on 7/24/15.
  */
-class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class BombListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_REPLY = 1;
     private List<Bomb> bombs = Collections.emptyList();
@@ -32,7 +34,7 @@ class BombRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Inject
     @Singleton
-    public BombRecyclerAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
+    public BombListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
         this.errorDrawable = errorDrawable;
         this.avatarBinder = avatarBinder;
     }

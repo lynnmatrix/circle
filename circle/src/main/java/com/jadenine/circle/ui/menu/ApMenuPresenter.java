@@ -10,7 +10,7 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.model.entity.UserApEntity;
-import com.jadenine.circle.ui.home.BombListPath;
+import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
@@ -18,6 +18,8 @@ import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import flow.Flow;
 import flow.History;
@@ -30,10 +32,11 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
+class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     private final Account account;
     private UserAp currentAp;
 
+    @Inject
     public ApMenuPresenter(Account account) {
         this.account = account;
     }
@@ -74,7 +77,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
         History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
         historyBuilder.pop();
-        historyBuilder.push(new BombListPath(userAp.getAP()));
+        historyBuilder.push(new TopicListPath(userAp.getAP()));
 
         Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
         currentAp = userAp;

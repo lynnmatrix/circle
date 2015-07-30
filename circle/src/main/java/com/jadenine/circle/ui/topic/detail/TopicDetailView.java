@@ -1,4 +1,4 @@
-package com.jadenine.circle.ui.detail;
+package com.jadenine.circle.ui.topic.detail;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +28,7 @@ import flow.Flow;
 /**
  * Created by linym on 7/24/15.
  */
-public class BombGroupDetailView extends LinearLayout{
+public class TopicDetailView extends LinearLayout{
     @InjectView(R.id.recycler_view)
     RecyclerView bombList;
 
@@ -45,17 +45,17 @@ public class BombGroupDetailView extends LinearLayout{
     Activity activity;
 
     @Inject
-    BombGroupPresenter presenter;
+    TopicDetailPresenter presenter;
 
     @Inject
     Drawable errorDrawable;
 
     @Inject
-    BombRecyclerAdapter bombRecyclerAdapter;
+    BombListAdapter bombListAdapter;
 
-    public BombGroupDetailView(Context context, AttributeSet attrs) {
+    public TopicDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<BombGroupPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<TopicDetailPath.Component>getDaggerComponent(context).inject(this);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class BombGroupDetailView extends LinearLayout{
         bombList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         bombList.setLayoutManager(linearLayoutManager);
-        bombList.setAdapter(bombRecyclerAdapter);
+        bombList.setAdapter(bombListAdapter);
 
         configToolbar();
     }
@@ -96,8 +96,8 @@ public class BombGroupDetailView extends LinearLayout{
         presenter.send();
     }
 
-    BombRecyclerAdapter getBombAdapter() {
-        return bombRecyclerAdapter;
+    BombListAdapter getBombAdapter() {
+        return bombListAdapter;
     }
 
 }

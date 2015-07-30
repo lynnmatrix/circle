@@ -20,11 +20,11 @@ import rx.subscriptions.Subscriptions;
 /**
  * Created by linym on 7/23/15.
  */
-class BombComposerPresenter extends ComposerPresenter {
+class TopicComposerPresenter extends ComposerPresenter {
 
     private final long CONTENT_MAX_LENGTH = 256;
 
-    public BombComposerPresenter(UserAp userAp) {
+    public TopicComposerPresenter(UserAp userAp) {
         super(userAp);
     }
 
