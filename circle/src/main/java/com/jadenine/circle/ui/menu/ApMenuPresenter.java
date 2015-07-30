@@ -162,6 +162,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
             private void openDefaultApIfNeed() {
                 if (!hasView()) return;
+
                 if (null == currentAp) {
                     onApSelected(account.getDefaultAp());
                 }

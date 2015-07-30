@@ -138,6 +138,9 @@ public class Account {
         return chatTimeline.getAllRanges();
     }
 
+    public boolean hasMoreChat() {
+        return chatTimeline.hasMore();
+    }
 
     private class UserApMapperDelegate implements MapperDelegate<UserApEntity, UserAp> {
         @Override

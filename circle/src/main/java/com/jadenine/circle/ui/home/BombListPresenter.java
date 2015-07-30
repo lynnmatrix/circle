@@ -7,8 +7,12 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.BombComposerPath;
 import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
+import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import flow.Flow;
 import mortar.ViewPresenter;
@@ -22,7 +26,8 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-class BombListPresenter extends ViewPresenter<BombListView>{
+class BombListPresenter extends ViewPresenter<BombListView> implements RefreshableHomeView
+        .RefreshableHomeListener {
     private final UserAp userAp;
 
     private Subscription refreshSubscription = Subscriptions.empty();{
@@ -32,6 +37,7 @@ class BombListPresenter extends ViewPresenter<BombListView>{
         loadingMoreSubscription.unsubscribe();
     }
 
+    @Inject
     public BombListPresenter(UserAp userAp) {
         this.userAp = userAp;
     }
@@ -39,11 +45,19 @@ class BombListPresenter extends ViewPresenter<BombListView>{
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
-        if(!hasView()) return;
+        getView().getAdapter().setOnFooterClickListener(new SectionedLoadMoreRecyclerAdapter
+                .OnFooterClickListener() {
 
-        getView().toolbar.setTitle(userAp.getSSID());
+            @Override
+            public void onFooterClicked(TimelineRange range, LoadMoreViewHolder
+                    loadMoreViewHolder) {
+                loadMore(range, loadMoreViewHolder);
+            }
+        });
 
-        refresh();
+        getView().getToolbar().setTitle(userAp.getSSID());
+
+        onRefresh();
     }
 
     @Override
@@ -53,7 +67,8 @@ class BombListPresenter extends ViewPresenter<BombListView>{
         loadingMoreSubscription.unsubscribe();
     }
 
-    void refresh() {
+    @Override
+    public void onRefresh() {
         if(!refreshSubscription.isUnsubscribed()){
             return;
         }
@@ -67,7 +82,7 @@ class BombListPresenter extends ViewPresenter<BombListView>{
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
-                getView().swipeRefreshLayout.setRefreshing(false);
+                getView().stopRefreshing();
             }
 
             @Override
@@ -76,7 +91,7 @@ class BombListPresenter extends ViewPresenter<BombListView>{
                 refreshSubscription = Subscriptions.empty();
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
-                getView().swipeRefreshLayout.setRefreshing(false);
+                getView().stopRefreshing();
                 updateBombGroups(userAp.getAllTimelineRanges());
             }
 
@@ -90,18 +105,15 @@ class BombListPresenter extends ViewPresenter<BombListView>{
         });
     }
 
-    private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
-        getView().getAdapter().setSections(ranges);
-    }
-
-    void loadMore() {
+    @Override
+    public void onLoadMore() {
         if(!loadingMoreSubscription.isUnsubscribed() || !userAp.hasMore()) {
             return;
         }
         Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMoreBomb()
                 .observeOn(AndroidSchedulers.mainThread());
 
-        topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+        loadingMoreSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
             @Override
             public void onCompleted() {
                 loadingMoreSubscription = Subscriptions.empty();
@@ -124,11 +136,16 @@ class BombListPresenter extends ViewPresenter<BombListView>{
         });
     }
 
+    @Override
+    public boolean onRowClick(int position) {
+        return false;
+    }
+
     void addBomb() {
         Flow.get(getView().getContext()).set(new BombComposerPath(userAp.getAP()));
     }
 
-    public void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
+    private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
         loadMoreViewHolder.startLoading();
         userAp.loadMoreBomb(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
 
@@ -147,5 +164,9 @@ class BombListPresenter extends ViewPresenter<BombListView>{
                 updateBombGroups(ranges);
             }
         });
+    }
+
+    private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
+        getView().getAdapter().setSections(ranges);
     }
 }

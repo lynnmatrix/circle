@@ -68,15 +68,13 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
             return;
         }
 
-        account.refreshChats().observeOn(AndroidSchedulers.mainThread())
+        refreshSubscription = account.refreshChats().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<TimelineRange<DirectMessageEntity>>>() {
                     @Override
                     public void onCompleted() {
                         refreshSubscription = Subscriptions.empty();
                         refreshSubscription.unsubscribe();
-                        if(!hasView()) {
-                            return;
-                        }
+                        if(!hasView()) return;
                         getView().stopRefreshing();
                     }
 
@@ -85,18 +83,14 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                         Timber.e(e, "Fail to refresh my private chats.");
                         refreshSubscription = Subscriptions.empty();
                         refreshSubscription.unsubscribe();
-                        if(!hasView()) {
-                            return;
-                        }
+                        if(!hasView()) return;
                         getView().stopRefreshing();
                         updateChats(account.getAllChats());
                     }
 
                     @Override
                     public void onNext(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
-                        if(!hasView()) {
-                            return;
-                        }
+                        if (!hasView()) return;
                         updateChats(timelineRanges);
                     }
                 });
@@ -104,11 +98,11 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
 
     @Override
     public void onLoadMore() {
-        if(!loadingMoreSubscription.isUnsubscribed()) {
+        if(!loadingMoreSubscription.isUnsubscribed() || account.hasMoreChat()) {
             return;
         }
 
-        account.loadMoreChat().observeOn(AndroidSchedulers.mainThread())
+        loadingMoreSubscription = account.loadMoreChat().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<TimelineRange<DirectMessageEntity>>>() {
                     @Override
                     public void onCompleted() {
@@ -125,12 +119,16 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
 
                     @Override
                     public void onNext(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
-                        if (!hasView()) {
-                            return;
-                        }
+                        if (!hasView()) return;
+
                         updateChats(timelineRanges);
                     }
                 });
+    }
+
+    @Override
+    public boolean onRowClick(int position) {
+        return false;
     }
 
     private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
@@ -156,10 +154,5 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
 
     private void updateChats(List<TimelineRange<DirectMessageEntity>> ranges) {
         getView().getAdapter().setSections(ranges);
-    }
-
-    @Override
-    public boolean onRowClick(int position) {
-        return false;
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
@@ -18,7 +19,6 @@ import flow.path.Path;
 /**
  * Created by linym on 7/22/15.
  */
-@DaggerScope(BombListPresenter.class)
 @Layout(R.layout.screen_bomb_list)
 public class BombListPath extends Path implements ScreenComponentFactory {
     private final String ap;
@@ -39,7 +39,7 @@ public class BombListPath extends Path implements ScreenComponentFactory {
                 .build();
     }
 
-    @DaggerScope(BombListPresenter.class)
+    @DaggerScope(BombListPath.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component{
         void inject(BombListView view);
@@ -47,21 +47,15 @@ public class BombListPath extends Path implements ScreenComponentFactory {
 
     @dagger.Module
     class Module {
-        @DaggerScope(BombListPresenter.class)
+        @DaggerScope(BombListPath.class)
         @Provides
         UserAp provideUserAp(Account account) {
             return account.getUserAp(ap);
         }
 
-        @DaggerScope(BombListPresenter.class)
+        @DaggerScope(BombListPath.class)
         @Provides
-        BombListPresenter providePresenter(UserAp userAp) {
-            return new BombListPresenter(userAp);
-        }
-
-        @DaggerScope(BombListPresenter.class)
-        @Provides
-        SectionedLoadMoreRecyclerAdapter provideAdapter(AvatarBinder binder, Drawable
+        SectionedLoadMoreRecyclerAdapter<Bomb> provideAdapter(AvatarBinder binder, Drawable
                 errorDrawable) {
             return new SectionedLoadMoreRecyclerAdapter(new BombRecyclerAdapter(errorDrawable,
                     binder));

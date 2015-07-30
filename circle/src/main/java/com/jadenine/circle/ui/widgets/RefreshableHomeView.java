@@ -29,7 +29,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/27/15.
  */
-public abstract class RefreshableHomeView extends LinearLayout implements HandlesBack {
+public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 

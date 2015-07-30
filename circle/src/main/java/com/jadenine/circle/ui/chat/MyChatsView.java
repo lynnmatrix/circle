@@ -23,10 +23,10 @@ public class MyChatsView extends RefreshableHomeView {
     MyChatsPresenter presenter;
 
     @Inject
-    SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> chatAdapter;
+    Activity activity;
 
     @Inject
-    Activity activity;
+    SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> chatAdapter;
 
     @Inject
     public MyChatsView(Context context, AttributeSet attrs) {
@@ -53,7 +53,7 @@ public class MyChatsView extends RefreshableHomeView {
         super.onDetachedFromWindow();
     }
 
-    public SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> getAdapter() {
+    SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> getAdapter() {
         return chatAdapter;
     }
 }
