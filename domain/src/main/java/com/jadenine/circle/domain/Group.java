@@ -63,4 +63,8 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
     public T getLatest() {
         return entities.getAt(0);
     }
+
+    public void remove(T entity) {
+        entities.remove(entity);
+    }
 }

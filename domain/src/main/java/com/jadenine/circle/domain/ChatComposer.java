@@ -10,7 +10,7 @@ import rx.Observable;
 /**
  * Created by linym on 7/27/15.
  */
-public class ChatComposer {
+class ChatComposer {
     private final DirectMessageService chatService;
 
     @Inject

@@ -7,6 +7,7 @@ import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.process.DeleteModelListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
 import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
 
@@ -158,9 +159,56 @@ public class BaseTimeline<T extends IdentifiableEntity>{
                         group(ts.getAll(), rangeDBLoaded);
                     }
                 }
+
+                clearIfTooMuch();
                 return Observable.just(getAllRanges());
             }
         }).subscribeOn(Schedulers.io());
+    }
+
+    private void clearIfTooMuch() {
+        int count = getCount();
+
+        List<T> entitiesClear = new LinkedList<>();
+        List<TimelineRangeCursor> cursorsCleared = new LinkedList<>();
+        while (needClear()) {
+            int tryClearCount = count - Constants.CAPABILITY;
+            TimelineRange<T> lastRange = getLastRange();
+
+            List<T> cleared = lastRange.clear(tryClearCount);
+            entitiesClear.addAll(cleared);
+
+            if(0 == lastRange.getCount()) {
+                rangeList.removeLast();
+                rangeList.getLast().contact(lastRange);
+                cursorsCleared.add(lastRange.cursor);
+            }
+
+            count -= cleared.size();
+        }
+
+        if (entitiesClear.size() > 0) {
+            TransactionManager.getInstance().addTransaction(new DeleteModelListTransaction<T>
+                    (ProcessModelInfo.withModels(entitiesClear)));
+
+            if (cursorsCleared.size() > 0) {
+                TransactionManager.getInstance().addTransaction(new DeleteModelListTransaction<TimelineRangeCursor>
+                        (ProcessModelInfo.withModels(cursorsCleared)));
+            }
+            rangeList.getLast().cursor.save();
+        }
+    }
+
+    private int getCount(){
+        int count = 0;
+        for(TimelineRange<T> range : rangeList) {
+            count += range.getCount();
+        }
+        return count;
+    }
+
+    private boolean needClear() {
+        return getCount() > Constants.CAPABILITY;
     }
 
     public @NotNull Observable<List<TimelineRange<T>>> loadMore() {
@@ -169,26 +217,16 @@ public class BaseTimeline<T extends IdentifiableEntity>{
             return Observable.empty();
         }
 
+        if(getCount() >= Constants.CAPABILITY) {
+            return Observable.just(getAllRanges());
+        }
+
         TimelineRange<T> rangeToLoadMore = getRangeToLoadMore();
 
         return loadMore(rangeToLoadMore);
     }
 
-    private TimelineRange<T> getRangeToLoadMore() {
-        TimelineRange<T> rangeToLoadMore = null;
-        for(TimelineRange range : rangeList) {
-            if(!range.isDBLoaded()){
-                rangeToLoadMore = range;
-                break;
-            }
-        }
-        if(null == rangeToLoadMore){
-            rangeToLoadMore = getLastRange();
-        }
-        return rangeToLoadMore;
-    }
-
-    public  @NotNull Observable<List<TimelineRange<T>>> loadMore(TimelineRange<T> range) {
+    public @NotNull Observable<List<TimelineRange<T>>> loadMore(TimelineRange<T> range) {
         final Long originalBottom = range.cursor.getBottom();
         final boolean rangeDbLoaded = range.isDBLoaded();
 
@@ -199,9 +237,8 @@ public class BaseTimeline<T extends IdentifiableEntity>{
                if (range.cursor.getBottom() > originalBottom) {
                    List<T> entities = range.getSubRange(originalBottom, range.cursor.getBottom()
                            + 1);
-                   for (T entity : entities) {
-                       range.group(entity);
-                   }
+                   group(entities, true);
+
                    if (!range.hasMore()) {
                        TimelineRange<T> previousRange = getPreviousRange(range);
                        if (null != previousRange) {
@@ -223,6 +260,20 @@ public class BaseTimeline<T extends IdentifiableEntity>{
                return Observable.just(getAllRanges());
            }
        }).subscribeOn(Schedulers.io());
+    }
+
+    private TimelineRange<T> getRangeToLoadMore() {
+        TimelineRange<T> rangeToLoadMore = null;
+        for(TimelineRange range : rangeList) {
+            if(!range.isDBLoaded()){
+                rangeToLoadMore = range;
+                break;
+            }
+        }
+        if(null == rangeToLoadMore){
+            rangeToLoadMore = getLastRange();
+        }
+        return rangeToLoadMore;
     }
 
     public boolean hasMore() {

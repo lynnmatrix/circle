@@ -19,7 +19,6 @@ import rx.functions.Func1;
  */
 public class UserAp implements Updatable<UserApEntity>{
 
-    public static final int BOMB_PAGE_COUNT = 200;
     private final UserApEntity entity;
     private final BaseTimeline<Bomb> timeline;
 
@@ -32,7 +31,7 @@ public class UserAp implements Updatable<UserApEntity>{
 
     public UserAp(UserApEntity entity) {
         this.entity = entity;
-        BombLoader loader = new BombLoader(getAP(), BOMB_PAGE_COUNT);
+        BombLoader loader = new BombLoader(getAP(), Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(loader);
 
         this.timeline = new BaseTimeline<>(getAP(), loader);

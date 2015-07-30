@@ -11,7 +11,7 @@ import rx.Observable;
 /**
  * Created by linym on 7/15/15.
  */
-public interface RangeLoader<T extends Identifiable<Long>>{
+interface RangeLoader<T extends Identifiable<Long>>{
 
     Observable<TimelineRangeResult<T>> refresh(Long top);
 

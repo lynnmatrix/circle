@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by linym on 7/23/15.
  */
-public class BombComposer {
+class BombComposer {
     private final ImageService imageService;
     private final AzureBlobUploader blobUploader;
     private final BombService bombService;

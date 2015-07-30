@@ -152,12 +152,16 @@ public class  TimelineRange<T extends Identifiable<Long>> {
      * contact two continual range.
      * @param range
      */
-    public void contact(TimelineRange<T> range) {
-        if(hasMore()) {
+    void contact(TimelineRange<T> range) {
+        if(hasMore() && range.getCount() > 0) {
             throw new IllegalStateException("Ranges which are not continuous cannot be contacted.");
         }
 
         list.addAll(range.getAll());
+        for(Group<T> group : range.getAllGroups()) {
+            groupList.put(group);
+        }
+
         cursor.contact(range.cursor);
     }
 
@@ -196,5 +200,41 @@ public class  TimelineRange<T extends Identifiable<Long>> {
 
     boolean isDBLoaded() {
         return dbLoaded.get();
+    }
+
+    /**
+     * @param tryClearCount
+     * @return entities cleared.
+     */
+    public List<T> clear(int tryClearCount) {
+        int clearCount = Math.min(tryClearCount, getCount());
+
+        ArrayList entitiesCleared = new ArrayList(clearCount);
+
+        while (clearCount > 0) {
+            T entity = list.remove(list.size() - 1);
+            entitiesCleared.add(0, entity);
+            unGroup(entity);
+            clearCount--;
+        }
+
+        cursor.setHasMore(clearCount > 0);
+        if(0 == getCount()) {
+            cursor.setBottom(null);
+            cursor.setTop(null);
+        } else {
+            cursor.setBottom(list.get(list.size() - 1).getId());
+        }
+        return entitiesCleared;
+    }
+
+    private void unGroup(T entity) {
+        Group<T> group = groupList.get(entity.getGroupId());
+        if(null != group) {
+            group.remove(entity);
+            if(0 == group.getCount()) {
+                groupList.remove(group);
+            }
+        }
     }
 }

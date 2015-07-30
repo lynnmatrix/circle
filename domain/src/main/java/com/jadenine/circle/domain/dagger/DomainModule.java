@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.BuildConfig;
+import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
@@ -30,14 +31,12 @@ import retrofit.converter.GsonConverter;
 @dagger.Module
 public class DomainModule {
 
-    public static final RestAdapter.LogLevel LOGLEVEL = BuildConfig.DEBUG ? RestAdapter.LogLevel
+    public static final RestAdapter.LogLevel LOG_LEVEL = BuildConfig.DEBUG ? RestAdapter.LogLevel
             .FULL : RestAdapter.LogLevel.NONE;
-    public static final String ENDPOINT_LOCAL = "http://192.168.9.117:8080";
-    public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
     public static final boolean FORE_AZURE = false;
 
-    public static final String ENDPOINT = BuildConfig.DEBUG && !FORE_AZURE ? ENDPOINT_LOCAL :
-            ENDPOINT_AZURE;
+    public static final String ENDPOINT = BuildConfig.DEBUG && !FORE_AZURE ? Constants.ENDPOINT_LOCAL :
+            Constants.ENDPOINT_AZURE;
 
     private final String deviceId;
 
@@ -68,7 +67,7 @@ public class DomainModule {
         }).create();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(LOGLEVEL)
+                .setLogLevel(LOG_LEVEL)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
                 .build();

@@ -90,7 +90,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
 
         recyclerView.setAdapter(sectionedBombGroupRecyclerAdapter);
 
-        sectionedBombGroupRecyclerAdapter.setLoadMoreListener(new SectionedBombGroupRecyclerAdapter.OnFooterClickListener() {
+        sectionedBombGroupRecyclerAdapter.setOnFooterClickListener(new SectionedBombGroupRecyclerAdapter.OnFooterClickListener() {
 
             @Override
             public void onFooterClicked(TimelineRange range, LoadMoreViewHolder

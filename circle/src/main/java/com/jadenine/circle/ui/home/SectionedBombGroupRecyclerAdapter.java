@@ -12,11 +12,11 @@ import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 
 /**
- * Created by linym on 7/28/15.
+ * Created by linym onFooterClickListener 7/28/15.
  */
 class SectionedBombGroupRecyclerAdapter extends
         SectionedRecyclerViewAdapter<TimelineRange<Bomb>, Group<Bomb>> {
-    private OnFooterClickListener loadMoreListener;
+    private OnFooterClickListener onFooterClickListener;
 
     public SectionedBombGroupRecyclerAdapter(BombRecyclerAdapter dataAdapter) {
         super(dataAdapter);
@@ -33,11 +33,11 @@ class SectionedBombGroupRecyclerAdapter extends
     @Override
     protected void onBindSectionFooter(RecyclerView.ViewHolder viewHolder, int position, final
                                        Section<TimelineRange<Bomb>> section) {
-        ((LoadMoreViewHolder)viewHolder).bind(section, loadMoreListener);
+        ((LoadMoreViewHolder)viewHolder).bind(section, onFooterClickListener);
     }
 
-    public void setLoadMoreListener(OnFooterClickListener listener) {
-        loadMoreListener = listener;
+    public void setOnFooterClickListener(OnFooterClickListener listener) {
+        onFooterClickListener = listener;
     }
 
     public interface OnFooterClickListener {

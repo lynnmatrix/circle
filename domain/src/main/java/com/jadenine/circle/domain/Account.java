@@ -19,7 +19,6 @@ import rx.functions.Func1;
  */
 public class Account {
     private static final int USER_AP_CAPABILITY = Integer.MAX_VALUE;
-    private static final int CHAT_PAGE_COUNT = 200;
     public static final String MY_CHATS_TIME_LINE = "my_chats";
 
     private final String deviceId;
@@ -45,7 +44,7 @@ public class Account {
         this.deviceId = deviceId;
         DaggerService.getDomainComponent().inject(this);
 
-        ChatLoader loader = new ChatLoader(deviceId, CHAT_PAGE_COUNT);
+        ChatLoader loader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(loader);
 
         this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, loader);
