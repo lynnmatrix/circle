@@ -117,6 +117,10 @@ public class Account {
         return chatTimeline.loadMore();
     }
 
+    public Observable<List<TimelineRange<DirectMessageEntity>>> loadMoreChat(TimelineRange range) {
+        return chatTimeline.loadMore(range);
+    }
+
     public Observable<DirectMessageEntity> publish(DirectMessageEntity chatMessage) {
         Observable<DirectMessageEntity> observable = bombComposer.send(chatMessage)
                 .map(new Func1<DirectMessageEntity, DirectMessageEntity>() {
@@ -133,6 +137,7 @@ public class Account {
     public List<TimelineRange<DirectMessageEntity>> getAllChats() {
         return chatTimeline.getAllRanges();
     }
+
 
     private class UserApMapperDelegate implements MapperDelegate<UserApEntity, UserAp> {
         @Override

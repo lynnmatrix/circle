@@ -9,6 +9,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.common.flow.Layout;
 
 import dagger.Provides;
@@ -60,9 +61,9 @@ public class BombListPath extends Path implements ScreenComponentFactory {
 
         @DaggerScope(BombListPresenter.class)
         @Provides
-        SectionedBombGroupRecyclerAdapter provideAdapter(AvatarBinder binder, Drawable
+        SectionedLoadMoreRecyclerAdapter provideAdapter(AvatarBinder binder, Drawable
                 errorDrawable) {
-            return new SectionedBombGroupRecyclerAdapter(new BombRecyclerAdapter(errorDrawable,
+            return new SectionedLoadMoreRecyclerAdapter(new BombRecyclerAdapter(errorDrawable,
                     binder));
         }
     }

@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerService;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 import com.jadenine.circle.utils.ToolbarColorizer;
 
@@ -21,7 +23,7 @@ public class MyChatsView extends RefreshableHomeView {
     MyChatsPresenter presenter;
 
     @Inject
-    MyChatsAdapter chatAdapter;
+    SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> chatAdapter;
 
     @Inject
     Activity activity;
@@ -51,7 +53,7 @@ public class MyChatsView extends RefreshableHomeView {
         super.onDetachedFromWindow();
     }
 
-    public MyChatsAdapter getAdapter() {
+    public SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> getAdapter() {
         return chatAdapter;
     }
 }

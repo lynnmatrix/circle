@@ -3,18 +3,17 @@ package com.jadenine.circle.ui.chat;
 import android.os.Bundle;
 
 import com.jadenine.circle.domain.Account;
-import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerScope;
+import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
@@ -44,6 +43,15 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
+        getView().getAdapter().setOnFooterClickListener(new SectionedLoadMoreRecyclerAdapter
+                .OnFooterClickListener() {
+
+            @Override
+            public void onFooterClicked(TimelineRange range, LoadMoreViewHolder
+                    loadMoreViewHolder) {
+                loadMore(range, loadMoreViewHolder);
+            }
+        });
         onRefresh();
     }
 
@@ -94,14 +102,6 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                 });
     }
 
-    private void updateChats(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
-        List<Group<DirectMessageEntity>> chatGroupList = new LinkedList<>();
-        for(TimelineRange<DirectMessageEntity> range : timelineRanges) {
-            chatGroupList.addAll(range.getAllGroups());
-        }
-        getView().getAdapter().setChatGroups(chatGroupList);
-    }
-
     @Override
     public void onLoadMore() {
         if(!loadingMoreSubscription.isUnsubscribed()) {
@@ -125,7 +125,7 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
 
                     @Override
                     public void onNext(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
-                        if(!hasView()) {
+                        if (!hasView()) {
                             return;
                         }
                         updateChats(timelineRanges);
@@ -133,14 +133,33 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                 });
     }
 
+    private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
+        loadMoreViewHolder.startLoading();
+        account.loadMoreChat(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<DirectMessageEntity>>>() {
+
+            @Override
+            public void onCompleted() {
+                loadMoreViewHolder.endLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                loadMoreViewHolder.setError();
+            }
+
+            @Override
+            public void onNext(List<TimelineRange<DirectMessageEntity>> ranges) {
+                updateChats(ranges);
+            }
+        });
+    }
+
+    private void updateChats(List<TimelineRange<DirectMessageEntity>> ranges) {
+        getView().getAdapter().setSections(ranges);
+    }
+
     @Override
     public boolean onRowClick(int position) {
-        Group<DirectMessageEntity> chat = getView().getAdapter().getChat(position);
-        DirectMessageEntity lastMessage = chat.getLatest();
-        ChatPath chatPath = new ChatPath(lastMessage.getAp(), Long.valueOf(lastMessage.getTopicId
-                ()), lastMessage.getRootUser(), lastMessage.getRootUser(), Long.valueOf
-                (lastMessage.getRootMessageId()));
-        Flow.get(getView()).set(chatPath);
-        return true;
+        return false;
     }
 }

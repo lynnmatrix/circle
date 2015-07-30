@@ -1,13 +1,10 @@
-package com.jadenine.circle.ui.home;
+package com.jadenine.circle.ui.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.widgets.LoadingView;
 
 import butterknife.ButterKnife;
@@ -16,7 +13,7 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/28/15.
  */
-class LoadMoreViewHolder extends RecyclerView.ViewHolder {
+public class LoadMoreViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.progress)
     LoadingView loadingView;
 
@@ -28,8 +25,8 @@ class LoadMoreViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    void bind(final SectionedRecyclerViewAdapter.Section<TimelineRange<Bomb>> section, final
-    SectionedBombGroupRecyclerAdapter.OnFooterClickListener listener) {
+    void bind(final SectionedRecyclerViewAdapter.Section section, final
+    SectionedLoadMoreRecyclerAdapter.OnFooterClickListener listener) {
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

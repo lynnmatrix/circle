@@ -19,7 +19,7 @@ import java.util.List;
  * Created by linym on 7/22/15.
  */
 class BombRecyclerAdapter extends SectionedRecyclerViewAdapter
-        .ItemAdapter<Group<Bomb>> {
+        .ItemAdapter<Bomb> {
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
     private final Drawable errorDrawable;
     private final AvatarBinder avatarBinder;

@@ -12,27 +12,25 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
-import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import flow.Flow;
 
 /**
  * Created by linym on 7/27/15.
  */
-class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewHolder> {
+class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMessageEntity> {
 
     private List<Group<DirectMessageEntity>> chatGroups = Collections.emptyList();
     private final AvatarBinder avatarBinder;
     private final Account account;
 
-    @Inject @DaggerScope(MyChatPath.class)
     public MyChatsAdapter(Account account, AvatarBinder avatarBinder){
         this.account = account;
         this.avatarBinder = avatarBinder;
@@ -46,8 +44,8 @@ class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewH
     }
 
     @Override
-    public void onBindViewHolder(ItemMyChatViewHolder holder, int position) {
-        holder.bind(chatGroups.get(position), account, avatarBinder);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((ItemMyChatViewHolder)holder).bind(chatGroups.get(position), account, avatarBinder);
     }
 
     @Override
@@ -62,6 +60,16 @@ class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewH
 
     public Group<DirectMessageEntity> getChat(int position) {
         return chatGroups.get(position);
+    }
+
+    @Override
+    public void setItems(List<Group<DirectMessageEntity>> items) {
+        setChatGroups(items);
+    }
+
+    @Override
+    public Group<DirectMessageEntity> getItem(int position) {
+        return getChat(position);
     }
 
     static class ItemMyChatViewHolder extends RecyclerView.ViewHolder{
@@ -82,7 +90,7 @@ class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewH
 
         public void bind(Group<DirectMessageEntity> chat, Account account, AvatarBinder
                 avatarBinder) {
-            DirectMessageEntity lastMessage = chat.getLatest();
+            final DirectMessageEntity lastMessage = chat.getLatest();
             if(null != lastMessage) {
                 avatarView.setImageResource(avatarBinder.getAvatar(lastMessage.getFrom(),
                         lastMessage.getTopicId()));
@@ -95,7 +103,18 @@ class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ItemMyChatViewH
                 }
                 apView.setText(apDes);
                 contentView.setText(lastMessage.getContent());
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChatPath chatPath = new ChatPath(lastMessage.getAp(), Long.valueOf
+                                (lastMessage.getTopicId()), lastMessage.getRootUser(), lastMessage
+                                .getRootUser(), Long.valueOf(lastMessage.getRootMessageId()));
+                        Flow.get(v).set(chatPath);
+                    }
+                });
             }
+
         }
     }
 }

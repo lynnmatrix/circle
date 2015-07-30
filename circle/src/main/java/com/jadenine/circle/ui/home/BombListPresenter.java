@@ -2,15 +2,12 @@ package com.jadenine.circle.ui.home;
 
 import android.os.Bundle;
 
-import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.composer.BombComposerPath;
+import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import flow.Flow;
@@ -94,24 +91,7 @@ class BombListPresenter extends ViewPresenter<BombListView>{
     }
 
     private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
-        List<Group<Bomb>> bombGroupList = new LinkedList<>();
-        List<SectionedRecyclerViewAdapter.Section<TimelineRange<Bomb>>> sections = new
-                ArrayList<>(ranges.size());
-        int offset = 0;
-        int sectionOffset = 0;
-        for(TimelineRange<Bomb> range: ranges) {
-            SectionedRecyclerViewAdapter.Section<TimelineRange<Bomb>> section = new
-                    SectionedRecyclerViewAdapter.Section<>(offset, range.getGroupCount(), range
-                    .hasMore(), range);
-
-            sections.add(sectionOffset++, section);
-
-            offset += range.getGroupCount();
-
-            bombGroupList.addAll(range.getAllGroups());
-        }
-
-        getView().getAdapter().setSections(sections, bombGroupList);
+        getView().getAdapter().setSections(ranges);
     }
 
     void loadMore() {

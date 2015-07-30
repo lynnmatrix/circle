@@ -22,6 +22,8 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.AutoLoadMoreListener;
+import com.jadenine.circle.ui.utils.LoadMoreViewHolder;
+import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.DividerItemDecoration;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
@@ -60,7 +62,7 @@ public class BombListView extends RelativeLayout implements HandlesBack {
     AvatarBinder avatarBinder;
 
     @Inject
-    SectionedBombGroupRecyclerAdapter sectionedBombGroupRecyclerAdapter;
+    SectionedLoadMoreRecyclerAdapter sectionedLoadMoreRecyclerAdapter;
 
     public BombListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -88,9 +90,9 @@ public class BombListView extends RelativeLayout implements HandlesBack {
             }
         });
 
-        recyclerView.setAdapter(sectionedBombGroupRecyclerAdapter);
+        recyclerView.setAdapter(sectionedLoadMoreRecyclerAdapter);
 
-        sectionedBombGroupRecyclerAdapter.setOnFooterClickListener(new SectionedBombGroupRecyclerAdapter.OnFooterClickListener() {
+        sectionedLoadMoreRecyclerAdapter.setOnFooterClickListener(new SectionedLoadMoreRecyclerAdapter.OnFooterClickListener() {
 
             @Override
             public void onFooterClicked(TimelineRange range, LoadMoreViewHolder
@@ -138,8 +140,8 @@ public class BombListView extends RelativeLayout implements HandlesBack {
         presenter.addBomb();
     }
 
-    SectionedBombGroupRecyclerAdapter getAdapter() {
-        return sectionedBombGroupRecyclerAdapter;
+    SectionedLoadMoreRecyclerAdapter getAdapter() {
+        return sectionedLoadMoreRecyclerAdapter;
     }
 
     @Override
