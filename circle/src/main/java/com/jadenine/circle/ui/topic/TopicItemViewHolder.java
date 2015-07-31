@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.detail.TopicDetailPath;
@@ -22,8 +23,14 @@ class TopicItemViewHolder extends RecyclerView.ViewHolder {
         this.topicHeader = topicHeader;
     }
 
-    public void bind(final Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
-        topicHeader.bind(rootBomb, commentCount, errorDrawable, avatarBinder);
+    public void bind(Group<Bomb> topic, Drawable
+            errorDrawable,
+                     AvatarBinder
+            avatarBinder) {
+        final Bomb rootBomb = topic.getRoot();
+        topicHeader.bind(rootBomb, topic.getCount() - 1, errorDrawable, avatarBinder);
+
+        topicHeader.bindTopicWithComments(topic, avatarBinder);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

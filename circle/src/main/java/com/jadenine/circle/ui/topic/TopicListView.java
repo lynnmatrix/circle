@@ -18,7 +18,6 @@ import butterknife.OnClick;
 /**
  * Created by linym on 7/22/15.
  */
-@DaggerScope(TopicListPresenter.class)
 public class TopicListView extends RefreshableHomeView {
     @Inject
     TopicListPresenter presenter;

@@ -7,4 +7,5 @@
     <dimen name="load_more_circle_small">7dp</dimen>
     <dimen name="load_more_circle_thickness">2dp</dimen>
     <dimen name="load_more_size">32dp</dimen>
+    <dimen name="topic_comment_text_size">16sp</dimen>
 </resources>

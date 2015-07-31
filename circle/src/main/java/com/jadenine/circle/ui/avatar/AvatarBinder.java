@@ -43,6 +43,17 @@ public class AvatarBinder {
         return builder;
     }
 
+    public SpannableStringBuilder getAvatarSpan(Context context, int avatarResId, float textSize) {
+        Drawable avatarDrawable = context.getResources().getDrawable(avatarResId);
+        avatarDrawable.setBounds(0, 0, (int) textSize, (int) textSize);
+
+        ImageSpan toAvatarSpan = new ImageSpan(avatarDrawable);
+        SpannableStringBuilder builder = new SpannableStringBuilder(" ");
+        builder.setSpan(toAvatarSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return builder;
+    }
+
     private void prepare(Context context) {
         String prefix = "ic_avatar_";
         String defType = "drawable";

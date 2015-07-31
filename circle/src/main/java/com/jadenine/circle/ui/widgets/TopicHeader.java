@@ -3,17 +3,26 @@ package com.jadenine.circle.ui.widgets;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.TimeFormatUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -24,6 +33,7 @@ import butterknife.OnClick;
  */
 public class TopicHeader extends LinearLayout {
 
+    public static final int COMMENTS_COUNT_IN_HEADER = 5;
     @InjectView(R.id.avatar)
     ImageView avatarView;
 
@@ -38,6 +48,9 @@ public class TopicHeader extends LinearLayout {
 
     @InjectView(R.id.message_count)
     TextView messageCountView;
+
+    @InjectView((R.id.topic_header_comments))
+    LinearLayout commentsView;
 
     private OnAvatarClickListener avatarClickListener;
 
@@ -75,6 +88,72 @@ public class TopicHeader extends LinearLayout {
         } else {
             imageView.setVisibility(View.GONE);
         }
+        commentsView.setVisibility(GONE);
+        commentsView.removeAllViews();
+    }
+
+    public void bindTopicWithComments(Group<Bomb> topic, AvatarBinder avatarBinder) {
+        List<Bomb> bombs = topic.getEntities();
+
+        boolean hasComments = bombs.size() > 1;
+        commentsView.setVisibility(hasComments ? VISIBLE : GONE);
+        if(hasComments) {
+            Collections.reverse(bombs);
+            int textSize = getContext().getResources().getDimensionPixelSize(R.dimen
+                    .topic_comment_text_size);
+
+            boolean needCollapse = bombs.size() >= COMMENTS_COUNT_IN_HEADER + 2;
+            List<CharSequence> lines = new ArrayList<>(COMMENTS_COUNT_IN_HEADER);
+            if(needCollapse) {
+                CharSequence comment1 = buildComment(avatarBinder, bombs.get(1), textSize);
+                lines.add(comment1);
+                CharSequence comment2 = buildComment(avatarBinder, bombs.get(2), textSize);
+                lines.add(comment2);
+
+                lines.add("    ...");
+
+                CharSequence commentSecondLast = buildComment(avatarBinder, bombs.get(bombs.size
+                        () - 2), textSize);
+                lines.add(commentSecondLast);
+                CharSequence commentLast = buildComment(avatarBinder, bombs.get(bombs.size() - 1)
+                        , textSize);
+                lines.add(commentLast);
+            } else {
+                for (Bomb bomb : bombs.subList(1, bombs.size())) {
+                    lines.add(buildComment(avatarBinder, bomb, textSize));
+                }
+            }
+
+            for(CharSequence line : lines) {
+                TextView textView = new TextView(getContext());
+                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams
+                        .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                textView.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+                textView.setText(line);
+                textView.setSingleLine(true);
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+                commentsView.addView(textView);
+            }
+        }
+    }
+
+    private CharSequence buildComment(AvatarBinder avatarBinder, Bomb bomb, float textSize) {
+        int fromResId = avatarBinder.getAvatar(bomb.getFrom(), bomb.getRootMessageId());
+        CharSequence fromAvatar = avatarBinder.getAvatarSpan(getContext(), fromResId, textSize);
+
+        SpannableStringBuilder commentBuilder = new SpannableStringBuilder();
+        commentBuilder.append(fromAvatar);
+        if(!TextUtils.isEmpty(bomb.getTo())) {
+            int toResId = avatarBinder.getAvatar(bomb.getTo(), bomb.getRootMessageId());
+            CharSequence toAvatar = avatarBinder.getAvatarSpan(getContext(), toResId, textSize);
+
+            commentBuilder.append("@");
+            commentBuilder.append(toAvatar);
+        }
+        commentBuilder.append(": ");
+        commentBuilder.append(bomb.getContent());
+        return commentBuilder;
     }
 
     private String getFormattedTime(long timestamp) {

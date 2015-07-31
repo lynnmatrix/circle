@@ -41,8 +41,7 @@ class TopicListAdapter extends SectionedRecyclerViewAdapter
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Group<Bomb> bombGroup = bombGroups.get(position);
         //TODO handle invisible group
-        ((TopicItemViewHolder)holder).bind(bombGroup.getRoot(), bombGroup.getCount() - 1,
-                errorDrawable, avatarBinder);
+        ((TopicItemViewHolder)holder).bind(bombGroup, errorDrawable, avatarBinder);
     }
 
     @Override
