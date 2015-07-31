@@ -13,7 +13,7 @@ public class AzureBlobUploader {
     // upload file to azure blob storage
     public Boolean upload(String sasUrl, InputStream inputStream, String mimeType) {
         try {
-            if(null == mimeType) {
+            if (null == mimeType) {
                 mimeType = "application/octet-stream";
             }
             int bytesRead;
@@ -49,5 +49,6 @@ public class AzureBlobUploader {
         }
         return false;
     }
+
 }
 

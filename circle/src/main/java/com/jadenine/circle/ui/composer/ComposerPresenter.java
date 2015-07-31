@@ -9,12 +9,17 @@ import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
+import com.jadenine.circle.utils.ImageCompressor;
+
+import java.io.FileNotFoundException;
 
 import mortar.ViewPresenter;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
+import timber.log.Timber;
 
 /**
  * Created by linym on 6/9/15.
@@ -74,6 +79,12 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
 
             imageUri = data.getData();
             mimeType = contentResolver.getType(imageUri);
+            try {
+                imageUri = ImageCompressor.compress(getView().getContext(), imageUri, Constants
+                        .COMPRESS_DST_WIDTH, Constants.COMPRESS_DST_HEIGHT);
+            } catch (FileNotFoundException e) {
+                Timber.e(e, "Fail to compress image.");
+            }
 
             getView().imageView.setImageURI(imageUri);
             getView().imageView.setVisibility(View.VISIBLE);

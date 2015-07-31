@@ -9,4 +9,6 @@ public class Constants {
 
     public static final String ENDPOINT_LOCAL = "http://192.168.9.117:8080";
     public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
+    public static final int COMPRESS_DST_WIDTH = 1024;
+    public static final int COMPRESS_DST_HEIGHT = 512;
 }
