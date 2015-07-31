@@ -42,7 +42,6 @@ public class TopicListView extends RefreshableHomeView {
         presenter.takeView(this);
 
         setAdapter(bombAdapter);
-
     }
 
     @Override

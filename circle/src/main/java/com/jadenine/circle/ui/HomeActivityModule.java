@@ -23,7 +23,6 @@ class HomeActivityModule {
         this.homeActivity = homeActivity;
     }
 
-    @DaggerScope(HomeActivity.class)
     @Provides
     Activity provideActivity(){
         return homeActivity;
