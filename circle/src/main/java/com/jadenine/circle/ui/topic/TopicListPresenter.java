@@ -61,6 +61,8 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
             }
         });
 
+        userAp.setHasUnread(false);
+
         getView().getToolbar().setTitle(userAp.getSSID());
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activity);
 

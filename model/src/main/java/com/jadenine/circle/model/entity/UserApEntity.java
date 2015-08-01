@@ -18,6 +18,9 @@ public class UserApEntity extends CircleBaseModel {
 
     String ssid;
 
+    @GsonIgnore
+    private boolean hasUnread;
+
     UserApEntity(){}
 
     public UserApEntity(String user, String ap, String ssid) {
@@ -47,4 +50,11 @@ public class UserApEntity extends CircleBaseModel {
         return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
     }
 
+    public void setHasUnread(boolean hasUnread) {
+        this.hasUnread = hasUnread;
+    }
+
+    public boolean getHasUnread() {
+        return hasUnread;
+    }
 }

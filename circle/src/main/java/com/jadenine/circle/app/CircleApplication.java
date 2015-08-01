@@ -3,15 +3,19 @@ package com.jadenine.circle.app;
 import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
-import android.os.Handler;
-import android.widget.Toast;
+import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.domain.dagger.DaggerDomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainModule;
+import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
@@ -36,12 +40,16 @@ import timber.log.Timber;
 @DaggerScope(CircleApplication.class)
 public class CircleApplication extends Application {
     public static final String ROOT_SCOPE_NAME = "Root";
+    public static final String CUSTOM_NOTIFICATION_TYPE_TOPIC = "topic";
     private MortarScope rootScope;
 
     private RefWatcher refWatcher;
 
     @Inject
     Account account;
+
+    @Inject
+    Gson gson;
 
     @Override
     public void onCreate() {
@@ -76,27 +84,44 @@ public class CircleApplication extends Application {
         UmengMessageHandler messageHandler = new UmengMessageHandler(){
             @Override
             public Notification getNotification(Context context, UMessage uMessage) {
-                Timber.d("PUSH", uMessage.custom);
-                Toast.makeText(context, uMessage.custom, Toast.LENGTH_LONG).show();
                 uMessage.title = getString(R.string.notification_title_new_topic);
+
+                Timber.tag("PUSH");
+                Timber.i("getNotification " + uMessage.custom);
+
+                if(!TextUtils.isEmpty(uMessage.custom)) {
+                    try {
+                        CustomNotification customNotification = gson.fromJson(uMessage.custom, CustomNotification.class);
+
+                        if (CUSTOM_NOTIFICATION_TYPE_TOPIC.equalsIgnoreCase(customNotification.type)) {
+                            Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
+                            UserAp userAp = account.getUserAp(bomb.getAp());
+                            if(null != userAp) {
+                                userAp.setHasUnread(true);
+                            }
+                        } else if("chat".equalsIgnoreCase(customNotification.type)) {
+                            DirectMessageEntity chatMessage = gson.fromJson(customNotification
+                                    .data, DirectMessageEntity.class);
+                            //TODO
+//                            account.setHasUnreadChat();
+                        }
+                    } catch (JsonSyntaxException e) {
+                        Timber.e(e, uMessage.custom);
+                    }
+                }
+
                 return super.getNotification(context, uMessage);
             }
 
             @Override
             public void dealWithCustomMessage(final Context context, final UMessage msg) {
-                new Handler(getMainLooper()).post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Timber.d("PUSH", msg.custom);
-                        Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
-                    }
-                });
+                Timber.tag("PUSH");
+                Timber.i("dealWithCustomMessage " + msg.custom);
             }
         };
 
         PushAgent pushAgent = PushAgent.getInstance(this);
-        pushAgent.setNotificaitonOnForeground(false);
+        pushAgent.setNotificaitonOnForeground(true);
         pushAgent.setMessageHandler(messageHandler);
     }
 
@@ -143,5 +168,10 @@ public class CircleApplication extends Application {
             return new AvatarBinder(appContext);
         }
 
+    }
+
+    private static class CustomNotification {
+        public String type;
+        public String data;
     }
 }

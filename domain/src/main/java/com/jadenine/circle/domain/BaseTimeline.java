@@ -300,4 +300,15 @@ public class BaseTimeline<T extends IdentifiableEntity>{
         //TODO
     }
 
+    public int getUnreadGroupCount() {
+        int count = 0;
+        for(TimelineRange<T> range : getAllRanges()) {
+            for(Group<T> group : range.getAllGroups()) {
+                if(!group.getRead() && null != group.getRoot()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 }

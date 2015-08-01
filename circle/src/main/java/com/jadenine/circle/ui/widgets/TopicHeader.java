@@ -46,6 +46,9 @@ public class TopicHeader extends LinearLayout {
     @InjectView(R.id.content_image)
     ImageView imageView;
 
+    @InjectView(R.id.comment_flag)
+    ImageView commentFlagView;
+
     @InjectView(R.id.message_count)
     TextView messageCountView;
 
@@ -90,6 +93,7 @@ public class TopicHeader extends LinearLayout {
         }
         commentsView.setVisibility(GONE);
         commentsView.removeAllViews();
+        commentFlagView.setEnabled(false);
     }
 
     public void bindTopicWithComments(Group<Bomb> topic, AvatarBinder avatarBinder) {
@@ -98,6 +102,10 @@ public class TopicHeader extends LinearLayout {
         boolean hasComments = bombs.size() > 1;
         commentsView.setVisibility(hasComments ? VISIBLE : GONE);
         if(hasComments) {
+
+            if(topic.getUnreadCount() > 0) {
+                commentFlagView.setEnabled(true);
+            }
             Collections.reverse(bombs);
             int textSize = getContext().getResources().getDimensionPixelSize(R.dimen
                     .topic_comment_text_size);

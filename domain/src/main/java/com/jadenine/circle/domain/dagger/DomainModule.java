@@ -52,8 +52,8 @@ public class DomainModule {
 
     @Provides
     @Singleton
-    public RestAdapter provideRestAdapter(){
-        Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+    public Gson provideGson(){
+        return  new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
                 return f.getDeclaredClass().equals(ModelAdapter.class) || null != f.getAnnotation
@@ -65,6 +65,11 @@ public class DomainModule {
                 return false;
             }
         }).create();
+    }
+
+    @Provides
+    @Singleton
+    public RestAdapter provideRestAdapter(Gson gson){
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(LOG_LEVEL)
@@ -73,7 +78,6 @@ public class DomainModule {
                 .build();
         return restAdapter;
     }
-
 
     @Provides
     @Singleton

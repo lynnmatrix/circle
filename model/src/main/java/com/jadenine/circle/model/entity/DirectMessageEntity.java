@@ -25,6 +25,8 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     String to;
     String content;
 
+    boolean read;
+
     DirectMessageEntity(){}
 
     public DirectMessageEntity(@NonNull String ap, @NonNull String topicId, @NonNull String from, @NonNull String to) {
@@ -49,20 +51,20 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     public String getRootMessageId() {
         return rootMessageId;
     }
+
     public void setRootMessageId(String rootMessageId) {
         this.rootMessageId = rootMessageId;
     }
-
     public String getRootUser() {
         return rootUser;
     }
+
     public void setRootUser(String rootUser) {
         this.rootUser = rootUser;
     }
     public String getTo() {
         return to;
     }
-
     public String getFrom() {
         return from;
     }
@@ -70,8 +72,19 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     public String getContent() {
         return content;
     }
+
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public boolean getRead() {
+        return read;
+    }
+
+    @Override
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     @NonNull

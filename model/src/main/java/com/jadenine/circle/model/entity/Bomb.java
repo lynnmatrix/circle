@@ -27,6 +27,8 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
 
     String images;
 
+    boolean read = false;
+
     Bomb(){}
 
     public Bomb(@NotNull String ap, @NonNull String from) {
@@ -94,6 +96,16 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
         this.images = images;
     }
 
+    @Override
+    public boolean getRead() {
+        return read;
+    }
+
+    @Override
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
     @NonNull
     @Override
     public Long getId() {
@@ -105,4 +117,6 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     public Long getGroupId() {
         return Long.valueOf(getRootMessageId());
     }
+
+
 }

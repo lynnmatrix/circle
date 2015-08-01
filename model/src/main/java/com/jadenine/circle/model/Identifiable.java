@@ -8,4 +8,7 @@ import android.support.annotation.NonNull;
 public interface Identifiable<K> {
     @NonNull K getId();
     @NonNull K getGroupId();
+
+    boolean getRead();
+    void setRead(boolean read);
 }

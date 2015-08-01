@@ -36,6 +36,7 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
         DaggerService.getDomainComponent().inject(loader);
 
         this.timeline = new BaseTimeline<>(getAP(), loader);
+        DaggerService.getDomainComponent().inject(this);
     }
 
     public UserApEntity getEntity() {
@@ -110,5 +111,17 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
 
     public boolean hasMore() {
         return timeline.hasMore();
+    }
+
+    public boolean hasUnread() {
+        return getEntity().getHasUnread();
+    }
+
+    public void setHasUnread(boolean hasUnread){
+        if(hasUnread == hasUnread()) {
+            return;
+        }
+        getEntity().setHasUnread(hasUnread);
+        getEntity().update();
     }
 }

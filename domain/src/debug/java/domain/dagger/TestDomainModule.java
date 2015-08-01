@@ -1,5 +1,6 @@
 package domain.dagger;
 
+import com.google.gson.Gson;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
@@ -79,6 +80,12 @@ public class TestDomainModule {
     @Singleton
     Account provideAccount() {
         return new Account(deviceId);
+    }
+
+    @Provides
+    @Singleton
+    Gson provideGson() {
+        return new Gson();
     }
 
     @Provides

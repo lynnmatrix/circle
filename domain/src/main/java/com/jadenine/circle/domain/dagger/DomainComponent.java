@@ -1,5 +1,6 @@
 package com.jadenine.circle.domain.dagger;
 
+import com.google.gson.Gson;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.ApSource;
 import com.jadenine.circle.domain.BombLoader;
@@ -19,5 +20,7 @@ public interface DomainComponent {
     void inject(ChatLoader loader);
 
     Account getAccount();
+
+    Gson gson();
 
 }

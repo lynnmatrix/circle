@@ -36,6 +36,18 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
         return groupId;
     }
 
+    @Override
+    public boolean getRead() {
+        return getUnreadCount() <= 0;
+    }
+
+    @Override
+    public void setRead(boolean read) {
+        for(T entity: getEntities()) {
+            entity.setRead(read);
+        }
+    }
+
     public void addEntity(T entity) {
         entities.put(entity);
     }
@@ -66,5 +78,13 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
 
     public void remove(T entity) {
         entities.remove(entity);
+    }
+
+    public int getUnreadCount(){
+        int count = 0;
+        for(T entity : getEntities()) {
+            count += entity.getRead()? 0: 1;
+        }
+        return count;
     }
 }
