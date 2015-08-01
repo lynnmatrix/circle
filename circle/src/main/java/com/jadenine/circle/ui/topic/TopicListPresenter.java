@@ -117,7 +117,7 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         if(!loadingMoreSubscription.isUnsubscribed() || !userAp.hasMore()) {
             return;
         }
-        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMoreBomb()
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMore()
                 .observeOn(AndroidSchedulers.mainThread());
 
         loadingMoreSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
@@ -154,7 +154,7 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
 
     private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
         loadMoreViewHolder.startLoading();
-        userAp.loadMoreBomb(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+        userAp.loadMore(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
 
             @Override
             public void onCompleted() {

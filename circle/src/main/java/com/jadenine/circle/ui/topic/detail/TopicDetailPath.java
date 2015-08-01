@@ -53,7 +53,7 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
         @Provides
         @DaggerScope(TopicDetailPresenter.class)
         Group<Bomb> provideBombGroup(UserAp userAp) {
-            return userAp.getBombGroup(groupId);
+            return userAp.getTopic(groupId);
         }
     }
 }

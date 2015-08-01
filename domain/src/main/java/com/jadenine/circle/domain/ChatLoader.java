@@ -1,5 +1,6 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
@@ -27,6 +28,7 @@ public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     public ChatLoader(String account, int pageCount) {
         this.account = account;
         this.pageCount = pageCount;
+        DaggerService.getDomainComponent().inject(this);
     }
 
     @Override

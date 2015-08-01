@@ -17,7 +17,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 6/3/15.
  */
-public class UserAp implements Updatable<UserApEntity>{
+public class UserAp implements ApSource.Updatable<UserApEntity> {
 
     private final UserApEntity entity;
     private final BaseTimeline<Bomb> timeline;
@@ -78,11 +78,11 @@ public class UserAp implements Updatable<UserApEntity>{
         return timeline.getAllRanges();
     }
 
-    public Observable<List<TimelineRange<Bomb>>> loadMoreBomb() {
+    public Observable<List<TimelineRange<Bomb>>> loadMore() {
         return timeline.loadMore();
     }
 
-    public Observable<List<TimelineRange<Bomb>>> loadMoreBomb(TimelineRange range) {
+    public Observable<List<TimelineRange<Bomb>>> loadMore(TimelineRange range) {
         return timeline.loadMore(range);
     }
 
@@ -103,7 +103,7 @@ public class UserAp implements Updatable<UserApEntity>{
         return bombComposer.uploadImage(inputStream, mimeType);
     }
 
-    public Group<Bomb> getBombGroup(Long groupId) {
+    public Group<Bomb> getTopic(Long groupId) {
         return timeline.getRange(groupId).getGroup(groupId);
     }
 

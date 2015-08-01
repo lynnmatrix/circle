@@ -13,9 +13,9 @@ import java.util.List;
 public class DomainUtils {
 
     @NonNull
-    public static <E> List<E> getEntities(List<? extends Updatable<E>> domainModels) {
+    public static <E> List<E> getEntities(List<? extends ApSource.Updatable<E>> domainModels) {
         List<E> entities = new ArrayList<>(domainModels.size());
-        for(Updatable<E> topic : domainModels) {
+        for(ApSource.Updatable<E> topic : domainModels) {
             entities.add(topic.getEntity());
         }
         return entities;
