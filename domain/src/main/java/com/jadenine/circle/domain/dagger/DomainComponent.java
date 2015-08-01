@@ -10,6 +10,7 @@ import com.jadenine.circle.domain.UserAp;
  * Created by linym on 7/3/15.
  */
 public interface DomainComponent {
+    void inject(Account account);
     void inject(ApSource apSource);
     void inject(UserAp userAp);
 

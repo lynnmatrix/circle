@@ -31,6 +31,7 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
 
     public UserAp(UserApEntity entity) {
         this.entity = entity;
+        DaggerService.getDomainComponent().inject(this);
         BombLoader loader = new BombLoader(getAP(), Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(loader);
 

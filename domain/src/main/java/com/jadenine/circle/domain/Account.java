@@ -1,5 +1,6 @@
 package com.jadenine.circle.domain;
 
+import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class Account {
 
     public Account(String deviceId) {
         this.deviceId = deviceId;
+
+        DaggerService.getDomainComponent().inject(this);
 
         ChatLoader loader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
 
