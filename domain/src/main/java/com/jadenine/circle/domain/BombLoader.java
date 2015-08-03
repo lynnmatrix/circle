@@ -2,10 +2,13 @@ package com.jadenine.circle.domain;
 
 import com.jadenine.circle.model.db.BombDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
+import com.jadenine.circle.model.db.TimelineDBService;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.rest.BombService;
 import com.jadenine.circle.model.rest.TimelineRangeResult;
+import com.jadenine.circle.model.state.TimelineEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
+import com.jadenine.circle.model.state.TimelineType;
 
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class BombLoader implements RangeLoader<Bomb> {
     BombDBService dbService;
 
     @Inject
+    TimelineDBService timelineDBService;
+
+    @Inject
     TimelineCursorDBService cursorDBService;
 
     public BombLoader(String ap, int pageCount){
@@ -41,6 +47,11 @@ public class BombLoader implements RangeLoader<Bomb> {
     @Override
     public Observable<TimelineRangeResult<Bomb>> loadMore(Long bottom) {
         return restService.list(ap, pageCount, null, bottom);
+    }
+
+    @Override
+    public Observable<TimelineEntity> loadTimeline(String timeline, TimelineType timelineType) {
+        return timelineDBService.load(timeline, timelineType);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.os.Build;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.model.state.TimelineType;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class BaseTimelineTest {
 
         ChatLoader loader = new ChatLoader(DEVICE_ID, 2);
         DaggerService.getDomainComponent().inject(loader);
-        timeline = new BaseTimeline("TEST", loader);
+        timeline = new BaseTimeline("TEST", TimelineType.TOPIC, loader);
     }
 
     @Test

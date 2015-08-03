@@ -24,6 +24,7 @@ public class TimelineCursorDBService {
 
                 List<TimelineRangeCursor> topicEntities = where.orderBy(true,
                         TimelineRangeCursor$Table.TOP).queryList();
+
                 if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(topicEntities);
                     subscriber.onCompleted();

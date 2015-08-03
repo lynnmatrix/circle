@@ -3,6 +3,7 @@ package com.jadenine.circle.model.entity;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -20,14 +21,16 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     String rootMessageId;
     String rootUser;
 
+    @Column(name = "fromUser") // 'from' is sql keyword
     String from;
+    @Column(name = "toUser") // 'to' is sql keyword
     String to;
 
     String content;
 
     String images;
 
-    boolean read = false;
+    boolean unread = true;
 
     Bomb(){}
 
@@ -97,13 +100,13 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     }
 
     @Override
-    public boolean getRead() {
-        return read;
+    public boolean getUnread() {
+        return unread;
     }
 
     @Override
-    public void setRead(boolean read) {
-        this.read = read;
+    public void setUnread(boolean unread) {
+        this.unread = unread;
     }
 
     @NonNull

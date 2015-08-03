@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.UserApEntity;
+import com.jadenine.circle.model.state.TimelineType;
 
 import java.io.InputStream;
 import java.util.List;
@@ -35,7 +36,7 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
         BombLoader loader = new BombLoader(getAP(), Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(loader);
 
-        this.timeline = new BaseTimeline<>(getAP(), loader);
+        this.timeline = new BaseTimeline<>(getAP(), TimelineType.TOPIC, loader);
     }
 
     public UserApEntity getEntity() {
@@ -113,14 +114,10 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
     }
 
     public boolean hasUnread() {
-        return getEntity().getHasUnread();
+        return timeline.getHasUnread();
     }
 
     public void setHasUnread(boolean hasUnread){
-        if(hasUnread == hasUnread()) {
-            return;
-        }
-        getEntity().setHasUnread(hasUnread);
-        getEntity().update();
+        timeline.setHasUnread(hasUnread);
     }
 }

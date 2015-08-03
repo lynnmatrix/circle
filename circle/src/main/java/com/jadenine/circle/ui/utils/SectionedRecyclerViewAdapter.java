@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.model.Identifiable;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by linym on 7/28/15.
  */
-public abstract class SectionedRecyclerViewAdapter<T extends Identifiable<Long>> extends
+public abstract class SectionedRecyclerViewAdapter<T extends IdentifiableEntity> extends
         RecyclerView.Adapter {
 
     private static final int TYPE_SECTION_HEADER = 0;
@@ -187,7 +187,7 @@ public abstract class SectionedRecyclerViewAdapter<T extends Identifiable<Long>>
         return null != sections.get(position);
     }
 
-    public static class Section<S extends Identifiable<Long>> {
+    public static class Section<S extends IdentifiableEntity> {
         int firstPosition;
         int count;
         int sectionedPosition;
@@ -214,7 +214,7 @@ public abstract class SectionedRecyclerViewAdapter<T extends Identifiable<Long>>
         }
     }
 
-    public static abstract class ItemAdapter<E extends Identifiable<Long>> extends
+    public static abstract class ItemAdapter<E extends IdentifiableEntity> extends
             RecyclerView.Adapter{
         public abstract void setItems(List<Group<E>> items);
         public abstract Group<E> getItem(int position);

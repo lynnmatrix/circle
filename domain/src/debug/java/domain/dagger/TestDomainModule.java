@@ -6,6 +6,7 @@ import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
+import com.jadenine.circle.model.db.TimelineDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.Image;
 import com.jadenine.circle.model.entity.UserApEntity;
@@ -116,15 +117,15 @@ public class TestDomainModule {
     @Singleton
     DirectMessageService provideChatService() {
         DirectMessageService mockService = mock(DirectMessageService.class);
-        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers
-                .isNull(Long.class), Matchers.isNull(Long.class)))
-                .thenReturn(Observable.just(new TimelineRangeResult<>(directMessageList.subList(0, 2),
-                        true, "8")));
+        when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers.isNull(Long.class),
+                Matchers.isNull(Long.class)))
+                .thenReturn(Observable.just(new TimelineRangeResult<>(directMessageList.subList
+                        (0, 2), true, "8")));
 
         when(mockService.listMessages(Matchers.anyString(), eq(2), Matchers.isNull(Long.class),
                 eq(7l)))
-                .thenReturn(Observable.just(new TimelineRangeResult<>(directMessageList.subList(2, 4)
-                        , false, null)));
+                .thenReturn(Observable.just(new TimelineRangeResult<>(directMessageList.subList
+                        (2, 4), false, null)));
 
         return mockService;
     }
@@ -170,6 +171,14 @@ public class TestDomainModule {
         return mock(DirectMessageDBService.class);
     }
 
+
+    @Provides
+    @Singleton
+    TimelineDBService provideTimelineDBService() {
+        return mock(TimelineDBService.class);
+    }
+
+
     @Provides
     @Singleton
     TimelineCursorDBService provideTimelineCursorDBService() {
@@ -181,5 +190,6 @@ public class TestDomainModule {
     BombDBService provideBombDBService() {
         return mock(BombDBService.class);
     }
+
 
 }

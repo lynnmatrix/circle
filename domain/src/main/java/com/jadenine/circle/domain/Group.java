@@ -3,6 +3,10 @@ package com.jadenine.circle.domain;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.model.Identifiable;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
+import com.raizlabs.android.dbflow.runtime.transaction.process.UpdateModelListTransaction;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,7 +14,7 @@ import java.util.List;
 /**
  * Created by linym on 7/17/15.
  */
-public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
+public class Group<T extends IdentifiableEntity> implements Identifiable<Long>{
     private final Long groupId;
     private final SortedCollection<Long, T> entities;
 
@@ -37,15 +41,18 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
     }
 
     @Override
-    public boolean getRead() {
-        return getUnreadCount() <= 0;
+    public boolean getUnread() {
+        return getUnreadCount() > 0;
     }
 
     @Override
-    public void setRead(boolean read) {
+    public void setUnread(boolean unread) {
         for(T entity: getEntities()) {
-            entity.setRead(read);
+            entity.setUnread(unread);
         }
+
+        TransactionManager.getInstance().addTransaction(new UpdateModelListTransaction
+                (ProcessModelInfo.withModels(getEntities())));
     }
 
     public void addEntity(T entity) {
@@ -83,7 +90,7 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
     private int getUnreadCount(){
         int count = 0;
         for(T entity : getEntities()) {
-            count += entity.getRead()? 0: 1;
+            count += entity.getUnread()? 1: 0;
         }
         return count;
     }

@@ -3,10 +3,13 @@ package com.jadenine.circle.domain;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
+import com.jadenine.circle.model.db.TimelineDBService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.TimelineRangeResult;
+import com.jadenine.circle.model.state.TimelineEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
+import com.jadenine.circle.model.state.TimelineType;
 
 import java.util.List;
 
@@ -24,6 +27,8 @@ public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     DirectMessageService messageService;
     @Inject DirectMessageDBService messageDBService;
     @Inject TimelineCursorDBService cursorDBService;
+    @Inject
+    TimelineDBService timelineDBService;
 
     public ChatLoader(String account, int pageCount) {
         this.account = account;
@@ -39,6 +44,11 @@ public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     @Override
     public Observable<TimelineRangeResult<DirectMessageEntity>> loadMore(Long bottom) {
         return messageService.listMessages(account, pageCount, null, bottom);
+    }
+
+    @Override
+    public Observable<TimelineEntity> loadTimeline(String timeline, TimelineType timelineType) {
+        return timelineDBService.load(timeline, timelineType);
     }
 
     @Override

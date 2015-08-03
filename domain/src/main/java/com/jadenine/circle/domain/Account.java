@@ -2,6 +2,7 @@ package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.model.state.TimelineType;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class Account {
 
         ChatLoader loader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
 
-        this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, loader);
+        this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, TimelineType.CHAT, loader);
         this.apSource = new ApSource(deviceId);
     }
 
@@ -121,13 +122,10 @@ public class Account {
     }
 
     public void setHasUnreadChat(boolean hasUnread) {
-        if(hasUnread == hasUnreadChat()) {
-            return;
-        }
-        //TODO
+        chatTimeline.setHasUnread(hasUnread);
     }
 
     public boolean hasUnreadChat() {
-        return false;
+        return chatTimeline.getHasUnread();
     }
 }

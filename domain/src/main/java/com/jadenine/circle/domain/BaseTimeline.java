@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.jadenine.circle.model.entity.IdentifiableEntity;
+import com.jadenine.circle.model.state.TimelineEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
+import com.jadenine.circle.model.state.TimelineType;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.process.DeleteModelListTransaction;
@@ -34,13 +36,13 @@ public class BaseTimeline<T extends IdentifiableEntity>{
     private final LinkedList<TimelineRange<T>> rangeList = new LinkedList<>();
 
     private final RangeLoader<T> loader;
-    private final String timeline;
     private AtomicBoolean cursorDBLoaded = new AtomicBoolean(false);
+    private final TimelineEntity entity;
 
-    public BaseTimeline(String timeline, RangeLoader<T> loader) {
+    public BaseTimeline(String timeline, TimelineType type, RangeLoader<T> loader) {
         Preconditions.checkNotNull(loader, "Null loader for timeline.");
-        this.timeline = timeline;
         this.loader = loader;
+        this.entity = new TimelineEntity(timeline, type);
     }
 
     private int getRangeCount() {
@@ -109,21 +111,31 @@ public class BaseTimeline<T extends IdentifiableEntity>{
     }
 
     protected String getTimelineId() {
-        return this.timeline;
+        return entity.getId();
     }
 
     public @NotNull Observable<List<TimelineRange<T>>> refresh() {
-        if(!cursorDBLoaded.get()) {
-            return loader.loadTimelineRangeCursors(getTimelineId()).flatMap(new Func1<List<TimelineRangeCursor>, Observable<List<TimelineRange<T>>>>() {
+        if (!cursorDBLoaded.get()) {
+            return loader.loadTimeline(getTimelineId(), entity.getType()).flatMap(new Func1<TimelineEntity, Observable<List<TimelineRange<T>>>>() {
+
                 @Override
-                public Observable<List<TimelineRange<T>>> call(List<TimelineRangeCursor> timelineRangeCursors) {
-                    if(rangeList.isEmpty()) {
-                        for(TimelineRangeCursor cursor : timelineRangeCursors) {
-                            rangeList.add(new TimelineRange<>(cursor, loader));
-                        }
+                public Observable<List<TimelineRange<T>>> call(TimelineEntity timelineEntity) {
+                    if(null != timelineEntity) {
+                        BaseTimeline.this.entity.merge(timelineEntity);
                     }
-                    cursorDBLoaded.set(true);
-                    return innerRefresh();
+                    return loader.loadTimelineRangeCursors(getTimelineId()).flatMap(new Func1<List<TimelineRangeCursor>, Observable<List<TimelineRange<T>>>>() {
+                        @Override
+                        public Observable<List<TimelineRange<T>>> call(List<TimelineRangeCursor>
+                                                                               timelineRangeCursors) {
+                            if (rangeList.isEmpty()) {
+                                for (TimelineRangeCursor cursor : timelineRangeCursors) {
+                                    rangeList.add(new TimelineRange<>(cursor, loader));
+                                }
+                            }
+                            cursorDBLoaded.set(true);
+                            return innerRefresh();
+                        }
+                    });
                 }
             }).subscribeOn(Schedulers.io());
         } else {
@@ -304,11 +316,23 @@ public class BaseTimeline<T extends IdentifiableEntity>{
         int count = 0;
         for(TimelineRange<T> range : getAllRanges()) {
             for(Group<T> group : range.getAllGroups()) {
-                if(!group.getRead() && null != group.getRoot()) {
+                if(group.getUnread() && null != group.getRoot()) {
                     count++;
                 }
             }
         }
         return count;
+    }
+
+    public boolean getHasUnread() {
+        return !entity.getRead();
+    }
+
+    public void setHasUnread(boolean hasUnread) {
+        if(hasUnread == getHasUnread()) {
+            return;
+        }
+        entity.setRead(!hasUnread);
+        entity.save();
     }
 }

@@ -2,7 +2,7 @@ package com.jadenine.circle.domain;
 
 import android.support.annotation.NonNull;
 
-import com.jadenine.circle.model.Identifiable;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.model.rest.TimelineRangeResult;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -20,7 +20,7 @@ import rx.functions.Func1;
 /**
  * Created by linym on 7/15/15.
  */
-public class  TimelineRange<T extends Identifiable<Long>> {
+public class  TimelineRange<T extends IdentifiableEntity> {
     final TimelineRangeCursor cursor;
     private final List<T> list;
     private final SortedCollection<Long, Group<T>> groupList;

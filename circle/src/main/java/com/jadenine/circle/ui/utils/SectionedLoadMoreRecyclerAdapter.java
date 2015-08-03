@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.model.Identifiable;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 
 /**
  * Created by linym onFooterClickListener 7/28/15.
  */
-public class SectionedLoadMoreRecyclerAdapter<T extends Identifiable<Long>> extends
+public class SectionedLoadMoreRecyclerAdapter<T extends IdentifiableEntity> extends
         SectionedRecyclerViewAdapter<T> {
     private OnFooterClickListener onFooterClickListener;
 

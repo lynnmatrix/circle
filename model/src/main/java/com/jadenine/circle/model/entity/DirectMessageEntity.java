@@ -3,6 +3,7 @@ package com.jadenine.circle.model.entity;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.model.db.CircleDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 
@@ -21,11 +22,13 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     String rootMessageId;
     String rootUser;
 
+    @Column(name = "fromUser") // 'from' is sql keyword
     String from;
+    @Column(name = "toUser") // 'to' is sql keyword
     String to;
     String content;
 
-    boolean read;
+    boolean unread;
 
     DirectMessageEntity(){}
 
@@ -78,13 +81,13 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     }
 
     @Override
-    public boolean getRead() {
-        return read;
+    public boolean getUnread() {
+        return unread;
     }
 
     @Override
-    public void setRead(boolean read) {
-        this.read = read;
+    public void setUnread(boolean unread) {
+        this.unread = unread;
     }
 
     @NonNull

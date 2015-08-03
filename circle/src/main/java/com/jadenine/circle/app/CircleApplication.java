@@ -3,6 +3,7 @@ package com.jadenine.circle.app;
 import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -15,12 +16,14 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.domain.dagger.DaggerDomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainModule;
+import com.jadenine.circle.model.db.CircleDatabase;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.utils.Device;
+import com.raizlabs.android.dbflow.DatabaseHelperListener;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -79,6 +82,22 @@ public class CircleApplication extends Application {
 
         FlowManager.init(this);
 
+        FlowManager.setDatabaseListener(CircleDatabase.NAME, new DatabaseHelperListener() {
+            @Override
+            public void onOpen(SQLiteDatabase sqLiteDatabase) {
+
+            }
+
+            @Override
+            public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+            }
+
+            @Override
+            public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+                sqLiteDatabase.execSQL("drop table Bomb, DirectMessageEntity;");
+            }
+        });
         refWatcher = installLeakCanary();
     }
 

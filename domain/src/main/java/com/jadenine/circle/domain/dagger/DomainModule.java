@@ -11,6 +11,7 @@ import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
+import com.jadenine.circle.model.db.TimelineDBService;
 import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
@@ -125,6 +126,12 @@ public class DomainModule {
     @Singleton
     BombDBService provideBombDBService() {
         return new BombDBService();
+    }
+
+    @Provides
+    @Singleton
+    TimelineDBService provideTimelineDBService() {
+        return new TimelineDBService();
     }
 
     @Provides
