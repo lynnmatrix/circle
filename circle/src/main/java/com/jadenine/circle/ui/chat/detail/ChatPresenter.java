@@ -80,6 +80,7 @@ class ChatPresenter extends ViewPresenter<ChatView> {
             if (null != chatGroup) {
                 chatMessages = chatGroup.getEntities();
                 Collections.reverse(chatMessages);
+                chatGroup.setRead(true);
             }
             getView().getChatAdapter().setChatMessages(chatMessages);
         }

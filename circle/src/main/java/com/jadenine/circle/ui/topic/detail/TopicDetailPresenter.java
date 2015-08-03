@@ -100,6 +100,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             List<Bomb> bombList = bombGroup.getEntities();
             Collections.reverse(bombList);
             getView().getBombAdapter().setBombs(bombGroup.getRoot(), bombList);
+            bombGroup.setRead(true);
         }
     }
 

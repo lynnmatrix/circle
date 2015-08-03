@@ -103,7 +103,7 @@ public class TopicHeader extends LinearLayout {
         commentsView.setVisibility(hasComments ? VISIBLE : GONE);
         if(hasComments) {
 
-            if(topic.getUnreadCount() > 0) {
+            if(!topic.getRead()) {
                 commentFlagView.setEnabled(true);
             }
             Collections.reverse(bombs);

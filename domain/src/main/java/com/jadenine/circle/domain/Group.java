@@ -80,7 +80,7 @@ public class Group<T extends Identifiable<Long>> implements Identifiable<Long>{
         entities.remove(entity);
     }
 
-    public int getUnreadCount(){
+    private int getUnreadCount(){
         int count = 0;
         for(T entity : getEntities()) {
             count += entity.getRead()? 0: 1;

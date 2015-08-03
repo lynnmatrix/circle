@@ -10,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.domain.dagger.DaggerDomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainComponentProduction;
@@ -41,6 +42,7 @@ import timber.log.Timber;
 public class CircleApplication extends Application {
     public static final String ROOT_SCOPE_NAME = "Root";
     public static final String CUSTOM_NOTIFICATION_TYPE_TOPIC = "topic";
+    public static final String CUSTOM_NOTIFICATION_TYPE_CHAT = "chat";
     private MortarScope rootScope;
 
     private RefWatcher refWatcher;
@@ -94,16 +96,9 @@ public class CircleApplication extends Application {
                         CustomNotification customNotification = gson.fromJson(uMessage.custom, CustomNotification.class);
 
                         if (CUSTOM_NOTIFICATION_TYPE_TOPIC.equalsIgnoreCase(customNotification.type)) {
-                            Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
-                            UserAp userAp = account.getUserAp(bomb.getAp());
-                            if(null != userAp) {
-                                userAp.setHasUnread(true);
-                            }
-                        } else if("chat".equalsIgnoreCase(customNotification.type)) {
-                            DirectMessageEntity chatMessage = gson.fromJson(customNotification
-                                    .data, DirectMessageEntity.class);
-                            //TODO
-//                            account.setHasUnreadChat();
+                            updateUserApUnRead(customNotification);
+                        } else if(CUSTOM_NOTIFICATION_TYPE_CHAT.equalsIgnoreCase(customNotification.type)) {
+                            updateChatUnread(customNotification);
                         }
                     } catch (JsonSyntaxException e) {
                         Timber.e(e, uMessage.custom);
@@ -117,6 +112,39 @@ public class CircleApplication extends Application {
             public void dealWithCustomMessage(final Context context, final UMessage msg) {
                 Timber.tag("PUSH");
                 Timber.i("dealWithCustomMessage " + msg.custom);
+            }
+
+            private void updateUserApUnRead(CustomNotification customNotification) {
+                Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
+                UserAp userAp = account.getUserAp(bomb.getAp());
+                Group<Bomb> topic = userAp.getTopic(bomb.getGroupId());
+                Long lastRead = null;
+                if(null != topic) {
+                    Bomb latestBomb = topic.getLatest();
+                    lastRead = latestBomb.getId();
+                }
+                if(null != userAp && (null == lastRead || bomb.getId() <
+                        lastRead)) {
+                    userAp.setHasUnread(true);
+                }
+            }
+
+            private void updateChatUnread(CustomNotification customNotification) {
+                DirectMessageEntity chatMessage = gson.fromJson(customNotification
+                        .data, DirectMessageEntity.class);
+                Group<DirectMessageEntity> chat = account.getChat(chatMessage.getAp(), Long
+                        .valueOf(chatMessage.getTopicId()), chatMessage.getRootUser(),
+                        chatMessage.getGroupId());
+
+                Long lastRead = null;
+                if(null != chat) {
+                    DirectMessageEntity latestMessage = chat.getLatest();
+                    lastRead = latestMessage.getId();
+                }
+
+                if(null == lastRead || chatMessage.getId() < lastRead) {
+                    account.setHasUnreadChat(true);
+                }
             }
         };
 

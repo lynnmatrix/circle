@@ -120,4 +120,14 @@ public class Account {
         return chatTimeline.hasMore();
     }
 
+    public void setHasUnreadChat(boolean hasUnread) {
+        if(hasUnread == hasUnreadChat()) {
+            return;
+        }
+        //TODO
+    }
+
+    public boolean hasUnreadChat() {
+        return false;
+    }
 }

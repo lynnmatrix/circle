@@ -76,6 +76,7 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                         refreshSubscription.unsubscribe();
                         if(!hasView()) return;
                         getView().stopRefreshing();
+                        account.setHasUnreadChat(false);
                     }
 
                     @Override
