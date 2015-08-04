@@ -98,7 +98,6 @@ abstract class MortarActivity extends Activity {
         BundleServiceRunner.getBundleServiceRunner(this).onSaveInstanceState(outState);
     }
 
-
     @Override protected void onDestroy() {
         // mortarScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && mortarScope != null) {

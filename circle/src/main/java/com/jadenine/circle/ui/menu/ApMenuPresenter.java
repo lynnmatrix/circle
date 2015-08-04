@@ -33,8 +33,9 @@ import timber.log.Timber;
  * Created by linym on 7/22/15.
  */
 class ApMenuPresenter extends ViewPresenter<ApMenuView>{
+    private static final String BUNDLE_CURRENT_AP = "current_ap";
     private final Account account;
-    private UserAp currentAp;
+    private String currentAp;
 
     @Inject
     public ApMenuPresenter(Account account) {
@@ -56,8 +57,17 @@ class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     @Override
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
+        if(null != savedInstanceState) {
+            currentAp = savedInstanceState.getString(BUNDLE_CURRENT_AP);
+        }
         if (!hasView()) return;
         loadAPList();
+    }
+
+    @Override
+    protected void onSave(Bundle outState) {
+        super.onSave(outState);
+        outState.putString(BUNDLE_CURRENT_AP, currentAp);
     }
 
     public boolean onApSelected(int position) {
@@ -80,7 +90,7 @@ class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         historyBuilder.push(new TopicListPath(userAp.getAP()));
 
         Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
-        currentAp = userAp;
+        currentAp = userAp.getAP();
     }
 
     @Subscribe
