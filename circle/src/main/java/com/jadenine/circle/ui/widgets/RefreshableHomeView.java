@@ -103,9 +103,10 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
 
     @Override
     public void onDetachedFromWindow() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        CircleApplication.getRefWatcher(getContext()).watch(this);
         super.onDetachedFromWindow();
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        activity = null;
+        CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {

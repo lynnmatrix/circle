@@ -75,6 +75,7 @@ public class ChatView extends LinearLayout {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

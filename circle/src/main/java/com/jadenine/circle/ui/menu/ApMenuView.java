@@ -68,6 +68,7 @@ public class ApMenuView extends NavigationView {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        drawerLayout = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

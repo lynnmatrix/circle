@@ -87,6 +87,7 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

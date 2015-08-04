@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
@@ -49,8 +50,10 @@ public class MyChatsView extends RefreshableHomeView {
 
     @Override
     public void onDetachedFromWindow() {
-        presenter.dropView(this);
         super.onDetachedFromWindow();
+        presenter.dropView(this);
+        activity = null;
+        CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> getAdapter() {

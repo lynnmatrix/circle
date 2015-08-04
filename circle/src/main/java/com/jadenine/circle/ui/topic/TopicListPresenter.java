@@ -13,6 +13,7 @@ import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 import com.jadenine.circle.utils.ToolbarColorizer;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,12 +41,12 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         loadingMoreSubscription.unsubscribe();
     }
 
-    private final Activity activity;
+    private final WeakReference<Activity> activity;
 
     @Inject
     public TopicListPresenter(UserAp userAp, Activity activity) {
         this.userAp = userAp;
-        this.activity = activity;
+        this.activity = new WeakReference<>(activity);
     }
 
     @Override
@@ -62,7 +63,7 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         });
 
         getView().getToolbar().setTitle(userAp.getSSID());
-        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activity);
+        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activity.get());
 
         onRefresh();
     }

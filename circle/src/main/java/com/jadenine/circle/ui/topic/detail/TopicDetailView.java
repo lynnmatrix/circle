@@ -63,7 +63,6 @@ public class TopicDetailView extends LinearLayout{
         super.onAttachedToWindow();
         ButterKnife.inject(this);
         presenter.takeView(this);
-
         bombList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         bombList.setLayoutManager(linearLayoutManager);
@@ -76,6 +75,7 @@ public class TopicDetailView extends LinearLayout{
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
