@@ -31,20 +31,20 @@ import flow.Flow;
  */
 @DaggerScope(ComposerPresenter.class)
 public class ComposerView extends RelativeLayout implements PreferenceManager.OnActivityResultListener {
-    @InjectView(R.id.message_edit)
-    EditText editor;
-
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+
+    @InjectView(R.id.message_edit)
+    EditText editor;
 
     @InjectView(R.id.imageview)
     ImageView imageView;
 
     @Inject
-    ComposerPresenter presenter;
+    Activity activity;
 
     @Inject
-    Activity activity;
+    ComposerPresenter presenter;
 
     public ComposerView(Context context, AttributeSet attrs) {
         super(context, attrs);

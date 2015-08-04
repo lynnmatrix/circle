@@ -37,5 +37,11 @@ public class MyChatPath extends Path implements ScreenComponentFactory {
         SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> provideMyChatsAdapter(Account account, AvatarBinder binder) {
             return new SectionedLoadMoreRecyclerAdapter(new MyChatsAdapter(account, binder));
         }
+
+        @DaggerScope(MyChatPath.class)
+        @Provides
+        MyChatsPresenter providePresenter(Account account) {
+            return new MyChatsPresenter(account);
+        }
     }
 }

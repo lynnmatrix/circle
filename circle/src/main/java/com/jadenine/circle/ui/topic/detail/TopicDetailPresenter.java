@@ -9,7 +9,6 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidator;
@@ -19,8 +18,6 @@ import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import flow.Flow;
 import mortar.ViewPresenter;
@@ -42,9 +39,6 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private String replyTo;
 
     private final AvatarBinder avatarBinder;
-
-    @DaggerScope(TopicDetailPresenter.class)
-    @Inject
     public TopicDetailPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
         this.userAp = userAp;
         this.bombGroup = bombGroup;
@@ -79,7 +73,8 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
                 Flow.get(getView()).set(chatPath);
             }
         });
-        getView().getBombAdapter().setOnBombItemClick(new BombListAdapter.OnBombItemClickListener() {
+        getView().getBombAdapter().setOnBombItemClick(new BombListAdapter.OnBombItemClickListener
+                () {
             @Override
             public boolean onBombItemClicked(Bomb bomb) {
                 setReplyTo(bomb);
@@ -116,8 +111,9 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private void updateHint() {
         Context context = getView().getContext();
 
-        getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(context, avatarBinder.getAvatar
-                (replyTo, rootBomb.getRootMessageId()), getView().replyEditor.getTextSize()));
+        getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(context, avatarBinder
+                .getAvatar(replyTo, rootBomb.getRootMessageId()), getView().replyEditor
+                .getTextSize()));
     }
 
     public void send() {
@@ -170,3 +166,4 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     }
 
 }
+

@@ -63,6 +63,7 @@ public class TopicDetailView extends LinearLayout{
         super.onAttachedToWindow();
         ButterKnife.inject(this);
         presenter.takeView(this);
+
         bombList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         bombList.setLayoutManager(linearLayoutManager);

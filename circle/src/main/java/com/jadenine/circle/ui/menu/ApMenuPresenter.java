@@ -19,8 +19,6 @@ import com.umeng.message.PushAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import flow.Flow;
 import flow.History;
 import mortar.MortarScope;
@@ -32,12 +30,11 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-class ApMenuPresenter extends ViewPresenter<ApMenuView>{
+public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     private static final String BUNDLE_CURRENT_AP = "current_ap";
     private final Account account;
     private String currentAp;
 
-    @Inject
     public ApMenuPresenter(Account account) {
         this.account = account;
     }

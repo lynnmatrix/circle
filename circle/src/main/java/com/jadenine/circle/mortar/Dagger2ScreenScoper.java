@@ -13,12 +13,10 @@ import timber.log.Timber;
  */
 public class Dagger2ScreenScoper extends BasicScreenScoper {
 
-    public static final String TAG = "ScreenScoper";
-
     @Override
     protected void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
         if (!(path instanceof ScreenComponentFactory)) {
-            Timber.w(TAG, "Path must implement ComponentFactory");
+            Timber.w("Path must implement ComponentFactory");
             return;
         }
 

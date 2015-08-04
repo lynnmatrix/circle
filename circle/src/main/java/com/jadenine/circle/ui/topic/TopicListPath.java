@@ -60,5 +60,12 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
             return new SectionedLoadMoreRecyclerAdapter(new TopicListAdapter(errorDrawable,
                     binder));
         }
+
+        @DaggerScope(TopicListPath.class)
+        @Provides
+        TopicListPresenter providePresenter(UserAp userAp){
+            return new TopicListPresenter(userAp);
+        }
+
     }
 }

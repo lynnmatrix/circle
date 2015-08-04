@@ -8,6 +8,7 @@ import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.common.flow.Layout;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
@@ -31,7 +32,7 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
     public Object createComponent(Object... dependencies) {
         return DaggerTopicDetailPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
-                .module(new Module())
+                .module(new Module(ap, groupId))
                 .build();
     }
 
@@ -42,7 +43,14 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
     }
 
     @dagger.Module
-    class Module{
+    static class Module{
+        private final String ap;
+        private final Long groupId;
+
+        public Module(String ap, Long groupId) {
+            this.ap = ap;
+            this.groupId = groupId;
+        }
 
         @Provides
         @DaggerScope(TopicDetailPresenter.class)
@@ -54,6 +62,12 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
         @DaggerScope(TopicDetailPresenter.class)
         Group<Bomb> provideBombGroup(UserAp userAp) {
             return userAp.getTopic(groupId);
+        }
+
+        @DaggerScope(TopicDetailPresenter.class)
+        @Provides
+        TopicDetailPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
+            return new TopicDetailPresenter(userAp, bombGroup, avatarBinder);
         }
     }
 }

@@ -5,14 +5,11 @@ import android.os.Bundle;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
-import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
+import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -35,7 +32,6 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
         loadingMoreSubscription.unsubscribe();
     }
 
-    @Inject @DaggerScope(MyChatPath.class)
     public MyChatsPresenter(Account account) {
         this.account = account;
     }
