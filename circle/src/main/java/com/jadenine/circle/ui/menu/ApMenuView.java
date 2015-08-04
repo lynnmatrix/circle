@@ -34,6 +34,9 @@ public class ApMenuView extends NavigationView {
     @Inject
     DrawerLayout drawerLayout;
 
+    @Inject
+    ApMenuAdapter adapter;
+
     public ApMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -57,7 +60,7 @@ public class ApMenuView extends NavigationView {
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),
                 LinearLayoutManager.VERTICAL);
         menuView.addItemDecoration(decoration);
-        getAdapter();
+        menuView.setAdapter(adapter);
         presenter.takeView(this);
     }
 
@@ -69,11 +72,6 @@ public class ApMenuView extends NavigationView {
     }
 
     ApMenuAdapter getAdapter() {
-         ApMenuAdapter adapter = (ApMenuAdapter) menuView.getAdapter();
-        if(null == adapter) {
-            adapter = new ApMenuAdapter();
-            menuView.setAdapter(adapter);
-        }
         return adapter;
     }
 }

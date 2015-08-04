@@ -17,7 +17,7 @@ public class TimelineEntity extends BaseModel{
 
     TimelineType type;
 
-    boolean read;
+    boolean unread; // 'read' is a reserved sql keyword
 
     TimelineEntity(){}
 
@@ -42,12 +42,12 @@ public class TimelineEntity extends BaseModel{
         this.type = type;
     }
 
-    public boolean getRead() {
-        return read;
+    public boolean getUnread() {
+        return unread;
     }
 
-    public void setRead(boolean read) {
-        this.read = read;
+    public void setUnread(boolean unread) {
+        this.unread = unread;
     }
 
     public void merge(TimelineEntity timelineEntity) {
@@ -57,6 +57,6 @@ public class TimelineEntity extends BaseModel{
                     " current timeline.");
         }
 
-        this.read = timelineEntity.getRead();
+        this.unread = timelineEntity.getUnread();
     }
 }

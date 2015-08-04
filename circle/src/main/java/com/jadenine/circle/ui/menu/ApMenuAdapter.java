@@ -9,12 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.mortar.DaggerScope;
+import com.jadenine.circle.ui.HomeActivity;
 import com.jadenine.circle.ui.chat.MyChatPath;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,6 +37,13 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<UserAp> aps = new ArrayList<>();
     private int selectedPosition = -1;
+
+    private final Account account;
+
+    @Inject @DaggerScope(HomeActivity.class)
+    public ApMenuAdapter(Account account) {
+        this.account = account;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -81,7 +93,8 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TYPE_HEADER:
                 break;
             case TYPE_MY_CHAT:
-                ((ItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string.title_private_chat);
+                ((ItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string
+                        .title_private_chat, account.hasUnreadChat());
                 break;
             case TYPE_AP:
                 ((ApMenuItemViewHolder)holder).bind(getAp(position));
@@ -122,14 +135,19 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @InjectView(R.id.title)
         TextView titleView;
 
+        @InjectView(R.id.read)
+        ImageView readView;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
 
-        public void bind(int iconResId, int titleResId) {
+        public void bind(int iconResId, int titleResId, boolean hasUnread) {
             iconView.setImageResource(iconResId);
             titleView.setText(titleResId);
+            readView.setVisibility(hasUnread?View.VISIBLE: View.GONE);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -325,14 +325,14 @@ public class BaseTimeline<T extends IdentifiableEntity>{
     }
 
     public boolean getHasUnread() {
-        return !entity.getRead();
+        return entity.getUnread();
     }
 
     public void setHasUnread(boolean hasUnread) {
         if(hasUnread == getHasUnread()) {
             return;
         }
-        entity.setRead(!hasUnread);
+        entity.setUnread(hasUnread);
         entity.save();
     }
 }

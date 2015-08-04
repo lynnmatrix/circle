@@ -16,7 +16,5 @@ public class TimelineTableCreation extends BaseMigration {
     public void migrate(SQLiteDatabase sqLiteDatabase) {
         TimelineEntity$Adapter adapter = new TimelineEntity$Adapter();
         sqLiteDatabase.execSQL(adapter.getCreationQuery());
-
-
     }
 }

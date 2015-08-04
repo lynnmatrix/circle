@@ -7,7 +7,8 @@
     android:gravity="center_vertical"
     android:minHeight="60dp"
     android:orientation="horizontal"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:id="@+id/icon"
@@ -19,8 +20,16 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:singleLine="true"/>
+
+    <ImageView
+        android:id="@+id/read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/unread_flag"/>
+
 </LinearLayout>
