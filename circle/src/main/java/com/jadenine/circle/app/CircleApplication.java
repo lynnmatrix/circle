@@ -94,8 +94,13 @@ public class CircleApplication extends Application {
             }
 
             @Override
-            public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-                sqLiteDatabase.execSQL("drop table Bomb, DirectMessageEntity;");
+            public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+                int currentVersion = oldVersion;
+                if(1 == currentVersion) {
+                    sqLiteDatabase.execSQL("drop table Bomb;");
+                    sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
+                    currentVersion = 2;
+                }
             }
         });
         refWatcher = installLeakCanary();
