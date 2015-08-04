@@ -71,15 +71,15 @@ public class HomeActivity extends MortarActivity {
 
     @Override
     protected void onDestroy() {
-        presenter.dropView(this);
         super.onDestroy();
+        presenter.dropView(this);
     }
 
     @Override
     protected Object buildDaggerService() {
         return DaggerHomeComponent.builder().appComponent((CircleApplication.AppComponent)
                 DaggerService.getDaggerComponent(getApplicationContext())).homeActivityModule(new
-                HomeActivityModule(this)).build();
+                HomeActivityModule()).build();
     }
 
     @Override

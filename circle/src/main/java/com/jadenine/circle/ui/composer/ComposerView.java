@@ -41,9 +41,6 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
     ImageView imageView;
 
     @Inject
-    Activity activity;
-
-    @Inject
     ComposerPresenter presenter;
 
     public ComposerView(Context context, AttributeSet attrs) {
@@ -69,10 +66,10 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(R.id.action_send == item.getItemId()) {
+                if (R.id.action_send == item.getItemId()) {
                     onClickSend();
                     return true;
-                } else if(R.id.action_add_image == item.getItemId()) {
+                } else if (R.id.action_add_image == item.getItemId()) {
                     presenter.pickImage();
                     return true;
                 }
@@ -80,14 +77,13 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
             }
         });
 
-        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
+//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity) getContext());
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

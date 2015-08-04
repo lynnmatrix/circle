@@ -199,6 +199,7 @@ public class CircleApplication extends Application {
         void inject(CircleApplication app);
         Account account();
         AvatarBinder avatarBinder();
+        Context appContext();
     }
 
     @Module
@@ -215,6 +216,9 @@ public class CircleApplication extends Application {
             return new AvatarBinder(appContext);
         }
 
+        @Provides
+        @DaggerScope(CircleApplication.class)
+        Context provideAppContext(){return appContext;}
     }
 
     private static class CustomNotification {

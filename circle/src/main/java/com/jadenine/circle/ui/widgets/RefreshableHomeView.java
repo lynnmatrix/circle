@@ -1,8 +1,6 @@
 package com.jadenine.circle.ui.widgets;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,9 +14,9 @@ import android.widget.LinearLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
+import com.jadenine.circle.ui.DrawerHandler;
 import com.jadenine.circle.ui.utils.AutoLoadMoreListener;
 import com.jadenine.circle.ui.utils.RecyclerItemClickListener;
-import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.flow.HandlesBack;
 
 import javax.inject.Inject;
@@ -40,10 +38,7 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     RecyclerView recyclerView;
 
     @Inject
-    DrawerLayout drawerLayout;
-
-    @Inject
-    Activity activity;
+    DrawerHandler drawerHandler;
 
     private RefreshableHomeListener refreshableHomeListener;
 
@@ -96,7 +91,7 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
             }
         });
 
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerHandler.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         configToolbar();
     }
@@ -104,26 +99,26 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        activity = null;
+        drawerHandler.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {
-        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
+//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)((PathContext) getContext
+//                ()).getBaseContext());
         toolbar.setNavigationIcon(R.drawable.ic_drawer);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
+                drawerHandler.openDrawer(GravityCompat.START);
             }
         });
     }
 
     @Override
     public boolean onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers();
+        if(drawerHandler.isDrawerOpen(GravityCompat.START)) {
+            drawerHandler.closeDrawer(GravityCompat.START);
             return true;
         }
         return false;

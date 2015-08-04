@@ -66,7 +66,8 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
 
         @DaggerScope(TopicDetailPresenter.class)
         @Provides
-        TopicDetailPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
+        TopicDetailPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder
+                avatarBinder) {
             return new TopicDetailPresenter(userAp, bombGroup, avatarBinder);
         }
     }

@@ -1,8 +1,6 @@
 package com.jadenine.circle.ui.chat;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
@@ -11,7 +9,6 @@ import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
-import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -22,9 +19,6 @@ public class MyChatsView extends RefreshableHomeView {
 
     @Inject
     MyChatsPresenter presenter;
-
-    @Inject
-    Activity activity;
 
     @Inject
     SectionedLoadMoreRecyclerAdapter<DirectMessageEntity> chatAdapter;
@@ -45,14 +39,13 @@ public class MyChatsView extends RefreshableHomeView {
         setAdapter(chatAdapter);
 
         getToolbar().setTitle(R.string.title_private_chat);
-        ToolbarColorizer.colorizeToolbar(getToolbar(), Color.WHITE, activity);
+//        ToolbarColorizer.colorizeToolbar(getToolbar(), Color.WHITE, (Activity) getContext());
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

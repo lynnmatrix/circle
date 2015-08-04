@@ -32,9 +32,6 @@ public class ApMenuView extends NavigationView {
     ApMenuPresenter presenter;
 
     @Inject
-    DrawerLayout drawerLayout;
-
-    @Inject
     ApMenuAdapter adapter;
 
     public ApMenuView(Context context, AttributeSet attrs) {
@@ -67,7 +64,6 @@ public class ApMenuView extends NavigationView {
     @Override
     public void onDetachedFromWindow() {
         presenter.dropView(this);
-        drawerLayout = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
         super.onDetachedFromWindow();
     }

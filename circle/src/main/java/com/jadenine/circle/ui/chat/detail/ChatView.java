@@ -1,8 +1,6 @@
 package com.jadenine.circle.ui.chat.detail;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +13,6 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
-import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -40,9 +37,6 @@ public class ChatView extends LinearLayout {
 
     @InjectView(R.id.message_edit)
     EditText replyEditor;
-
-    @Inject
-    Activity activity;
 
     @Inject
     ChatAdapter chatAdapter;
@@ -75,12 +69,11 @@ public class ChatView extends LinearLayout {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {
-        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
+//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)getContext());
         toolbar.setTitle(R.string.title_private_chat);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
         toolbar.setNavigationOnClickListener(new OnClickListener() {

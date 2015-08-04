@@ -67,7 +67,8 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        getView().activity.startActivityForResult(intent, PICK_IMAGE);
+        Activity activity = (Activity) getView().getContext();
+        activity.startActivityForResult(intent, PICK_IMAGE);
     }
 
     abstract void send(final String content);

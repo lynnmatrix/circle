@@ -1,8 +1,6 @@
 package com.jadenine.circle.ui.topic.detail;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +14,6 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
-import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -40,9 +37,6 @@ public class TopicDetailView extends LinearLayout{
 
     @InjectView(R.id.message_edit)
     EditText replyEditor;
-
-    @Inject
-    Activity activity;
 
     @Inject
     TopicDetailPresenter presenter;
@@ -76,12 +70,11 @@ public class TopicDetailView extends LinearLayout{
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {
-        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, activity);
+//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)getContext());
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override

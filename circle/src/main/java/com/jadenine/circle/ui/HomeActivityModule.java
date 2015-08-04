@@ -1,11 +1,10 @@
 package com.jadenine.circle.ui;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 
 import com.jadenine.circle.R;
@@ -20,21 +19,6 @@ import dagger.Provides;
  */
 @dagger.Module
 class HomeActivityModule {
-    private final HomeActivity homeActivity;
-    public HomeActivityModule(HomeActivity homeActivity) {
-        this.homeActivity = homeActivity;
-    }
-
-    @Provides
-    Activity provideActivity(){
-        return homeActivity;
-    }
-
-    @DaggerScope(HomeActivity.class)
-    @Provides
-    DrawerLayout provideDrawerLayout(){
-        return homeActivity.drawerLayout;
-    }
 
     @DaggerScope(HomeActivity.class)
     @Provides
@@ -50,14 +34,20 @@ class HomeActivityModule {
 
     @DaggerScope(HomeActivity.class)
     @Provides
-    Drawable provideErrorDrawable(Activity activity){
-        Drawable errorDrawable = activity.getResources().getDrawable(R.drawable
+    DrawerHandler provideDrawerHandler(HomePresenter homePresenter) {
+        return homePresenter;
+    }
+
+    @DaggerScope(HomeActivity.class)
+    @Provides
+    Drawable provideErrorDrawable(Context appContext){
+        Drawable errorDrawable = appContext.getResources().getDrawable(R.drawable
                 .ic_error_outline_black);
 
         TypedValue typedValue = new TypedValue();
         int[] textSizeAttr = new int[]{R.attr.colorPrimary};
         int indexOfAttrColorPrimary = 0;
-        TypedArray a = activity.obtainStyledAttributes(typedValue.data, textSizeAttr);
+        TypedArray a = appContext.obtainStyledAttributes(typedValue.data, textSizeAttr);
         int colorPrimary = a.getColor(indexOfAttrColorPrimary, Color.BLACK);
         a.recycle();
 

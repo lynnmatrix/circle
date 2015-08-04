@@ -1,6 +1,5 @@
 package com.jadenine.circle.ui.topic;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import com.jadenine.circle.domain.TimelineRange;
@@ -10,7 +9,6 @@ import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
-import com.jadenine.circle.utils.ToolbarColorizer;
 
 import java.util.List;
 
@@ -55,7 +53,8 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         });
 
         getView().getToolbar().setTitle(userAp.getSSID());
-        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, getView().activity);
+//        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, (Activity) getView
+//                ().getContext());
 
         onRefresh();
     }

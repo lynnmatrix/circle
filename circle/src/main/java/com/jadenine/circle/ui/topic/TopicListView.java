@@ -1,6 +1,5 @@
 package com.jadenine.circle.ui.topic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -21,9 +20,6 @@ import butterknife.OnClick;
 public class TopicListView extends RefreshableHomeView {
     @Inject
     TopicListPresenter presenter;
-
-    @Inject
-    Activity activity;
 
     @Inject
     SectionedLoadMoreRecyclerAdapter<Bomb> bombAdapter;
@@ -47,7 +43,6 @@ public class TopicListView extends RefreshableHomeView {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-        activity = null;
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

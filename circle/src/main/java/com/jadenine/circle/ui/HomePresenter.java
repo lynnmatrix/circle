@@ -24,7 +24,7 @@ import mortar.bundler.BundleService;
 /**
  * Created by linym on 6/15/15.
  */
-class HomePresenter extends Presenter<HomeActivity> {
+class HomePresenter extends Presenter<HomeActivity> implements DrawerHandler {
 
     private static final String WX_APP_ID = "wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
     private IWXAPI wechatApi = null;
@@ -156,4 +156,33 @@ class HomePresenter extends Presenter<HomeActivity> {
         return result;
     }
 
+    @Override
+    public boolean isDrawerOpen(int gravity) {
+        if(hasView()) {
+            return getView().drawerLayout.isDrawerOpen(gravity);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void openDrawer(int gravity) {
+        if(hasView()) {
+            getView().drawerLayout.openDrawer(gravity);
+        }
+    }
+
+    @Override
+    public void closeDrawer(int gravity) {
+        if(hasView()) {
+            getView().drawerLayout.closeDrawer(gravity);
+        }
+    }
+
+    @Override
+    public void setDrawerLockMode(int lockMode) {
+        if(hasView()) {
+            getView().drawerLayout.setDrawerLockMode(lockMode);
+        }
+    }
 }
