@@ -242,7 +242,14 @@ public class BaseTimeline<T extends IdentifiableEntity>{
         final Long originalBottom = range.cursor.getBottom();
         final boolean rangeDbLoaded = range.isDBLoaded();
 
-       return range.loadMore().flatMap(new Func1<TimelineRange<T>,
+        Long sinceId = null;
+        boolean isLastRange = range == getLastRange();
+        final TimelineRange<T> previousRange = isLastRange?null:getPreviousRange(range);
+        if(null != previousRange) {
+            sinceId = previousRange.cursor.getTop();
+        }
+
+       return range.loadMore(sinceId).flatMap(new Func1<TimelineRange<T>,
                Observable<List<TimelineRange<T>>>>() {
            @Override
            public Observable<List<TimelineRange<T>>> call(TimelineRange<T> range) {
@@ -252,7 +259,7 @@ public class BaseTimeline<T extends IdentifiableEntity>{
                    group(entities, true);
 
                    if (!range.hasMore()) {
-                       TimelineRange<T> previousRange = getPreviousRange(range);
+
                        if (null != previousRange) {
                            range.contact(previousRange);
                            previousRange.cursor.delete();

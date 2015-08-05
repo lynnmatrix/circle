@@ -42,8 +42,8 @@ public class ChatLoader implements RangeLoader<DirectMessageEntity> {
     }
 
     @Override
-    public Observable<TimelineRangeResult<DirectMessageEntity>> loadMore(Long bottom) {
-        return messageService.listMessages(account, pageCount, null, bottom);
+    public Observable<TimelineRangeResult<DirectMessageEntity>> loadMore(Long beforeId, Long sinceId) {
+        return messageService.listMessages(account, pageCount, sinceId, beforeId);
     }
 
     @Override

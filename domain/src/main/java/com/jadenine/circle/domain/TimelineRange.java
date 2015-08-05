@@ -89,12 +89,11 @@ public class  TimelineRange<T extends IdentifiableEntity> {
      * they are continuous.
      * @return The current range.
      */
-    //TODO Limit the result by the top of previous range.
-    public Observable<TimelineRange<T>> loadMore() {
+    public Observable<TimelineRange<T>> loadMore(Long sinceId) {
         if(!isDBLoaded()) {
             return loadLocal();
         } else {
-            return loader.loadMore(cursor.getBottom()).flatMap(new Func1<TimelineRangeResult<T>,
+            return loader.loadMore(cursor.getBottom(), sinceId).flatMap(new Func1<TimelineRangeResult<T>,
                     Observable<TimelineRange<T>>>() {
 
                 @Override

@@ -17,7 +17,7 @@ interface RangeLoader<T extends Identifiable<Long>>{
 
     Observable<TimelineRangeResult<T>> refresh(Long top);
 
-    Observable<TimelineRangeResult<T>> loadMore(Long bottom);
+    Observable<TimelineRangeResult<T>> loadMore(Long beforeId, Long sinceId);
 
     Observable<TimelineEntity> loadTimeline(String timeline, TimelineType timelineType);
 

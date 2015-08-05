@@ -45,8 +45,8 @@ public class BombLoader implements RangeLoader<Bomb> {
     }
 
     @Override
-    public Observable<TimelineRangeResult<Bomb>> loadMore(Long bottom) {
-        return restService.list(ap, pageCount, null, bottom);
+    public Observable<TimelineRangeResult<Bomb>> loadMore(Long bottom, Long sinceId) {
+        return restService.list(ap, pageCount, sinceId, bottom);
     }
 
     @Override

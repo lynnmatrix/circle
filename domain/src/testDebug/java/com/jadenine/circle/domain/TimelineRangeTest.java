@@ -166,7 +166,7 @@ public class TimelineRangeTest {
                 ArrayList<DirectMessageEntity>(), loader);
 
         final CountDownLatch latch = new CountDownLatch(1);
-        range.loadMore().subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
+        range.loadMore(null).subscribe(new Observer<TimelineRange<DirectMessageEntity>>() {
             @Override
             public void onCompleted() {
                 latch.countDown();
