@@ -116,19 +116,34 @@ public abstract class SectionedRecyclerViewAdapter<T extends IdentifiableEntity>
     public void setSections(List<TimelineRange<T>> ranges) {
         List<Group<T>> groups = new LinkedList<>();
         List<SectionedRecyclerViewAdapter.Section<T>> sections = new ArrayList<>(ranges.size());
-        int offset = 0;
+
+        int groupOffset = 0;
         int sectionOffset = 0;
         for(TimelineRange<T> range: ranges) {
+
+            int visibleCount = 0;
+            for(Group<T> group : range.getAllGroups()) {
+                //check whether current group is visible
+                if(null != group.getRoot()) {
+                    groups.add(group);
+                    visibleCount++;
+                }
+            }
+
+            if(visibleCount <= 0) {
+                break;
+            }
+
             SectionedRecyclerViewAdapter.Section<T> section = new
-                    SectionedRecyclerViewAdapter.Section<>(offset, range.getGroupCount(), range
+                    SectionedRecyclerViewAdapter.Section<>(groupOffset, visibleCount, range
                     .hasMore(), range);
 
-            sections.add(sectionOffset++, section);
+            sections.add(sectionOffset, section);
 
-            offset += range.getGroupCount();
-
-            groups.addAll(range.getAllGroups());
+            sectionOffset++;
+            groupOffset += section.count;
         }
+
         setSections(sections, groups);
     }
 

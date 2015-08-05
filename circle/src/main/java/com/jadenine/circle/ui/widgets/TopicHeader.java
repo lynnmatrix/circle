@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by linym on 7/24/15.
@@ -76,6 +77,10 @@ public class TopicHeader extends LinearLayout {
     }
 
     public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
+        if(null == rootBomb) {
+            Timber.wtf("Try to bind topic without root.");
+            return;
+        }
         setTag(rootBomb.getId());
 
         avatarView.setImageResource(avatarBinder.getAvatar(rootBomb.getFrom(), rootBomb.getRootMessageId()));
