@@ -27,13 +27,13 @@
             android:hint="@string/message_edit_hint"
             android:paddingLeft="2dp"/>
 
-        <ImageView
+        <com.jadenine.circle.ui.widgets.TintImageView
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_send_black"
-            android:tint="?attr/colorAccent"/>
+            app:tint="?attr/colorAccent"/>
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

@@ -42,14 +42,14 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
-            <ImageView
+            <com.jadenine.circle.ui.widgets.TintImageView
                 android:id="@+id/comment_flag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
                 android:src="@drawable/ic_forum_black"
-                android:tint="@color/comment_flag_tint"/>
+                app:tint="@color/comment_flag_tint"/>
 
             <TextView
                 android:id="@+id/message_count"

@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
@@ -10,13 +11,13 @@
     android:background="?android:attr/selectableItemBackground"
     android:paddingRight="@dimen/activity_horizontal_margin">
 
-    <ImageView
+    <com.jadenine.circle.ui.widgets.TintImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_wifi_black"
-        android:tint="?attr/colorPrimary"/>
+        app:tint="?attr/colorPrimary"/>
 
     <TextView
         android:id="@+id/ap_ssid"
