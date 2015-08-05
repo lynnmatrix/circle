@@ -7,6 +7,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.menu.ApMenuView;
+import com.jadenine.common.mortar.ActivityOwner;
 
 /**
  * Created by linym on 6/13/15.
@@ -21,6 +22,8 @@ public interface HomeComponent {
     Account account();
 
     DrawerHandler drawerHandler();
+
+    ActivityOwner activityOwner();
 
     void inject(HomeActivity homeActivity);
     void inject(ApMenuView apMenuView);

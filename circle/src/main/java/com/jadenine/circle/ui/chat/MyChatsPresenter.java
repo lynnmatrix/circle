@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.chat;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.jadenine.circle.domain.Account;
@@ -8,6 +9,8 @@ import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
+import com.jadenine.circle.utils.ToolbarColorizer;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ import timber.log.Timber;
 class MyChatsPresenter extends ViewPresenter<MyChatsView> implements RefreshableHomeView
         .RefreshableHomeListener {
     private final Account account;
+    private final ActivityOwner activityOwner;
 
     private Subscription refreshSubscription = Subscriptions.empty();{
         refreshSubscription.unsubscribe();
@@ -32,13 +36,15 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
         loadingMoreSubscription.unsubscribe();
     }
 
-    public MyChatsPresenter(Account account) {
+    public MyChatsPresenter(Account account, ActivityOwner owner) {
         this.account = account;
+        this.activityOwner = owner;
     }
 
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
+        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
         getView().getAdapter().setOnFooterClickListener(new SectionedLoadMoreRecyclerAdapter
                 .OnFooterClickListener() {
 
@@ -48,7 +54,9 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                 loadMore(range, loadMoreViewHolder);
             }
         });
+
         onRefresh();
+
     }
 
     @Override

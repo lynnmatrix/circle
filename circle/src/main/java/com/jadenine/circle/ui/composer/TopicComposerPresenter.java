@@ -8,6 +8,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -24,8 +25,8 @@ class TopicComposerPresenter extends ComposerPresenter {
 
     private final long CONTENT_MAX_LENGTH = 256;
 
-    public TopicComposerPresenter(UserAp userAp) {
-        super(userAp);
+    public TopicComposerPresenter(UserAp userAp, ActivityOwner owner) {
+        super(userAp, owner);
     }
 
     @Override

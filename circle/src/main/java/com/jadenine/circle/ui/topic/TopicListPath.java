@@ -12,6 +12,7 @@ import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.common.flow.Layout;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
 import flow.path.Path;
@@ -63,8 +64,8 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
 
         @DaggerScope(TopicListPath.class)
         @Provides
-        TopicListPresenter providePresenter(UserAp userAp){
-            return new TopicListPresenter(userAp);
+        TopicListPresenter providePresenter(UserAp userAp, ActivityOwner owner){
+            return new TopicListPresenter(userAp, owner);
         }
 
     }

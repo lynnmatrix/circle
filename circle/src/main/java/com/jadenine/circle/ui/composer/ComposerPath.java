@@ -7,6 +7,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.common.flow.Layout;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
 import flow.path.Path;
@@ -45,8 +46,8 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
 
             @DaggerScope(ComposerPresenter.class)
             @Provides
-            ComposerPresenter providePresenter(UserAp userAp) {
-                return new TopicComposerPresenter(userAp);
+            ComposerPresenter providePresenter(UserAp userAp, ActivityOwner owner) {
+                return new TopicComposerPresenter(userAp, owner);
             }
         }
 }

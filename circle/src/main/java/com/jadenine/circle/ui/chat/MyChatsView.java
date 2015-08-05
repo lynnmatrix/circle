@@ -34,12 +34,11 @@ public class MyChatsView extends RefreshableHomeView {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        presenter.takeView(this);
 
         setAdapter(chatAdapter);
 
         getToolbar().setTitle(R.string.title_private_chat);
-//        ToolbarColorizer.colorizeToolbar(getToolbar(), Color.WHITE, (Activity) getContext());
+        presenter.takeView(this);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.menu.ApMenuPresenter;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
 
@@ -35,6 +36,12 @@ class HomeActivityModule {
     @DaggerScope(HomeActivity.class)
     @Provides
     DrawerHandler provideDrawerHandler(HomePresenter homePresenter) {
+        return homePresenter;
+    }
+
+    @DaggerScope(HomeActivity.class)
+    @Provides
+    ActivityOwner provideActivityOwner(HomePresenter homePresenter) {
         return homePresenter;
     }
 

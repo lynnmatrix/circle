@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.provider.MediaStore;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.ui.scanner.WifiPath;
+import com.jadenine.common.mortar.ActivityOwner;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
@@ -24,7 +26,7 @@ import mortar.bundler.BundleService;
 /**
  * Created by linym on 6/15/15.
  */
-class HomePresenter extends Presenter<HomeActivity> implements DrawerHandler {
+class HomePresenter extends Presenter<HomeActivity> implements DrawerHandler, ActivityOwner {
 
     private static final String WX_APP_ID = "wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
     private IWXAPI wechatApi = null;
@@ -184,5 +186,10 @@ class HomePresenter extends Presenter<HomeActivity> implements DrawerHandler {
         if(hasView()) {
             getView().drawerLayout.setDrawerLockMode(lockMode);
         }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return getView();
     }
 }

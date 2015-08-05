@@ -1,6 +1,7 @@
 package com.jadenine.circle.ui.topic.detail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,6 +15,8 @@ import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.ui.widgets.TopicHeader;
+import com.jadenine.circle.utils.ToolbarColorizer;
+import com.jadenine.common.mortar.ActivityOwner;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.Collections;
@@ -39,12 +42,16 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private String replyTo;
 
     private final AvatarBinder avatarBinder;
-    public TopicDetailPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder) {
+
+    private final ActivityOwner activityOwner;
+
+    public TopicDetailPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
         this.userAp = userAp;
         this.bombGroup = bombGroup;
         this.rootBomb = bombGroup.getRoot();
         this.replyTo = rootBomb.getRootUser();
         this.avatarBinder = avatarBinder;
+        this.activityOwner = owner;
     }
 
     @Override
@@ -81,6 +88,8 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
                 return false;
             }
         });
+
+        ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
     }
 
     @Override

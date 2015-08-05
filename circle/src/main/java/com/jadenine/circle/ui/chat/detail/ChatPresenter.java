@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.chat.detail;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -12,6 +13,8 @@ import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
+import com.jadenine.circle.utils.ToolbarColorizer;
+import com.jadenine.common.mortar.ActivityOwner;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import java.util.Collections;
@@ -32,15 +35,15 @@ class ChatPresenter extends ViewPresenter<ChatView> {
     private String topicId;
     private String from, to;
 
-
     @Nullable
     private Group<DirectMessageEntity> chatGroup;
     private Account account;
-
     private AvatarBinder avatarBinder;
 
+    private final ActivityOwner activityOwner;
+
     public ChatPresenter(Account account, String ap, @NotNull String topicId, @NotNull String
-            from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup,  AvatarBinder avatarBinder) {
+            from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup,  AvatarBinder avatarBinder, ActivityOwner owner) {
         this.account = account;
         this.ap = ap;
         this.topicId = topicId;
@@ -48,6 +51,7 @@ class ChatPresenter extends ViewPresenter<ChatView> {
         this.to = to;
         this.chatGroup = chatGroup;
         this.avatarBinder = avatarBinder;
+        this.activityOwner = owner;
     }
 
     @Override
@@ -61,6 +65,7 @@ class ChatPresenter extends ViewPresenter<ChatView> {
             getView().replyEditor.setText(content);
             getView().replyEditor.setSelection(content.length());
         }
+        ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
 
         getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(getView().getContext(),
                 avatarBinder.getAvatar(to, topicId), getView().replyEditor.getTextSize()));

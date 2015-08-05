@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.topic;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.jadenine.circle.domain.TimelineRange;
@@ -9,6 +10,8 @@ import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
+import com.jadenine.circle.utils.ToolbarColorizer;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import java.util.List;
 
@@ -28,6 +31,8 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         .RefreshableHomeListener {
     private final UserAp userAp;
 
+    private final ActivityOwner activityOwner;
+
     private Subscription refreshSubscription = Subscriptions.empty();{
         refreshSubscription.unsubscribe();
     }
@@ -35,8 +40,9 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         loadingMoreSubscription.unsubscribe();
     }
 
-    public TopicListPresenter(UserAp userAp) {
+    public TopicListPresenter(UserAp userAp, ActivityOwner owner) {
         this.userAp = userAp;
+        this.activityOwner = owner;
     }
 
     @Override
@@ -53,8 +59,8 @@ class TopicListPresenter extends ViewPresenter<TopicListView> implements Refresh
         });
 
         getView().getToolbar().setTitle(userAp.getSSID());
-//        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, (Activity) getView
-//                ().getContext());
+
+        ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
 
         onRefresh();
     }

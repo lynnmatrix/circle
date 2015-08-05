@@ -10,6 +10,7 @@ import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.common.flow.Layout;
+import com.jadenine.common.mortar.ActivityOwner;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import dagger.Provides;
@@ -67,8 +68,8 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
         @DaggerScope(TopicDetailPresenter.class)
         @Provides
         TopicDetailPresenter providePresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder
-                avatarBinder) {
-            return new TopicDetailPresenter(userAp, bombGroup, avatarBinder);
+                avatarBinder, ActivityOwner owner) {
+            return new TopicDetailPresenter(userAp, bombGroup, avatarBinder, owner);
         }
     }
 }

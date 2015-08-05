@@ -11,6 +11,7 @@ import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.common.flow.Layout;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
 import flow.path.Path;
@@ -64,7 +65,7 @@ public class ChatPath extends Path implements ScreenComponentFactory {
         @DaggerScope(ChatPath.class)
         @Provides
         ChatPresenter providePresenter(Account account, @Nullable Group<DirectMessageEntity>
-                chatGroup,  AvatarBinder avatarBinder) {
+                chatGroup,  AvatarBinder avatarBinder, ActivityOwner owner) {
             String from = rootUser;
             String to = rootTo;
             if(!account.getDeviceId().equals(rootUser)) {
@@ -72,7 +73,7 @@ public class ChatPath extends Path implements ScreenComponentFactory {
                 to = rootUser;
             }
             return new ChatPresenter(account, ap, String.valueOf(bombGroupId), from, to,
-                    chatGroup, avatarBinder);
+                    chatGroup, avatarBinder, owner);
         }
     }
 }

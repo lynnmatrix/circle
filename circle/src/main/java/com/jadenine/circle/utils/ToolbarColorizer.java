@@ -34,6 +34,8 @@ import com.jadenine.circle.R;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 /**
  * Helper class that iterates through Toolbar views, and sets dynamically icons and texts color
  * Created by chomi3 on 2015-01-19.
@@ -111,6 +113,10 @@ public class ToolbarColorizer {
      */
     private static void setOverflowButtonColor(final Activity activity, final
     PorterDuffColorFilter colorFilter) {
+        if(null == activity) {
+            Timber.w("Null activity, fail to set color for overflow menu.");
+            return;
+        }
         final String overflowDescription = activity.getString(R.string
                 .abc_action_menu_overflow_description);
         final ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();

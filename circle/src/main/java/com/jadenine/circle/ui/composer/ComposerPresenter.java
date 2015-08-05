@@ -3,6 +3,7 @@ package com.jadenine.circle.ui.composer;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +14,8 @@ import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.ImageCompressor;
+import com.jadenine.circle.utils.ToolbarColorizer;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import java.io.FileNotFoundException;
 
@@ -32,12 +35,15 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     protected final UserAp userAp;
     protected Uri imageUri;
     protected String mimeType;
+
     protected Subscription sendSubscription = Subscriptions.empty();{
         sendSubscription.unsubscribe();
     }
 
-    public ComposerPresenter(UserAp userAp) {
+    private final ActivityOwner activityOwner;
+    public ComposerPresenter(UserAp userAp, ActivityOwner owner) {
         this.userAp = userAp;
+        this.activityOwner = owner;
     }
 
     @Override
@@ -47,13 +53,14 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
             return;
         }
 
-        getView().toolbar.setTitle(R.string.title_activity_topic_composer);
-
         if(null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().editor.setText(content);
         }
         SoftKeyboardToggler.toggleInputMethod(getView().editor, true);
+
+        ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
+        getView().toolbar.setTitle(R.string.title_activity_topic_composer);
     }
 
     @Override

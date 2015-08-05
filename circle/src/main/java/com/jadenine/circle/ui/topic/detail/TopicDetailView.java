@@ -74,7 +74,6 @@ public class TopicDetailView extends LinearLayout{
     }
 
     protected void configToolbar() {
-//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)getContext());
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override

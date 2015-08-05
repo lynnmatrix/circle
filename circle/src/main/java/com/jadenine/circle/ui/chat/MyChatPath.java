@@ -9,6 +9,7 @@ import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.common.flow.Layout;
+import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
 import flow.path.Path;
@@ -40,8 +41,8 @@ public class MyChatPath extends Path implements ScreenComponentFactory {
 
         @DaggerScope(MyChatPath.class)
         @Provides
-        MyChatsPresenter providePresenter(Account account) {
-            return new MyChatsPresenter(account);
+        MyChatsPresenter providePresenter(Account account, ActivityOwner owner) {
+            return new MyChatsPresenter(account, owner);
         }
     }
 }

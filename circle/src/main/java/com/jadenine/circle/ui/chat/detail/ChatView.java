@@ -55,7 +55,6 @@ public class ChatView extends LinearLayout {
         ButterKnife.inject(this);
         presenter.takeView(this);
 
-
         messageList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         messageList.setLayoutManager(linearLayoutManager);
@@ -73,7 +72,6 @@ public class ChatView extends LinearLayout {
     }
 
     protected void configToolbar() {
-//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)getContext());
         toolbar.setTitle(R.string.title_private_chat);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_light);
         toolbar.setNavigationOnClickListener(new OnClickListener() {

@@ -1,9 +1,7 @@
 package com.jadenine.circle.ui.composer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -18,7 +16,6 @@ import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
-import com.jadenine.circle.utils.ToolbarColorizer;
 
 import javax.inject.Inject;
 
@@ -52,7 +49,6 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
-        presenter.takeView(this);
 
         toolbar.inflateMenu(R.menu.menu_message_add);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_back_dark);
@@ -77,7 +73,7 @@ public class ComposerView extends RelativeLayout implements PreferenceManager.On
             }
         });
 
-//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity) getContext());
+        presenter.takeView(this);
     }
 
     @Override
