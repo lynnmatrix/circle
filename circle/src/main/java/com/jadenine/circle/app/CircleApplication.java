@@ -173,7 +173,7 @@ public class CircleApplication extends Application {
         };
 
         PushAgent pushAgent = PushAgent.getInstance(this);
-        pushAgent.setNotificaitonOnForeground(true);
+        pushAgent.setNotificaitonOnForeground(false);
         pushAgent.setMessageHandler(messageHandler);
     }
 
