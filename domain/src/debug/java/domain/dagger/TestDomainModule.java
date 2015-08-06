@@ -2,11 +2,13 @@ package domain.dagger;
 
 import com.google.gson.Gson;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.db.TimelineDBService;
+import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.Image;
 import com.jadenine.circle.model.entity.UserApEntity;
@@ -53,6 +55,9 @@ public class TestDomainModule {
     private final List<UserApEntity> apList = new LinkedList<>();
 
     private final List<DirectMessageEntity> directMessageList= new LinkedList<>();
+
+    private final List<Bomb> bombList = new LinkedList<>();
+
     public TestDomainModule(String deviceId) {
         this.deviceId = deviceId;
 
@@ -64,6 +69,40 @@ public class TestDomainModule {
         directMessageList.add(genTestDirectMessage(2));//id:8
         directMessageList.add(genTestDirectMessage(1));//id:9
 
+        bombList.add(genMyTopicBomb(1));
+        bombList.add(genMyTopicBomb(2));
+        bombList.add(genMyTopicBomb(3));
+        bombList.add(genMyTopicBomb(4));
+        bombList.add(genMyTopicBomb(5));
+
+        bombList.add(genSomeoneStartedBomb(11));
+        bombList.add(genSomeoneStartedBomb(12));
+        bombList.add(genSomeoneStartedBomb(13));
+        bombList.add(genSomeoneStartedBomb(14));
+        bombList.add(genSomeoneStartedBomb(15));
+        bombList.add(genSomeoneStartedBomb(16));
+    }
+
+    private Bomb genMyTopicBomb(int id) {
+        String someone = "someone";
+        Bomb bomb = spy(new Bomb(USER_AP_MAC, 1== id%2?deviceId:someone));
+        doReturn(""+id).when(bomb).getMessageId();
+        bomb.setRootMessageId("1");
+        bomb.setRootUser(deviceId);
+        bomb.setTo(1 == id % 2 ? someone : deviceId);
+        bomb.setContent("message " + id);
+        return bomb;
+    }
+
+    private Bomb genSomeoneStartedBomb(int id) {
+        String someone = "someone";
+        Bomb bomb = spy(new Bomb(USER_AP_MAC, 1== id%2?someone:deviceId));
+        doReturn(""+id).when(bomb).getMessageId();
+        bomb.setRootMessageId("1");
+        bomb.setRootUser(someone);
+        bomb.setTo(1 == id % 2 ? deviceId : someone);
+        bomb.setContent("message " + id);
+        return bomb;
     }
 
     private DirectMessageEntity genTestDirectMessage(int number) {
@@ -133,7 +172,13 @@ public class TestDomainModule {
     @Provides
     @Singleton
     BombService provideBombService() {
-        return mock(BombService.class);
+        BombService mockService = mock(BombService.class);
+
+        when(mockService.myTopicsTimeline(Matchers.anyString(), eq(Constants.PAGE_SIZE), Matchers.isNull(Long.class),
+                Matchers.isNull(Long.class)))
+                .thenReturn(Observable.just(new TimelineRangeResult<>(bombList, false, null)));
+
+        return mockService;
     }
 
     @Provides
@@ -143,7 +188,6 @@ public class TestDomainModule {
         when(mockService.getWritableSas()).thenReturn(Observable.<Image>empty());
         return mockService;
     }
-
 
     @Provides
     @Singleton

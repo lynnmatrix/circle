@@ -5,6 +5,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.ApSource;
 import com.jadenine.circle.domain.BombLoader;
 import com.jadenine.circle.domain.ChatLoader;
+import com.jadenine.circle.domain.MyTopicLoader;
 import com.jadenine.circle.domain.UserAp;
 
 /**
@@ -18,6 +19,8 @@ public interface DomainComponent {
     void inject(BombLoader loader);
 
     void inject(ChatLoader loader);
+
+    void inject(MyTopicLoader loader);
 
     Account getAccount();
 

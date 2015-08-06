@@ -76,7 +76,7 @@ public class UserApTest {
 
     @Test
     public void testGetTopic() throws Exception {
-        assertNotNull(userAp.getTopic("topicId"));
+        assertNotNull(userAp.getTopic(1l));
     }
 
     @Test

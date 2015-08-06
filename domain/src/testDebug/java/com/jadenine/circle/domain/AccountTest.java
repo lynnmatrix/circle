@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.UserApEntity;
 
 import org.junit.Assert;
@@ -16,6 +17,9 @@ import domain.dagger.TestDomainModule;
 import rx.Observer;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
@@ -32,8 +36,7 @@ public class AccountTest {
         DaggerService.setComponent(DaggerTestDomainComponent.builder().testDomainModule(new
                 TestDomainModule(DEVICE_ID)).build());
         account = DaggerService.getDomainComponent().getAccount();
-        //Waiting for gradle plugin 1.3+, walk around by define Test dagger in debug rather than
-        // test.
+        //TODO Waiting for gradle plugin 1.3+, walk around by define Test dagger in debug rather than test.
     }
 
     @Test
@@ -43,7 +46,7 @@ public class AccountTest {
 
     @Test
     public void testAddUserAp() throws Exception {
-        Assert.assertNotNull(account.getUserAps());
+        assertNotNull(account.getUserAps());
         Assert.assertTrue(account.getUserAps().isEmpty());
 
         final UserAp ap = new UserAp(new UserApEntity(DEVICE_ID, "mac", "ssid"));
@@ -82,7 +85,7 @@ public class AccountTest {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                latch.countDown();
+                fail();
             }
 
             @Override
@@ -93,8 +96,6 @@ public class AccountTest {
 
         Assert.assertTrue(latch.await(100, TimeUnit.SECONDS));
 
-        verify(account.apDBService).listAps();
-        verify(account.apService).listAPs(eq(DEVICE_ID));
         assertFalse(account.getUserAps().isEmpty());
     }
 
@@ -118,5 +119,30 @@ public class AccountTest {
             }
         });
         assertTrue(latch.await(10, TimeUnit.SECONDS));*/
+    }
+
+    @Test
+    public void testMyTopics() throws InterruptedException {
+        assertNotNull(account.getMyTopics());
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        account.refreshMyTopics().subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                fail();
+            }
+
+            @Override
+            public void onNext(List<TimelineRange<Bomb>> timelineRanges) {
+
+            }
+        });
+        assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 }

@@ -17,11 +17,12 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by linym on 7/22/15.
+ * Created by linym on 8/6/15.
  */
-public class BombLoader implements RangeLoader<Bomb> {
-    private final String ap;
+public class MyTopicLoader implements RangeLoader<Bomb> {
+    private final String auth;
     private final int pageCount;
+
     @Inject
     BombService restService;
 
@@ -34,19 +35,19 @@ public class BombLoader implements RangeLoader<Bomb> {
     @Inject
     TimelineCursorDBService cursorDBService;
 
-    public BombLoader(String ap, int pageCount){
-        this.ap = ap;
+    public MyTopicLoader(String auth, int pageCount) {
+        this.auth = auth;
         this.pageCount = pageCount;
     }
 
     @Override
     public Observable<TimelineRangeResult<Bomb>> refresh(Long top) {
-        return restService.apTimeline(ap, pageCount, top, null);
+        return restService.myTopicsTimeline(auth, pageCount, top, null);
     }
 
     @Override
-    public Observable<TimelineRangeResult<Bomb>> loadMore(Long bottom, Long sinceId) {
-        return restService.apTimeline(ap, pageCount, sinceId, bottom);
+    public Observable<TimelineRangeResult<Bomb>> loadMore(Long beforeId, Long sinceId) {
+        return restService.myTopicsTimeline(auth, pageCount, sinceId, beforeId);
     }
 
     @Override
@@ -61,6 +62,6 @@ public class BombLoader implements RangeLoader<Bomb> {
 
     @Override
     public Observable<List<Bomb>> loadTimelineRange(Long top, Long bottom) {
-        return dbService.listMessage(ap, bottom + 1, top - 1);
+        return dbService.myTopics(auth, bottom + 1, top - 1);
     }
 }

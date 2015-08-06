@@ -5,8 +5,11 @@ import android.support.annotation.NonNull;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.Identifiable;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
+import com.jadenine.circle.model.entity.IdentifiableEntity;
 import com.jadenine.circle.model.rest.TimelineRangeResult;
+import com.jadenine.circle.model.state.TimelineEntity;
 import com.jadenine.circle.model.state.TimelineRangeCursor;
+import com.jadenine.circle.model.state.TimelineType;
 
 import org.junit.Test;
 
@@ -189,7 +192,7 @@ public class TimelineRangeTest {
 
     }
 
-    private class Id implements Identifiable<Long> {
+    private class Id implements IdentifiableEntity {
         private final Long id;
         public Id(Long id){
             this.id = id;
@@ -206,6 +209,41 @@ public class TimelineRangeTest {
         public Long getGroupId() {
             return id;
         }
+
+        @Override
+        public boolean getUnread() {
+            return false;
+        }
+
+        @Override
+        public void setUnread(boolean unread) {
+
+        }
+
+        @Override
+        public void save() {
+
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
+        public void update() {
+
+        }
+
+        @Override
+        public void insert() {
+
+        }
+
+        @Override
+        public boolean exists() {
+            return false;
+        }
     }
 
     private static class Loader implements RangeLoader<Id>{
@@ -216,7 +254,12 @@ public class TimelineRangeTest {
         }
 
         @Override
-        public Observable<TimelineRangeResult<Id>> loadMore(Long bottom) {
+        public Observable<TimelineRangeResult<Id>> loadMore(Long beforeId, Long sinceId) {
+            return null;
+        }
+
+        @Override
+        public Observable<TimelineEntity> loadTimeline(String timeline, TimelineType timelineType) {
             return null;
         }
 

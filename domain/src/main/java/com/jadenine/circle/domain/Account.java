@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.state.TimelineType;
 
@@ -22,7 +23,7 @@ public class Account {
     private final ApSource apSource;
 
     private final BaseTimeline<DirectMessageEntity> chatTimeline;
-
+    private final BaseTimeline<Bomb> myTopicsTimeline;
     @Inject
     ChatComposer bombComposer;
 
@@ -31,10 +32,14 @@ public class Account {
 
         DaggerService.getDomainComponent().inject(this);
 
-        ChatLoader loader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
+        ChatLoader chatLoader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
 
-        this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, TimelineType.CHAT, loader);
+        this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, TimelineType.CHAT, chatLoader);
         this.apSource = new ApSource(deviceId);
+
+        MyTopicLoader myTopicLoader = new MyTopicLoader(deviceId, Constants.PAGE_SIZE);
+        DaggerService.getDomainComponent().inject(myTopicLoader);
+        this.myTopicsTimeline = new BaseTimeline<>("my_topics", TimelineType.MY_TOPIC, myTopicLoader);
     }
 
     public String getDeviceId() {
@@ -66,6 +71,7 @@ public class Account {
         return ap;
     }
 
+    //<editor-fold desc="chat">
     public Group<DirectMessageEntity> getChat(String ap, Long bombGroupId, String rootUser, Long
             rootMessageId) {
         if(null != rootMessageId) {
@@ -128,4 +134,27 @@ public class Account {
     public boolean hasUnreadChat() {
         return chatTimeline.getHasUnread();
     }
+    //</editor-fold>
+
+    //<editor-fold desc="my topics">
+
+    public Observable<List<TimelineRange<Bomb>>> refreshMyTopics(){
+        return myTopicsTimeline.refresh();
+    }
+
+    public Observable<List<TimelineRange<Bomb>>> loadMoreMyTopics(){
+        return myTopicsTimeline.loadMore();
+    }
+    public Observable<List<TimelineRange<Bomb>>> loadMoreMyTopics(TimelineRange<Bomb> range) {
+        return myTopicsTimeline.loadMore(range);
+    }
+
+    public boolean hasMoreMyTopic(){
+        return myTopicsTimeline.hasMore();
+    }
+
+    public List<TimelineRange<Bomb>> getMyTopics(){
+        return myTopicsTimeline.getAllRanges();
+    }
+    //</editor-fold>
 }

@@ -24,10 +24,10 @@ public interface BombService {
      * @param beforeId (optional) Returns results with an ID greater than (that is, older than) to the specified ID.
      */
     @POST("/bomb/list")
-    Observable<TimelineRangeResult<Bomb>> list(@Query("ap") String ap,
-                                          @Query("count") Integer count,
-                                          @Query("since_id") Long sinceId,
-                                          @Query("before_id") Long beforeId);
+    Observable<TimelineRangeResult<Bomb>> apTimeline(@Query("ap") String ap,
+                                                     @Query("count") Integer count,
+                                                     @Query("since_id") Long sinceId,
+                                                     @Query("before_id") Long beforeId);
 
     /**
      * Send a  message
@@ -36,4 +36,20 @@ public interface BombService {
      */
     @POST("/bomb/add")
     Observable<Bomb> add(@Body Bomb message);
+
+
+    /**
+     * Returns a collection of the most recent timeline messages belongs to topics started by myself.
+     *
+     * @param auth user
+     * @param count (optional) See{@link BombService#apTimeline(String, Integer, Long, Long)}
+     * @param sinceId (optional) See{@link BombService#apTimeline(String, Integer, Long, Long)}
+     * @param beforeId (optional) See{@link BombService#apTimeline(String, Integer, Long, Long)}
+     */
+    @POST("/bomb/list/user")
+    Observable<TimelineRangeResult<Bomb>> myTopicsTimeline(@Query("auth") String auth,
+                                                           @Query("count") Integer count,
+                                                           @Query("since_id") Long sinceId,
+                                                           @Query("before_id") Long beforeId);
+
 }
