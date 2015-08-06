@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import flow.Flow;
 import flow.History;
+import flow.path.Path;
 
 /**
  * Created by linym on 8/5/15.
@@ -31,8 +32,12 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    public void bind(int iconResId, int titleResId, boolean hasUnread) {
-        iconView.setImageResource(iconResId);
+    public void bind(int iconResId, int titleResId, boolean hasUnread, final Path path) {
+        if(iconResId > 0) {
+            iconView.setImageResource(iconResId);
+        }
+        iconView.setVisibility(iconResId >0?View.VISIBLE:View.GONE);
+
         titleView.setText(titleResId);
         readView.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +47,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
                 Context context = itemView.getContext();
                 History.Builder historyBuilder = Flow.get(context).getHistory().buildUpon();
                 historyBuilder.pop();
-                historyBuilder.push(new MyChatPath());
+                historyBuilder.push(path);
 
                 Flow.get(context).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
             }

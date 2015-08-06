@@ -10,6 +10,8 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.HomeActivity;
+import com.jadenine.circle.ui.chat.MyChatPath;
+import com.jadenine.circle.ui.topic.user.MyTopicPath;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -24,7 +26,9 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_HEADER = 0;
     private final int TYPE_AP = 1;
     private final int TYPE_MY_CHAT = 2;
-    public static final int NON_AP_ITEM_COUNT = 2;
+    private final int TYPE_MY_TOPICS = 3;
+
+    public static final int NON_AP_ITEM_COUNT = 3;
 
     private List<UserAp> aps = new ArrayList<>();
     private int selectedPosition = -1;
@@ -42,6 +46,8 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(0 == position) {
             type = TYPE_HEADER;
         } else if(1 == position) {
+            type = TYPE_MY_TOPICS;
+        } else if(2 == position) {
             type = TYPE_MY_CHAT;
         } else {
             type = TYPE_AP;
@@ -58,6 +64,12 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 .drawer_header, parent,
                         false);
                 viewHolder = new DrawerHeaderViewHolder(header);
+                break;
+            case TYPE_MY_TOPICS:
+                View myTopicsMenuItem = LayoutInflater.from(parent.getContext()).inflate(R.layout
+                        .item_navigation_menu, parent, false);
+
+                viewHolder = new ItemViewHolder(myTopicsMenuItem);
                 break;
             case TYPE_MY_CHAT:
                 View myChatMenuItem = LayoutInflater.from(parent.getContext()).inflate(R.layout
@@ -83,9 +95,13 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (holder.getItemViewType()) {
             case TYPE_HEADER:
                 break;
+            case TYPE_MY_TOPICS:
+                ((ItemViewHolder)holder).bind(R.drawable.ic_person_outline, R.string
+                        .title_my_topic, account.hasUnreadChat(), new MyTopicPath());
+                break;
             case TYPE_MY_CHAT:
                 ((ItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string
-                        .title_private_chat, account.hasUnreadChat());
+                        .title_private_chat, account.hasUnreadChat(), new MyChatPath());
                 break;
             case TYPE_AP:
                 ((ApMenuItemViewHolder)holder).bind(getAp(position));

@@ -22,5 +22,6 @@
     <string name="topic_edit_hint">说点什么</string>
     <string name="loading_more">加载更多</string>
     <string name="error_load_more">加载失败</string>
+    <string name="title_my_topic">我的话题</string>
 
 </resources>

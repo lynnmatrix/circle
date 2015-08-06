@@ -131,11 +131,6 @@ class MyChatsPresenter extends ViewPresenter<MyChatsView> implements Refreshable
                 });
     }
 
-    @Override
-    public boolean onRowClick(int position) {
-        return false;
-    }
-
     private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
         loadMoreViewHolder.startLoading();
         account.loadMoreChat(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<DirectMessageEntity>>>() {

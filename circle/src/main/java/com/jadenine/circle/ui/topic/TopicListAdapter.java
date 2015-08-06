@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by linym on 7/22/15.
  */
-class TopicListAdapter extends SectionedRecyclerViewAdapter
+public class TopicListAdapter extends SectionedRecyclerViewAdapter
         .ItemAdapter<Bomb> {
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
     private final Drawable errorDrawable;

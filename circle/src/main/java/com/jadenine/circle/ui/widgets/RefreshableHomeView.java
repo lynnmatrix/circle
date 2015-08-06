@@ -59,17 +59,6 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
         recyclerView.addItemDecoration(decoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
-                RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position) {
-                        if(null != refreshableHomeListener) {
-                            return refreshableHomeListener.onRowClick(position);
-                        }
-                        return false;
-                    }
-                }));
-
         recyclerView.addOnScrollListener(new AutoLoadMoreListener(linearLayoutManager) {
             @Override
             public void onLoadMore() {
@@ -143,6 +132,5 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     public interface RefreshableHomeListener{
         void onRefresh();
         void onLoadMore();
-        boolean onRowClick(int position);
     }
 }

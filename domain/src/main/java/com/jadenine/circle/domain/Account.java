@@ -156,5 +156,9 @@ public class Account {
     public List<TimelineRange<Bomb>> getMyTopics(){
         return myTopicsTimeline.getAllRanges();
     }
+
+    public List<TimelineRange<Bomb>> getAllMyTopics() {
+        return myTopicsTimeline.getAllRanges();
+    }
     //</editor-fold>
 }

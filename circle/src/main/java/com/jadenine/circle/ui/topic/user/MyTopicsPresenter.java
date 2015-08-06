@@ -1,12 +1,13 @@
-package com.jadenine.circle.ui.topic;
+package com.jadenine.circle.ui.topic.user;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
+import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
@@ -15,7 +16,6 @@ import com.jadenine.common.mortar.ActivityOwner;
 
 import java.util.List;
 
-import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observable;
 import rx.Observer;
@@ -25,12 +25,10 @@ import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
 /**
- * Created by linym on 7/22/15.
+ * Created by linym on 8/6/15.
  */
-public class TopicListPresenter extends ViewPresenter<TopicListView> implements RefreshableHomeView
-        .RefreshableHomeListener {
-    private final UserAp userAp;
-
+public class MyTopicsPresenter  extends ViewPresenter<MyTopicView> implements RefreshableHomeView.RefreshableHomeListener{
+    private final Account account;
     private final ActivityOwner activityOwner;
 
     private Subscription refreshSubscription = Subscriptions.empty();{
@@ -40,8 +38,8 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         loadingMoreSubscription.unsubscribe();
     }
 
-    public TopicListPresenter(UserAp userAp, ActivityOwner owner) {
-        this.userAp = userAp;
+    public MyTopicsPresenter(Account account, ActivityOwner owner) {
+        this.account = account;
         this.activityOwner = owner;
     }
 
@@ -58,7 +56,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
             }
         });
 
-        getView().getToolbar().setTitle(userAp.getSSID());
+        getView().getToolbar().setTitle(R.string.title_my_topic);
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
 
@@ -72,13 +70,10 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         loadingMoreSubscription.unsubscribe();
     }
 
+    //<editor-fold desc="load data">
     @Override
     public void onRefresh() {
-        if(!refreshSubscription.isUnsubscribed()){
-            return;
-        }
-
-        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.refresh()
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = account.refreshMyTopics()
                 .observeOn(AndroidSchedulers.mainThread());
 
         refreshSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
@@ -88,7 +83,6 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
                 getView().stopRefreshing();
-                userAp.setHasUnread(false);
             }
 
             @Override
@@ -98,7 +92,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
                 getView().stopRefreshing();
-                updateBombGroups(userAp.getAllTimelineRanges());
+                updateBombGroups(account.getAllMyTopics());
             }
 
             @Override
@@ -113,13 +107,26 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
 
     @Override
     public void onLoadMore() {
-        if(!loadingMoreSubscription.isUnsubscribed() || !userAp.hasMore()) {
+        if(!loadingMoreSubscription.isUnsubscribed() || !account.hasMoreMyTopic()) {
             return;
         }
-        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMore()
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = account.loadMoreMyTopics()
                 .observeOn(AndroidSchedulers.mainThread());
 
-        loadingMoreSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+        loadingMoreSubscription = topicsObservable.subscribe(createAutoLoadMoreObserver());
+    }
+
+    private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
+        loadMoreViewHolder.startLoading();
+        account.loadMoreMyTopics(range).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(createLoadMoreObserver(loadMoreViewHolder));
+    }
+
+
+    //<editor-fold desc="commons to load topics">
+    @NonNull
+    private Observer<List<TimelineRange<Bomb>>> createAutoLoadMoreObserver() {
+        return new Observer<List<TimelineRange<Bomb>>>() {
             @Override
             public void onCompleted() {
                 loadingMoreSubscription = Subscriptions.empty();
@@ -139,16 +146,12 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
 
                 updateBombGroups(ranges);
             }
-        });
+        };
     }
 
-    void addBomb() {
-        Flow.get(getView().getContext()).set(new ComposerPath(userAp.getAP()));
-    }
-
-    private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
-        loadMoreViewHolder.startLoading();
-        userAp.loadMore(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+    @NonNull
+    private Observer<List<TimelineRange<Bomb>>> createLoadMoreObserver(final LoadMoreViewHolder loadMoreViewHolder) {
+        return new Observer<List<TimelineRange<Bomb>>>() {
 
             @Override
             public void onCompleted() {
@@ -164,10 +167,13 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
             public void onNext(List<TimelineRange<Bomb>> ranges) {
                 updateBombGroups(ranges);
             }
-        });
+        };
     }
 
     private void updateBombGroups(List<TimelineRange<Bomb>> ranges) {
         getView().getAdapter().setSections(ranges);
     }
+    //</editor-fold>
+    //</editor-fold>
+
 }
