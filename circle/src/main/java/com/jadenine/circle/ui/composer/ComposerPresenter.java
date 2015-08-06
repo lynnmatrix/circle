@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
@@ -32,6 +33,7 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final int PICK_IMAGE = 1;
 
+    protected final Account account;
     protected final UserAp userAp;
     protected Uri imageUri;
     protected String mimeType;
@@ -41,7 +43,8 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     }
 
     private final ActivityOwner activityOwner;
-    public ComposerPresenter(UserAp userAp, ActivityOwner owner) {
+    public ComposerPresenter(Account account, UserAp userAp, ActivityOwner owner) {
+        this.account = account;
         this.userAp = userAp;
         this.activityOwner = owner;
     }

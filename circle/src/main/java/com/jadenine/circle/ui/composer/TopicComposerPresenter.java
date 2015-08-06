@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
@@ -24,9 +25,8 @@ import rx.subscriptions.Subscriptions;
 class TopicComposerPresenter extends ComposerPresenter {
 
     private final long CONTENT_MAX_LENGTH = 256;
-
-    public TopicComposerPresenter(UserAp userAp, ActivityOwner owner) {
-        super(userAp, owner);
+    public TopicComposerPresenter(Account account, UserAp userAp, ActivityOwner owner) {
+        super(account, userAp, owner);
     }
 
     @Override
@@ -90,7 +90,7 @@ class TopicComposerPresenter extends ComposerPresenter {
     }
 
     private void publish(Bomb bomb) {
-        userAp.publish(bomb).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer
+        account.publish(bomb).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer
                 <Bomb>() {
 
             @Override

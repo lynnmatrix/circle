@@ -46,8 +46,8 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
 
             @DaggerScope(ComposerPresenter.class)
             @Provides
-            ComposerPresenter providePresenter(UserAp userAp, ActivityOwner owner) {
-                return new TopicComposerPresenter(userAp, owner);
+            ComposerPresenter providePresenter(Account account, UserAp userAp, ActivityOwner owner) {
+                return new TopicComposerPresenter(account, userAp, owner);
             }
         }
 }

@@ -25,7 +25,9 @@ public class Account {
     private final BaseTimeline<DirectMessageEntity> chatTimeline;
     private final BaseTimeline<Bomb> myTopicsTimeline;
     @Inject
-    ChatComposer bombComposer;
+    ChatComposer chatComposer;
+    @Inject
+    BombComposer bombComposer;
 
     public Account(String deviceId) {
         this.deviceId = deviceId;
@@ -106,19 +108,6 @@ public class Account {
         return chatTimeline.loadMore(range);
     }
 
-    public Observable<DirectMessageEntity> publish(DirectMessageEntity chatMessage) {
-        Observable<DirectMessageEntity> observable = bombComposer.send(chatMessage)
-                .map(new Func1<DirectMessageEntity, DirectMessageEntity>() {
-                    @Override
-                    public DirectMessageEntity call(DirectMessageEntity bomb1) {
-                        chatTimeline.addPublished(bomb1);
-                        return bomb1;
-                    }
-                });
-
-        return observable;
-    }
-
     public List<TimelineRange<DirectMessageEntity>> getAllChats() {
         return chatTimeline.getAllRanges();
     }
@@ -161,4 +150,17 @@ public class Account {
         return myTopicsTimeline.getAllRanges();
     }
     //</editor-fold>
+
+    //<editor-fold desc="publisher">
+
+    public Observable<DirectMessageEntity> publish(DirectMessageEntity chatMessage) {
+        return chatComposer.send(chatMessage);
+    }
+
+    public Observable<Bomb> publish(final Bomb bomb) {
+        return bombComposer.send(bomb);
+    }
+
+    //</editor-fold>
+
 }

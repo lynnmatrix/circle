@@ -88,19 +88,6 @@ public class UserAp implements ApSource.Updatable<UserApEntity> {
         return timeline.loadMore(range);
     }
 
-    public Observable<Bomb> publish(final Bomb bomb) {
-        Observable<Bomb> observable = bombComposer.send(bomb)
-                .map(new Func1<Bomb, Bomb>() {
-                    @Override
-                    public Bomb call(Bomb bomb1) {
-                        timeline.addPublished(bomb1);
-                        return bomb1;
-                    }
-                });
-
-        return observable;
-    }
-
     public Observable<String> uploadImage(InputStream inputStream, String mimeType) {
         return bombComposer.uploadImage(inputStream, mimeType);
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
+import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.domain.UserAp;
@@ -35,6 +36,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final String BUNDLE_REPLY_TO = "reply_to";
 
+    private final Account account;
     private final UserAp userAp;
     private final Group<Bomb> bombGroup;
     private final Bomb rootBomb;
@@ -45,7 +47,8 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
     private final ActivityOwner activityOwner;
 
-    public TopicDetailPresenter(UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
+    public TopicDetailPresenter(Account account, UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
+        this.account = account;
         this.userAp = userAp;
         this.bombGroup = bombGroup;
         this.rootBomb = bombGroup.getRoot();
@@ -139,7 +142,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
         bomb.setRootMessageId(rootBomb.getRootMessageId());
         bomb.setRootUser(rootBomb.getRootUser());
 
-        userAp.publish(bomb).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Bomb>() {
+        account.publish(bomb).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Bomb>() {
 
             @Override
             public void onCompleted() {
