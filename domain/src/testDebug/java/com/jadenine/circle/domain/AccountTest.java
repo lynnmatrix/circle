@@ -123,7 +123,7 @@ public class AccountTest {
 
     @Test
     public void testMyTopics() throws InterruptedException {
-        assertNotNull(account.getMyTopics());
+        assertNotNull(account.getAllMyTopics());
 
         final CountDownLatch latch = new CountDownLatch(1);
         account.refreshMyTopics().subscribe(new Observer<List<TimelineRange<Bomb>>>() {

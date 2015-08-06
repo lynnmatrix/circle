@@ -27,7 +27,7 @@ import timber.log.Timber;
 /**
  * Created by linym on 8/6/15.
  */
-public class MyTopicsPresenter  extends ViewPresenter<MyTopicView> implements RefreshableHomeView.RefreshableHomeListener{
+class MyTopicsPresenter  extends ViewPresenter<MyTopicView> implements RefreshableHomeView.RefreshableHomeListener{
     private final Account account;
     private final ActivityOwner activityOwner;
 

@@ -142,8 +142,8 @@ public class Account {
         return myTopicsTimeline.hasMore();
     }
 
-    public List<TimelineRange<Bomb>> getMyTopics(){
-        return myTopicsTimeline.getAllRanges();
+    public Group<Bomb> getMyTopic(Long groupId){
+        return myTopicsTimeline.getRange(groupId).getGroup(groupId);
     }
 
     public List<TimelineRange<Bomb>> getAllMyTopics() {

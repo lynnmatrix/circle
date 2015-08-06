@@ -44,7 +44,7 @@ public class MyTopicPath extends Path implements ScreenComponentFactory {
         @Provides
         SectionedLoadMoreRecyclerAdapter<Bomb> provideAdapter(AvatarBinder binder, Drawable
                 errorDrawable) {
-            return new SectionedLoadMoreRecyclerAdapter(new TopicListAdapter(errorDrawable,
+            return new SectionedLoadMoreRecyclerAdapter(new MyTopicListAdapter(errorDrawable,
                     binder));
         }
 

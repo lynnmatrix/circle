@@ -1,15 +1,16 @@
-package com.jadenine.circle.ui.widgets;
+package com.jadenine.circle.ui.topic.detail;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.widgets.TopicHeader;
 
 /**
  * Created by linym on 7/25/15.
  */
-public class TopicHeaderViewHolder extends RecyclerView.ViewHolder {
+class TopicHeaderViewHolder extends RecyclerView.ViewHolder {
     private final TopicHeader topicHeader;
 
     public TopicHeaderViewHolder(TopicHeader itemView) {

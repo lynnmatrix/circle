@@ -49,7 +49,7 @@ public class TopicDetailView extends LinearLayout{
 
     public TopicDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<TopicDetailPath.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<TopicDetailComponent>getDaggerComponent(context).inject(this);
     }
 
     @Override

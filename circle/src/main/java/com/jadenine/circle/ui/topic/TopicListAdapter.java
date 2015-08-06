@@ -21,8 +21,8 @@ import java.util.List;
 public class TopicListAdapter extends SectionedRecyclerViewAdapter
         .ItemAdapter<Bomb> {
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
-    private final Drawable errorDrawable;
-    private final AvatarBinder avatarBinder;
+    protected final Drawable errorDrawable;
+    protected final AvatarBinder avatarBinder;
 
     public TopicListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
         this.errorDrawable = errorDrawable;
@@ -30,7 +30,7 @@ public class TopicListAdapter extends SectionedRecyclerViewAdapter
     }
 
     @Override
-    public TopicItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         TopicHeader topicHeader = (TopicHeader) LayoutInflater.from(parent.getContext()).inflate(R.layout.topic_header,
                 parent, false);
         TopicItemViewHolder viewHolder = new TopicItemViewHolder(topicHeader);

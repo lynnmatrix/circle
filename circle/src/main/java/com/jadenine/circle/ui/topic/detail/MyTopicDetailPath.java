@@ -17,54 +17,50 @@ import dagger.Provides;
 import flow.path.Path;
 
 /**
- * Created by linym on 7/24/15.
+ * Created by linym on 8/6/15.
  */
 @Layout(R.layout.screen_bomb_group)
-public class TopicDetailPath extends Path implements ScreenComponentFactory{
-    private final String ap;
+public class MyTopicDetailPath extends Path implements ScreenComponentFactory {
     private final Long groupId;
 
-    public TopicDetailPath(@NotNull String ap, @NotNull Long groupId) {
-        this.ap = ap;
+    public MyTopicDetailPath(@NotNull Long groupId) {
         this.groupId = groupId;
     }
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerTopicDetailPath_Component.builder().homeComponent((HomeComponent)
+        return DaggerMyTopicDetailPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
-                .module(new Module(ap, groupId))
+                .module(new Module(groupId))
                 .build();
     }
 
-    @DaggerScope(TopicDetailPresenter.class)
+    @DaggerScope(MyTopicDetailPath.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     interface Component extends TopicDetailComponent{
     }
 
     @dagger.Module
     static class Module{
-        private final String ap;
         private final Long groupId;
 
-        public Module(String ap, Long groupId) {
-            this.ap = ap;
+        public Module(Long groupId) {
             this.groupId = groupId;
         }
 
         @Provides
-        @DaggerScope(TopicDetailPresenter.class)
-        UserAp provideUserAp(Account account){
-            return account.getUserAp(ap);
+        @DaggerScope(MyTopicDetailPath.class)
+        UserAp provideUserAp(Account account, Group<Bomb> topic){
+            return account.getUserAp(topic.getRoot().getAp());
         }
 
         @Provides
-        @DaggerScope(TopicDetailPresenter.class)
-        Group<Bomb> provideBombGroup(UserAp userAp) {
-            return userAp.getTopic(groupId);
+        @DaggerScope(MyTopicDetailPath.class)
+        Group<Bomb> provideBombGroup(Account account) {
+            return account.getMyTopic(groupId);
         }
 
-        @DaggerScope(TopicDetailPresenter.class)
+        @DaggerScope(MyTopicDetailPath.class)
         @Provides
         TopicDetailPresenter providePresenter(Account account, UserAp userAp, Group<Bomb> bombGroup, AvatarBinder
                 avatarBinder, ActivityOwner owner) {

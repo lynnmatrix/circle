@@ -10,7 +10,6 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.widgets.TopicHeader;
-import com.jadenine.circle.ui.widgets.TopicHeaderViewHolder;
 
 import java.util.Collections;
 import java.util.List;
