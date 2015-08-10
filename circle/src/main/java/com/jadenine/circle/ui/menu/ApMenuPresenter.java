@@ -92,7 +92,6 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
     @Subscribe
     public void onApConnected(EventProducer.APConnectedEvent event) {
-        if(!hasView()) return;
         addAPIfNot(event.getAP());
     }
 

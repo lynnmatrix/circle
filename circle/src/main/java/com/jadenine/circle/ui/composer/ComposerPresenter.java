@@ -38,11 +38,11 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     protected Uri imageUri;
     protected String mimeType;
 
+    private final ActivityOwner activityOwner;
+
     protected Subscription sendSubscription = Subscriptions.empty();{
         sendSubscription.unsubscribe();
     }
-
-    private final ActivityOwner activityOwner;
     public ComposerPresenter(Account account, UserAp userAp, ActivityOwner owner) {
         this.account = account;
         this.userAp = userAp;
@@ -77,7 +77,7 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        Activity activity = (Activity) getView().getContext();
+        Activity activity = activityOwner.getActivity();
         activity.startActivityForResult(intent, PICK_IMAGE);
     }
 
