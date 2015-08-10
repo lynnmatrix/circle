@@ -10,8 +10,4 @@
         android:title="@string/share"
         android:icon="@drawable/ic_share_black"/>
 
-    <item
-        android:id="@+id/item_wifi_scan"
-        android:title="@string/wifi_scan"
-        android:icon="@drawable/ic_wifi_black"/>
 </menu>

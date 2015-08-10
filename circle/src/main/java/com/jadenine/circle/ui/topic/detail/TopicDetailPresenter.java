@@ -3,6 +3,8 @@ package com.jadenine.circle.ui.topic.detail;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
@@ -15,6 +17,7 @@ import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
+import com.jadenine.circle.ui.utils.ShareService;
 import com.jadenine.circle.ui.widgets.TopicHeader;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.mortar.ActivityOwner;
@@ -47,6 +50,8 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
     private final ActivityOwner activityOwner;
 
+    private final ShareService shareService;
+
     public TopicDetailPresenter(Account account, UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
         this.account = account;
         this.userAp = userAp;
@@ -55,6 +60,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
         this.replyTo = rootBomb.getRootUser();
         this.avatarBinder = avatarBinder;
         this.activityOwner = owner;
+        this.shareService = new ShareService();
     }
 
     @Override
@@ -70,10 +76,6 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             getView().replyEditor.setSelection(content.length());
         }
 
-        getView().toolbar.setTitle(userAp.getSSID());
-        updateHint();
-
-        loadMessages();
         getView().getBombAdapter().setOnAvatarClickListener(new TopicHeader.OnAvatarClickListener
                 () {
             @Override
@@ -92,6 +94,30 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             }
         });
 
+        updateHint();
+
+        loadMessages();
+
+        getView().toolbar.inflateMenu(R.menu.drawer);
+        getView().toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_share_wechat:
+                        shareService.shareToWeChatTimeline();
+                        return true;
+                    case R.id.item_share:
+                        shareService.share();
+                        return true;
+                }
+                return false;
+            }
+        });
+        if(!shareService.start(getView().getContext())){
+            getView().toolbar.getMenu().findItem(R.id.item_share_wechat).setVisible(false);
+        }
+
+        getView().toolbar.setTitle(userAp.getSSID());
         ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
     }
 
@@ -100,6 +126,12 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
         super.onSave(outState);
         outState.putString(BUNDLE_TYPED_CONTENT, getView().replyEditor.getText().toString());
         outState.putString(BUNDLE_REPLY_TO, replyTo);
+    }
+
+    @Override
+    protected void onExitScope() {
+        super.onExitScope();
+        shareService.stop();
     }
 
     void loadMessages() {

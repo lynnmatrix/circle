@@ -19,7 +19,7 @@ import flow.path.Path;
 /**
  * Created by linym on 8/6/15.
  */
-@Layout(R.layout.screen_bomb_group)
+@Layout(R.layout.screen_topic_detail)
 public class MyTopicDetailPath extends Path implements ScreenComponentFactory {
     private final Long groupId;
 

@@ -56,7 +56,6 @@ public class TopicDetailView extends LinearLayout{
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
-        presenter.takeView(this);
 
         bombList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -64,6 +63,8 @@ public class TopicDetailView extends LinearLayout{
         bombList.setAdapter(bombListAdapter);
 
         configToolbar();
+
+        presenter.takeView(this);
     }
 
     @Override
@@ -92,5 +93,6 @@ public class TopicDetailView extends LinearLayout{
     BombListAdapter getBombAdapter() {
         return bombListAdapter;
     }
+
 
 }

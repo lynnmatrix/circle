@@ -45,27 +45,6 @@ public class HomeActivity extends MortarActivity {
 
         DaggerService.<HomeComponent>getDaggerComponent(this).inject(this);
 
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//
-//            @Override
-//            public boolean onNavigationItemSelected(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.item_share_wechat:
-//                        drawerLayout.closeDrawer(GravityCompat.START);
-//                        presenter.shareToWeChat();
-//                        return true;
-//                    case R.id.item_share:
-//                        drawerLayout.closeDrawer(GravityCompat.START);
-//                        presenter.share();
-//                        return true;
-//                    case R.id.item_wifi_scan:
-//                        drawerLayout.closeDrawer(GravityCompat.START);
-//                        presenter.scanWifi();
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
         presenter.takeView(this);
     }
 

@@ -53,7 +53,6 @@ public class ChatView extends LinearLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
-        presenter.takeView(this);
 
         messageList.setHasFixedSize(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -62,6 +61,7 @@ public class ChatView extends LinearLayout {
         messageList.setAdapter(chatAdapter);
 
         configToolbar();
+        presenter.takeView(this);
     }
 
     @Override
