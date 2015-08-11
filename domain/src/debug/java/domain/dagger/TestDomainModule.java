@@ -34,6 +34,7 @@ import dagger.Provides;
 import rx.Observable;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
@@ -177,6 +178,8 @@ public class TestDomainModule {
         when(mockService.myTopicsTimeline(Matchers.anyString(), eq(Constants.PAGE_SIZE), Matchers.isNull(Long.class),
                 Matchers.isNull(Long.class)))
                 .thenReturn(Observable.just(new TimelineRangeResult<>(bombList, false, null)));
+
+        when(mockService.top(anyString())).thenReturn(Observable.<TimelineRangeResult<Bomb>>empty().just(new TimelineRangeResult<Bomb>(bombList, false, null)));
 
         return mockService;
     }

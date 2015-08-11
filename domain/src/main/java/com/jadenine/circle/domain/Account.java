@@ -5,18 +5,19 @@ import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.state.TimelineType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by linym on 6/17/15.
  */
 public class Account {
-    public static final String MY_CHATS_TIME_LINE = "my_chats";
+    public static final String TIME_LINE_MY_CHATS = "my_chats";
+    public static final String TIME_LINE_MY_TOPICS = "my_topics";
 
     private final String deviceId;
 
@@ -24,6 +25,8 @@ public class Account {
 
     private final BaseTimeline<DirectMessageEntity> chatTimeline;
     private final BaseTimeline<Bomb> myTopicsTimeline;
+    private final TopBoard topBoard;
+
     @Inject
     ChatComposer chatComposer;
     @Inject
@@ -36,12 +39,16 @@ public class Account {
 
         ChatLoader chatLoader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
 
-        this.chatTimeline = new BaseTimeline<>(MY_CHATS_TIME_LINE, TimelineType.CHAT, chatLoader);
+        this.chatTimeline = new BaseTimeline<>(TIME_LINE_MY_CHATS, TimelineType.CHAT, chatLoader);
         this.apSource = new ApSource(deviceId);
 
         MyTopicLoader myTopicLoader = new MyTopicLoader(deviceId, Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(myTopicLoader);
-        this.myTopicsTimeline = new BaseTimeline<>("my_topics", TimelineType.MY_TOPIC, myTopicLoader);
+        this.myTopicsTimeline = new BaseTimeline<>(TIME_LINE_MY_TOPICS, TimelineType.MY_TOPIC, myTopicLoader);
+
+        TopLoader topLoader = new TopLoader(deviceId);
+        DaggerService.getDomainComponent().inject(topLoader);
+        this.topBoard = new TopBoard(topLoader, Constants.TOP_K);
     }
 
     public String getDeviceId() {
@@ -163,4 +170,13 @@ public class Account {
 
     //</editor-fold>
 
+    //<editor-fold desc="top">
+    public Observable<ArrayList<Group<Bomb>>> refreshTop(){
+        return topBoard.refresh();
+    }
+
+    public List<Group<Bomb>> getTops(){
+        return topBoard.getTops();
+    }
+    //</editor-fold>
 }

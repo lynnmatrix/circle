@@ -52,4 +52,12 @@ public interface BombService {
                                                            @Query("since_id") Long sinceId,
                                                            @Query("before_id") Long beforeId);
 
+    /**
+     * Return the top 10 topic
+     *
+     * @param auth
+     */
+    @POST("/bomb/list/top")
+    Observable<TimelineRangeResult<Bomb>> top(@Query("auth") String auth);
+
 }

@@ -11,4 +11,5 @@ public class Constants {
     public static final String ENDPOINT_AZURE = "https://circle.chinacloudsites.cn:443";
     public static final int COMPRESS_DST_WIDTH = 1024;
     public static final int COMPRESS_DST_HEIGHT = 512;
+    public static final int TOP_K = 10;
 }
