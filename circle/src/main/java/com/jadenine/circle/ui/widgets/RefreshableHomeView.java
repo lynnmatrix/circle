@@ -47,7 +47,7 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     }
 
     @Override
-    public void onAttachedToWindow() {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ButterKnife.inject(this);
 
@@ -86,15 +86,13 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
     }
 
     @Override
-    public void onDetachedFromWindow() {
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         drawerHandler.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 
     protected void configToolbar() {
-//        ToolbarColorizer.colorizeToolbar(toolbar, Color.WHITE, (Activity)((PathContext) getContext
-//                ()).getBaseContext());
         toolbar.setNavigationIcon(R.drawable.ic_drawer);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override

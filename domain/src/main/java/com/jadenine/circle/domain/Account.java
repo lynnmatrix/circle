@@ -178,5 +178,9 @@ public class Account {
     public List<Group<Bomb>> getTops(){
         return topBoard.getTops();
     }
+
+    public Group<Bomb> getTopTopic(Long groupId) {
+        return topBoard.getTopic(groupId);
+    }
     //</editor-fold>
 }

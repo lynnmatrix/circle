@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.topic;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,9 +25,12 @@ public class TopicListAdapter extends SectionedRecyclerViewAdapter
     protected final Drawable errorDrawable;
     protected final AvatarBinder avatarBinder;
 
-    public TopicListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
+    private final OnTopicClickListener onTopicClickListener;
+
+    public TopicListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder, OnTopicClickListener listener) {
         this.errorDrawable = errorDrawable;
         this.avatarBinder = avatarBinder;
+        this.onTopicClickListener = listener;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class TopicListAdapter extends SectionedRecyclerViewAdapter
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Group<Bomb> bombGroup = bombGroups.get(position);
-        ((TopicItemViewHolder)holder).bind(bombGroup, errorDrawable, avatarBinder);
+        ((TopicItemViewHolder)holder).bind(bombGroup, errorDrawable, avatarBinder, onTopicClickListener);
     }
 
     @Override
@@ -70,5 +74,9 @@ public class TopicListAdapter extends SectionedRecyclerViewAdapter
 
     public Group<Bomb> getBombGroup(int position) {
         return bombGroups.get(position);
+    }
+
+    public interface OnTopicClickListener{
+        void onTopicClicked(Context context, Group<Bomb> topic);
     }
 }

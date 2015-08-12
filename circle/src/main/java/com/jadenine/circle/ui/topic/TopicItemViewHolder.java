@@ -23,10 +23,10 @@ class TopicItemViewHolder extends RecyclerView.ViewHolder {
         this.topicHeader = topicHeader;
     }
 
-    public void bind(Group<Bomb> topic, Drawable
+    public void bind(final Group<Bomb> topic, Drawable
             errorDrawable,
                      AvatarBinder
-            avatarBinder) {
+                             avatarBinder, final TopicListAdapter.OnTopicClickListener onTopicClickListener) {
         final Bomb rootBomb = topic.getRoot();
         topicHeader.bind(rootBomb, topic.getCount() - 1, errorDrawable, avatarBinder);
 
@@ -34,8 +34,7 @@ class TopicItemViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Flow.get(v.getContext()).set(new TopicDetailPath(rootBomb.getAp(), rootBomb
-                        .getGroupId()));
+                onTopicClickListener.onTopicClicked(v.getContext(), topic);
             }
         });
     }

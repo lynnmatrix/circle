@@ -45,7 +45,7 @@ public class TopBoard {
                 Collections.sort(topTopics, new Comparator<Group<Bomb>>() {
                     @Override
                     public int compare(Group<Bomb> lhs, Group<Bomb> rhs) {
-                        return lhs.getCount() - rhs.getCount();
+                        return rhs.getCount() - lhs.getCount();
                     }
                 });
 
@@ -73,5 +73,16 @@ public class TopBoard {
 
     public List<Group<Bomb>> getTops() {
         return new ArrayList<>(topics);
+    }
+
+    public Group<Bomb> getTopic(Long groupId) {
+        Group<Bomb> result = null;
+         for(Group<Bomb> topic : getTops()) {
+            if(topic.getId().equals(groupId)){
+                result = topic;
+                break;
+            }
+        }
+        return result;
     }
 }

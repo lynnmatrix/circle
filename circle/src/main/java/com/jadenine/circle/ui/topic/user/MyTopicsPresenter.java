@@ -97,7 +97,6 @@ class MyTopicsPresenter  extends ViewPresenter<MyTopicView> implements Refreshab
 
             @Override
             public void onNext(List<TimelineRange<Bomb>> ranges) {
-                Timber.i("hasView():%b", hasView());
                 if (!hasView()) return;
 
                 updateBombGroups(ranges);

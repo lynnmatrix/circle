@@ -11,6 +11,7 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.HomeActivity;
 import com.jadenine.circle.ui.chat.MyChatPath;
+import com.jadenine.circle.ui.topic.top.TopPath;
 import com.jadenine.circle.ui.topic.user.MyTopicPath;
 
 import java.security.InvalidParameterException;
@@ -27,8 +28,9 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_AP = 1;
     private final int TYPE_MY_CHAT = 2;
     private final int TYPE_MY_TOPICS = 3;
+    private final int TYPE_TOP_TOPICS = 4;
 
-    public static final int NON_AP_ITEM_COUNT = 3;
+    public static final int NON_AP_ITEM_COUNT = 4;
 
     private List<UserAp> aps = new ArrayList<>();
     private int selectedPosition = -1;
@@ -46,8 +48,10 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(0 == position) {
             type = TYPE_HEADER;
         } else if(1 == position) {
-            type = TYPE_MY_TOPICS;
+            type = TYPE_TOP_TOPICS;
         } else if(2 == position) {
+            type = TYPE_MY_TOPICS;
+        } else if(3 == position) {
             type = TYPE_MY_CHAT;
         } else {
             type = TYPE_AP;
@@ -65,17 +69,13 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         false);
                 viewHolder = new DrawerHeaderViewHolder(header);
                 break;
+            case TYPE_TOP_TOPICS:
             case TYPE_MY_TOPICS:
-                View myTopicsMenuItem = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                        .item_navigation_menu, parent, false);
-
-                viewHolder = new ItemViewHolder(myTopicsMenuItem);
-                break;
             case TYPE_MY_CHAT:
-                View myChatMenuItem = LayoutInflater.from(parent.getContext()).inflate(R.layout
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
                         .item_navigation_menu, parent, false);
 
-                viewHolder = new ItemViewHolder(myChatMenuItem);
+                viewHolder = new ItemViewHolder(itemView);
                 break;
             case TYPE_AP:
                 View apView = LayoutInflater.from(parent.getContext()).inflate(R.layout
@@ -94,6 +94,10 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         boolean selected = selectedPosition == position;
         switch (holder.getItemViewType()) {
             case TYPE_HEADER:
+                break;
+            case TYPE_TOP_TOPICS:
+                ((ItemViewHolder)holder).bind(R.drawable.ic_fire, R.string
+                        .title_top_topics,false, new TopPath());
                 break;
             case TYPE_MY_TOPICS:
                 ((ItemViewHolder)holder).bind(R.drawable.ic_person_outline, R.string
