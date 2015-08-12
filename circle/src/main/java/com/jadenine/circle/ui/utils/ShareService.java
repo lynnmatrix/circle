@@ -21,7 +21,8 @@ import java.io.ByteArrayOutputStream;
  */
 public class ShareService {
     private static final boolean ENABLE = false;
-    private static final String WX_APP_ID = "wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
+    private static final String WX_APP_ID = "wx22640278e820fdc8";//"wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
+
     private IWXAPI wechatApi = null;
     private Context context;
 

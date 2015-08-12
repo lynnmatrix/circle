@@ -21,8 +21,9 @@ public class Dagger2ScreenScoper extends BasicScreenScoper {
         }
 
         ScreenComponentFactory screenComponentFactory = (ScreenComponentFactory) path;
-        Object component = screenComponentFactory.createComponent(parentScope.getService(DaggerService.SERVICE_NAME));
+        Object parentComponent = parentScope.getService(DaggerService.SERVICE_NAME);
+        Object component = screenComponentFactory.createComponent(parentComponent);
         mortarScopeBuilder.withService(DaggerService.SERVICE_NAME, component);
-        Timber.i(DaggerService.SERVICE_NAME + " "+ component.toString());
+        Timber.i(DaggerService.SERVICE_NAME + " "+ component.toString() +" " + parentComponent.toString());
     }
 }
