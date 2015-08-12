@@ -11,6 +11,7 @@ import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.ui.topic.TopicListPath;
+import com.jadenine.circle.ui.topic.top.TopPath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import flow.Flow;
 import flow.History;
+import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -59,6 +61,11 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         }
         if (!hasView()) return;
         loadAPList();
+        openDefaultItem();
+    }
+
+    private void openDefaultItem() {
+        replaceWithPath(new TopPath());
     }
 
     @Override
@@ -81,15 +88,17 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         if(null == userAp) {
             return;
         }
-
-        History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
-        historyBuilder.pop();
-        historyBuilder.push(new TopicListPath(userAp.getAP()));
-
-        Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
+        replaceWithPath(new TopicListPath(userAp.getAP()));
         currentAp = userAp.getAP();
     }
 
+    private void replaceWithPath(@NonNull Path path) {
+        History.Builder historyBuilder = Flow.get(getContext()).getHistory().buildUpon();
+        historyBuilder.pop();
+        historyBuilder.push(path);
+
+        Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
+    }
     @Subscribe
     public void onApConnected(EventProducer.APConnectedEvent event) {
         addAPIfNot(event.getAP());
@@ -148,14 +157,12 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
             @Override
             public void onCompleted() {
-                openDefaultApIfNeed();
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.w(e, "Failed to load aps.");
                 getAdapter().setUserAps(account.getUserAps());
-                openDefaultApIfNeed();
             }
 
             @Override
@@ -167,14 +174,6 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);
-            }
-
-            private void openDefaultApIfNeed() {
-                if (!hasView()) return;
-
-                if (null == currentAp) {
-                    onApSelected(account.getDefaultAp());
-                }
             }
         });
     }
