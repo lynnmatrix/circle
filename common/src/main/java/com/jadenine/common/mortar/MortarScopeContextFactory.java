@@ -9,20 +9,22 @@ import flow.path.PathContextFactory;
 import mortar.MortarScope;
 import timber.log.Timber;
 
-public class BasicMortarContextFactory implements PathContextFactory {
+public class MortarScopeContextFactory implements PathContextFactory {
 
     private final ScreenScoper screenScoper;
 
-    public BasicMortarContextFactory(ScreenScoper screenScoper) {
+    public MortarScopeContextFactory(ScreenScoper screenScoper) {
         this.screenScoper = screenScoper;
     }
 
     @Override
     public Context setUpContext(Path path, Context parentContext) {
 
-        MortarScope scope = screenScoper.getScreenScope(parentContext, path.toString(), path);
+        //TODO get scope name of path
+        String scopeName = path.toString();
+        MortarScope scope = screenScoper.getScreenScope(parentContext, scopeName, path);
 
-        Timber.d(BasicMortarContextFactory.class.getCanonicalName(), "MortarContextFactory - " +
+        Timber.d(MortarScopeContextFactory.class.getCanonicalName(), "MortarContextFactory - " +
                 "set up scope " + scope.getName());
 
         return new TearDownContext(parentContext, scope);
@@ -38,16 +40,16 @@ public class BasicMortarContextFactory implements PathContextFactory {
         private final MortarScope parentScope;
         private LayoutInflater inflater;
 
-        static void destroyScope(Context context) {
-            MortarScope scope = MortarScope.getScope(context);
-            Timber.d(BasicMortarContextFactory.class.getCanonicalName(), "MortarContextFactory - " +
-                    "Destroy scope " + scope.getName());
-            scope.destroy();
+        public TearDownContext(Context parentContext, MortarScope scope) {
+            super(scope.createContext(parentContext));
+            this.parentScope = MortarScope.getScope(parentContext);
         }
 
-        public TearDownContext(Context context, MortarScope scope) {
-            super(scope.createContext(context));
-            this.parentScope = MortarScope.getScope(context);
+        static void destroyScope(Context context) {
+            MortarScope scope = MortarScope.getScope(context);
+            Timber.d(MortarScopeContextFactory.class.getCanonicalName(), "MortarContextFactory - " +
+                    "Destroy scope " + scope.getName());
+            scope.destroy();
         }
 
         @Override

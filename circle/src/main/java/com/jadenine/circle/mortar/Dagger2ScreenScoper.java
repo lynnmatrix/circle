@@ -14,7 +14,7 @@ import timber.log.Timber;
 public class Dagger2ScreenScoper extends BasicScreenScoper {
 
     @Override
-    protected void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
+    protected void configureMortarScope(Context parentContext, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder) {
         if (!(path instanceof ScreenComponentFactory)) {
             Timber.w("Path must implement ComponentFactory");
             return;
@@ -23,5 +23,6 @@ public class Dagger2ScreenScoper extends BasicScreenScoper {
         ScreenComponentFactory screenComponentFactory = (ScreenComponentFactory) path;
         Object component = screenComponentFactory.createComponent(parentScope.getService(DaggerService.SERVICE_NAME));
         mortarScopeBuilder.withService(DaggerService.SERVICE_NAME, component);
+        Timber.i(DaggerService.SERVICE_NAME + " "+ component.toString());
     }
 }

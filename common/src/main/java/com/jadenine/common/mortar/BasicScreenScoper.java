@@ -8,8 +8,8 @@ import timber.log.Timber;
 
 public abstract class BasicScreenScoper implements ScreenScoper {
 
-    public MortarScope getScreenScope(Context context, String name, Path path) {
-        MortarScope parentScope = MortarScope.getScope(context);
+    public MortarScope getScreenScope(Context parentContext, String name, Path path) {
+        MortarScope parentScope = MortarScope.getScope(parentContext);
         Timber.d("ScreenScoper - Screen scoper with parent " +
                 parentScope.getName());
 
@@ -20,11 +20,11 @@ public abstract class BasicScreenScoper implements ScreenScoper {
         }
 
         MortarScope.Builder builder = parentScope.buildChild();
-        configureMortarScope(context, name, path, parentScope, builder);
+        configureMortarScope(parentContext, name, path, parentScope, builder);
 
         Timber.d( "ScreenScoper - Screen scoper builds and returns new scope " + name);
         return builder.build(name);
     }
 
-    protected abstract void configureMortarScope(Context context, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder);
+    protected abstract void configureMortarScope(Context parentContext, String name, Path path, MortarScope parentScope, MortarScope.Builder mortarScopeBuilder);
 }

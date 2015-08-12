@@ -32,22 +32,22 @@ public class SimplePathContainer extends PathContainer {
         this.contextFactory = contextFactory;
     }
 
-    @Override protected void performTraversal(final ViewGroup containerView,
+    @Override
+    protected void performTraversal(final ViewGroup containerView,
                                               final TraversalState traversalState, final Flow.Direction direction,
                                               final Flow.TraversalCallback callback) {
-
         final PathContext context;
-        final PathContext oldPath;
+        final PathContext oldPathContext;
         if (containerView.getChildCount() > 0) {
-            oldPath = PathContext.get(containerView.getChildAt(0).getContext());
+            oldPathContext = PathContext.get(containerView.getChildAt(0).getContext());
         } else {
-            oldPath = PathContext.root(containerView.getContext());
+            oldPathContext = PathContext.root(containerView.getContext());
         }
 
         Path to = traversalState.toPath();
 
         View newView;
-        context = PathContext.create(oldPath, to, contextFactory);
+        context = PathContext.create(oldPathContext, to, contextFactory);
         int layout = getLayout(to);
         newView = LayoutInflater.from(context)
                 .cloneInContext(context)
@@ -63,7 +63,7 @@ public class SimplePathContainer extends PathContainer {
         if (fromView == null || direction == REPLACE) {
             containerView.removeAllViews();
             containerView.addView(newView);
-            oldPath.destroyNotIn(context, contextFactory);
+            oldPathContext.destroyNotIn(context, contextFactory);
             callback.onTraversalCompleted();
         } else {
             containerView.addView(newView);
@@ -73,7 +73,7 @@ public class SimplePathContainer extends PathContainer {
                     runAnimation(containerView, finalFromView, view, direction, new Flow.TraversalCallback() {
                         @Override public void onTraversalCompleted() {
                             containerView.removeView(finalFromView);
-                            oldPath.destroyNotIn(context, contextFactory);
+                            oldPathContext.destroyNotIn(context, contextFactory);
                             callback.onTraversalCompleted();
                         }
                     });

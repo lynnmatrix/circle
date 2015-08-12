@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import com.jadenine.circle.R;
 import com.jadenine.common.flow.ActivityResultSupport;
-import com.jadenine.common.mortar.BasicMortarContextFactory;
+import com.jadenine.common.mortar.MortarScopeContextFactory;
 import com.jadenine.common.flow.FramePathContainerView;
 import com.jadenine.common.flow.SimplePathContainer;
 
@@ -17,7 +17,7 @@ public class MortarPathContainerView extends FramePathContainerView implements P
 
     public MortarPathContainerView(Context context, AttributeSet attrs) {
         super(context, attrs, new SimplePathContainer(R.id.screen_switcher_tag, Path
-                .contextFactory(new BasicMortarContextFactory(new Dagger2ScreenScoper()))));
+                .contextFactory(new MortarScopeContextFactory(new Dagger2ScreenScoper()))));
     }
 
     @Override

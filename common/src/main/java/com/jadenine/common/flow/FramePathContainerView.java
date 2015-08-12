@@ -39,12 +39,13 @@ public class FramePathContainerView extends FrameLayout
         return !disabled && super.dispatchTouchEvent(ev);
     }
 
-    @Override public ViewGroup getContainerView() {
-        return this;
+    //<editor-fold desc="PathContainerView interface implementation">
+    @Override public ViewGroup getCurrentChild() {
+        return (ViewGroup) getContainerView().getChildAt(0);
     }
 
-    @Override protected void onFinishInflate() {
-        super.onFinishInflate();
+    @Override public ViewGroup getContainerView() {
+        return this;
     }
 
     @Override public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
@@ -56,12 +57,9 @@ public class FramePathContainerView extends FrameLayout
             }
         });
     }
+    //</editor-fold>
 
     @Override public boolean onBackPressed() {
         return BackSupport.onBackPressed(getCurrentChild());
-    }
-
-    @Override public ViewGroup getCurrentChild() {
-        return (ViewGroup) getContainerView().getChildAt(0);
     }
 }

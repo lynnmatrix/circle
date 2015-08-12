@@ -7,5 +7,5 @@ import flow.path.Path;
 import mortar.MortarScope;
 
 public interface ScreenScoper {
-    MortarScope getScreenScope(Context context, String name, Path path);
+    MortarScope getScreenScope(Context parentContext, String name, Path path);
 }
