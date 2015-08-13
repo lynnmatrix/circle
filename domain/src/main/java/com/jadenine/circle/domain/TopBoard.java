@@ -37,9 +37,11 @@ public class TopBoard {
 
                 LongSparseArray<Group<Bomb>> groupedBomb = groupBomb(bombTimelineRangeResult.getAll());
 
-                for(int i= 0 ; i < groupedBomb.size();i++) {
+                for (int i = 0; i < groupedBomb.size(); i++) {
                     Group<Bomb> topic = groupedBomb.valueAt(i);
-                    topTopics.add(topic);
+                    if (topic.hasRootEntity()) {
+                        topTopics.add(topic);
+                    }
                 }
 
                 Collections.sort(topTopics, new Comparator<Group<Bomb>>() {
@@ -60,7 +62,7 @@ public class TopBoard {
                 for (Bomb bomb : bombs) {
                     final Long groupId = bomb.getGroupId();
                     Group<Bomb> topic = groupedBomb.get(groupId);
-                    if(null == topic) {
+                    if (null == topic) {
                         topic = new Group<>(groupId);
                         groupedBomb.put(groupId, topic);
                     }
