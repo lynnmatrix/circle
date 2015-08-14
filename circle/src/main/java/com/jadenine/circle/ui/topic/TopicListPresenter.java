@@ -16,6 +16,7 @@ import com.jadenine.common.mortar.ActivityOwner;
 import java.util.List;
 
 import flow.Flow;
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observable;
 import rx.Observer;
@@ -37,17 +38,17 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         refreshSubscription.unsubscribe();
     }
     private Subscription loadingMoreSubscription = Subscriptions.empty();{
+
         loadingMoreSubscription.unsubscribe();
     }
-
     public TopicListPresenter(UserAp userAp, ActivityOwner owner) {
         this.userAp = userAp;
         this.activityOwner = owner;
     }
 
     @Override
-    protected void onLoad(Bundle savedInstanceState) {
-        super.onLoad(savedInstanceState);
+    protected void onEnterScope(MortarScope scope) {
+        super.onEnterScope(scope);
         getView().getAdapter().setOnFooterClickListener(new SectionedLoadMoreRecyclerAdapter
                 .OnFooterClickListener() {
 
@@ -57,12 +58,16 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
                 loadMore(range, loadMoreViewHolder);
             }
         });
+        onRefresh();
+    }
+
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
+        super.onLoad(savedInstanceState);
 
         getView().getToolbar().setTitle(userAp.getSSID());
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
-
-        onRefresh();
     }
 
     @Override
@@ -103,7 +108,6 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
 
             @Override
             public void onNext(List<TimelineRange<Bomb>> ranges) {
-                Timber.i("hasView():%b", hasView());
                 if (!hasView()) return;
 
                 updateBombGroups(ranges);

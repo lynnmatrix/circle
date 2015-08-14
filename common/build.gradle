@@ -12,6 +12,6 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.mortar:mortar:0.17'
-    compile 'com.squareup.flow:flow-path:0.10'
+    compile 'com.squareup.flow:flow-path:0.11'
     compile 'com.jakewharton.timber:timber:3.1.0'
 }
