@@ -12,6 +12,7 @@ import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.topic.top.TopPath;
+import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.jadenine.circle.utils.ApUtils;
 import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
@@ -61,11 +62,15 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         }
         if (!hasView()) return;
         loadAPList();
-        openDefaultItem();
+        openDefaultItemIfNeed();
     }
 
-    private void openDefaultItem() {
-        replaceWithPath(new TopPath());
+    private void openDefaultItemIfNeed() {
+        History history = Flow.get(getContext()).getHistory();
+        Path top = history.top();
+        if(top instanceof WelcomePath) {
+            replaceWithPath(new TopPath());
+        }
     }
 
     @Override
