@@ -288,7 +288,7 @@ public class ApSource {
     /**
      * Created by linym on 7/10/15.
      */
-    public static interface Binder<E, D>  {
+    public interface Binder<E, D>  {
         D find(E e);
 
         D build(E e);
@@ -297,7 +297,7 @@ public class ApSource {
     /**
      * Created by linym on 6/18/15.
      */
-    static interface Updatable<E> {
+    interface Updatable<E> {
         void merge(E e);
 
         E getEntity();

@@ -104,6 +104,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
         Flow.get(getContext()).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
     }
+
     @Subscribe
     public void onApConnected(EventProducer.APConnectedEvent event) {
         addAPIfNot(event.getAP());

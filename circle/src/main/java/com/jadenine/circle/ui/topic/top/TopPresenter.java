@@ -14,6 +14,7 @@ import com.jadenine.common.mortar.ActivityOwner;
 import java.util.ArrayList;
 import java.util.List;
 
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
@@ -40,7 +41,6 @@ class TopPresenter extends ViewPresenter<TopView> implements RefreshableHomeView
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
-
         getView().getToolbar().setTitle(R.string.title_top_topics);
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());

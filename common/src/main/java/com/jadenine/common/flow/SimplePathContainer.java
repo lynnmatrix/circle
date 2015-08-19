@@ -58,7 +58,7 @@ public class SimplePathContainer extends PathContainer {
             fromView = containerView.getChildAt(0);
             traversalState.saveViewState(fromView);
         }
-        traversalState.restoreViewState(newView);
+
 
         if (fromView == null || direction == REPLACE) {
             containerView.removeAllViews();
@@ -80,6 +80,8 @@ public class SimplePathContainer extends PathContainer {
                 }
             });
         }
+
+        traversalState.restoreViewState(newView);
     }
 
     protected int getLayout(Path path) {

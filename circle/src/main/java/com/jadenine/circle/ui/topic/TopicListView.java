@@ -43,6 +43,7 @@ public class TopicListView extends RefreshableHomeView {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+        setAdapter(null);
         CircleApplication.getRefWatcher(getContext()).watch(this);
     }
 

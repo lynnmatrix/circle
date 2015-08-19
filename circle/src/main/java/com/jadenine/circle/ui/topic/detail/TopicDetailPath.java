@@ -9,6 +9,7 @@ import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.common.flow.Layout;
 import com.jadenine.common.mortar.ActivityOwner;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -23,22 +24,30 @@ import flow.path.Path;
 public class TopicDetailPath extends Path implements ScreenComponentFactory{
     private final String ap;
     private final Long groupId;
+    private final Path parentPath;
 
-    public TopicDetailPath(@NotNull String ap, @NotNull Long groupId) {
+    public TopicDetailPath(@NotNull String ap, @NotNull Long groupId, Path parentPath) {
         this.ap = ap;
         this.groupId = groupId;
+        this.parentPath = parentPath;
+    }
+
+    @Override
+    protected void build(Builder builder) {
+        super.build(builder);
+        builder.append(parentPath);
     }
 
     @Override
     public Object createComponent(Object... dependencies) {
-        return DaggerTopicDetailPath_Component.builder().homeComponent((HomeComponent)
-                dependencies[0])
+        return DaggerTopicDetailPath_Component.builder()
+                .component((TopicListPath.Component)dependencies[0])
                 .module(new Module(ap, groupId))
                 .build();
     }
 
     @DaggerScope(TopicDetailPresenter.class)
-    @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
+    @dagger.Component(dependencies = TopicListPath.Component.class, modules = Module.class)
     interface Component extends TopicDetailComponent{
     }
 
@@ -50,12 +59,6 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
         public Module(String ap, Long groupId) {
             this.ap = ap;
             this.groupId = groupId;
-        }
-
-        @Provides
-        @DaggerScope(TopicDetailPresenter.class)
-        UserAp provideUserAp(Account account){
-            return account.getUserAp(ap);
         }
 
         @Provides

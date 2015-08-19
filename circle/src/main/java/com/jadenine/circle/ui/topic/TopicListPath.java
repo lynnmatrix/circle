@@ -10,7 +10,9 @@ import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
+import com.jadenine.circle.ui.DrawerHandler;
 import com.jadenine.circle.ui.HomeComponent;
+import com.jadenine.circle.ui.UiComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.detail.TopicDetailPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
@@ -46,8 +48,10 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
 
     @DaggerScope(TopicListPath.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
-    interface Component{
+    public interface Component extends UiComponent{
         void inject(TopicListView view);
+
+        UserAp ap();
     }
 
     @dagger.Module
@@ -68,7 +72,7 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
                 public void onTopicClicked(Context context, Group<Bomb> topic) {
                     Bomb rootBomb = topic.getRoot();
                     Flow.get(context).set(new TopicDetailPath(rootBomb.getAp(), rootBomb
-                            .getGroupId()));
+                            .getGroupId(), TopicListPath.this));
                 }
             }));
         }
