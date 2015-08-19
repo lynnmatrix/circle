@@ -12,15 +12,6 @@ import java.util.List;
  */
 public class DomainUtils {
 
-    @NonNull
-    public static <E> List<E> getEntities(List<? extends ApSource.Updatable<E>> domainModels) {
-        List<E> entities = new ArrayList<>(domainModels.size());
-        for(ApSource.Updatable<E> topic : domainModels) {
-            entities.add(topic.getEntity());
-        }
-        return entities;
-    }
-
     public static boolean checkEmpty(Collection collection) {
         return null == collection || collection.isEmpty();
     }

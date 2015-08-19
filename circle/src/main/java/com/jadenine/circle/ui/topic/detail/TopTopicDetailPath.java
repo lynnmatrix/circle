@@ -28,7 +28,7 @@ public class TopTopicDetailPath extends Path implements ScreenComponentFactory {
     public Object createComponent(Object... dependencies) {
         return DaggerTopTopicDetailPath_Component.builder().homeComponent((HomeComponent)
                 dependencies[0])
-                .topicDetailModule(new TopicDetailModule(groupId))
+                .topicDetailModule(new TopicDetailModule())
                 .module(new Module(groupId))
                 .build();
     }

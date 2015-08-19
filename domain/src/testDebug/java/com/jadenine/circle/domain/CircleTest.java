@@ -20,17 +20,17 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by linym on 7/13/15.
  */
-public class UserApTest {
+public class CircleTest {
     public static final String DEVICE_ID = "deviceID";
     private Account account;
-    private UserAp userAp;
+    private Circle circle;
     @Before
     public void setUp() throws InterruptedException {
         DaggerService.setComponent(DaggerTestDomainComponent.builder().testDomainModule(new
                 TestDomainModule(DEVICE_ID)).build());
         account = DaggerService.getDomainComponent().getAccount();
         final CountDownLatch latch = new CountDownLatch(1);
-        account.listAPs().subscribe(new Observer<List<UserAp>>() {
+        account.listCircles().subscribe(new Observer<List<Circle>>() {
             @Override
             public void onCompleted() {
                 latch.countDown();
@@ -42,21 +42,20 @@ public class UserApTest {
             }
 
             @Override
-            public void onNext(List<UserAp> userAps) {
+            public void onNext(List<Circle> userAps) {
 
             }
         });
 
         assertTrue(latch.await(1, TimeUnit.SECONDS));
-        userAp = account.getUserAps().get(0);
+        circle = account.getCircles().get(0);
     }
 
     @Test
     public void testEntity(){
-        assertNotNull(userAp.getEntity());
-        assertEquals("TMAC", userAp.getAP());
-        assertEquals(DEVICE_ID, userAp.getUser());
-        assertEquals("TSSID", userAp.getSSID());
+        assertNotNull(circle.getEntity());
+        assertEquals("TMAC", circle.getCircleId());
+        assertEquals("TSSID", circle.getName());
     }
 
     @Test
@@ -76,7 +75,7 @@ public class UserApTest {
 
     @Test
     public void testGetTopic() throws Exception {
-        assertNotNull(userAp.getTopic(1l));
+        assertNotNull(circle.getTopic(1l));
     }
 
     @Test

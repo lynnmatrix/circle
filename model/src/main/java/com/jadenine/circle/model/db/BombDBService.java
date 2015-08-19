@@ -16,13 +16,13 @@ import rx.Subscriber;
  * Created by linym on 7/22/15.
  */
 public class BombDBService {
-    public Observable<List<Bomb>> listMessage(final String ap, final Long sinceId, final Long beforeId) {
+    public Observable<List<Bomb>> listMessage(final String circle, final Long sinceId, final Long beforeId) {
 
         return Observable.create(new Observable.OnSubscribe<List<Bomb>>() {
             @Override
             public void call(Subscriber<? super List<Bomb>> subscriber) {
 
-                if(null == ap) {
+                if(null == circle) {
                     if(!subscriber.isUnsubscribed()) {
                         subscriber.onError(new InvalidParameterException("Invalid ap."));
                     }
@@ -31,7 +31,7 @@ public class BombDBService {
 
                 Where<Bomb> where;
                 where = new Select().from(Bomb.class).where();
-                where.and(Condition.column(Bomb$Table.AP).eq(ap));
+                where.and(Condition.column(Bomb$Table.CIRCLE).eq(circle));
                 where = rangeFilterAndOrder(where, beforeId, sinceId);
 
                 List<Bomb> bombs = where.queryList();

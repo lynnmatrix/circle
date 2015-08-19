@@ -5,12 +5,11 @@ import android.graphics.drawable.Drawable;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.ui.DrawerHandler;
 import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.UiComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
@@ -28,14 +27,14 @@ import flow.path.Path;
  */
 @Layout(R.layout.screen_bomb_list)
 public class TopicListPath extends Path implements ScreenComponentFactory {
-    private final String ap;
+    private final String circle;
 
-    public TopicListPath(String ap) {
-        this.ap = ap;
+    public TopicListPath(String circle) {
+        this.circle = circle;
     }
 
-    public String getAp() {
-        return ap;
+    public String getCircle() {
+        return circle;
     }
 
     @Override
@@ -51,15 +50,15 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
     public interface Component extends UiComponent{
         void inject(TopicListView view);
 
-        UserAp ap();
+        Circle circle();
     }
 
     @dagger.Module
     class Module {
         @DaggerScope(TopicListPath.class)
         @Provides
-        UserAp provideUserAp(Account account) {
-            return account.getUserAp(ap);
+        Circle provideCircle(Account account) {
+            return account.getCircle(circle);
         }
 
         @DaggerScope(TopicListPath.class)
@@ -71,7 +70,7 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
                 @Override
                 public void onTopicClicked(Context context, Group<Bomb> topic) {
                     Bomb rootBomb = topic.getRoot();
-                    Flow.get(context).set(new TopicDetailPath(rootBomb.getAp(), rootBomb
+                    Flow.get(context).set(new TopicDetailPath(rootBomb
                             .getGroupId(), TopicListPath.this));
                 }
             }));
@@ -79,8 +78,8 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
 
         @DaggerScope(TopicListPath.class)
         @Provides
-        TopicListPresenter providePresenter(UserAp userAp, ActivityOwner owner){
-            return new TopicListPresenter(userAp, owner);
+        TopicListPresenter providePresenter(Circle circle, ActivityOwner owner){
+            return new TopicListPresenter(circle, owner);
         }
 
     }

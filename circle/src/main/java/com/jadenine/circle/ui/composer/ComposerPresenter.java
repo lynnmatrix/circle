@@ -11,8 +11,8 @@ import android.view.View;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Constants;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.utils.ImageCompressor;
 import com.jadenine.circle.utils.ToolbarColorizer;
@@ -34,7 +34,7 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     private static final int PICK_IMAGE = 1;
 
     protected final Account account;
-    protected final UserAp userAp;
+    protected final Circle circle;
     protected Uri imageUri;
     protected String mimeType;
 
@@ -43,9 +43,9 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     protected Subscription sendSubscription = Subscriptions.empty();{
         sendSubscription.unsubscribe();
     }
-    public ComposerPresenter(Account account, UserAp userAp, ActivityOwner owner) {
+    public ComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
         this.account = account;
-        this.userAp = userAp;
+        this.circle = circle;
         this.activityOwner = owner;
     }
 

@@ -3,8 +3,8 @@ package com.jadenine.circle.ui.topic;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
@@ -30,7 +30,7 @@ import timber.log.Timber;
  */
 public class TopicListPresenter extends ViewPresenter<TopicListView> implements RefreshableHomeView
         .RefreshableHomeListener {
-    private final UserAp userAp;
+    private final Circle circle;
 
     private final ActivityOwner activityOwner;
 
@@ -41,8 +41,8 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
 
         loadingMoreSubscription.unsubscribe();
     }
-    public TopicListPresenter(UserAp userAp, ActivityOwner owner) {
-        this.userAp = userAp;
+    public TopicListPresenter(Circle circle, ActivityOwner owner) {
+        this.circle = circle;
         this.activityOwner = owner;
     }
 
@@ -65,7 +65,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
 
-        getView().getToolbar().setTitle(userAp.getSSID());
+        getView().getToolbar().setTitle(circle.getName());
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
     }
@@ -83,7 +83,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
             return;
         }
 
-        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.refresh()
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = circle.refresh()
                 .observeOn(AndroidSchedulers.mainThread());
 
         refreshSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
@@ -93,7 +93,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
                 getView().stopRefreshing();
-                userAp.setHasUnread(false);
+                circle.setHasUnread(false);
             }
 
             @Override
@@ -103,7 +103,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
                 refreshSubscription.unsubscribe();
                 if(!hasView()) return;
                 getView().stopRefreshing();
-                updateBombGroups(userAp.getAllTimelineRanges());
+                updateBombGroups(circle.getAllTimelineRanges());
             }
 
             @Override
@@ -117,10 +117,10 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
 
     @Override
     public void onLoadMore() {
-        if(!loadingMoreSubscription.isUnsubscribed() || !userAp.hasMore()) {
+        if(!loadingMoreSubscription.isUnsubscribed() || !circle.hasMore()) {
             return;
         }
-        Observable<List<TimelineRange<Bomb>>> topicsObservable = userAp.loadMore()
+        Observable<List<TimelineRange<Bomb>>> topicsObservable = circle.loadMore()
                 .observeOn(AndroidSchedulers.mainThread());
 
         loadingMoreSubscription = topicsObservable.subscribe(new Observer<List<TimelineRange<Bomb>>>() {
@@ -147,12 +147,12 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
     }
 
     void addBomb() {
-        Flow.get(getView().getContext()).set(new ComposerPath(userAp.getAP()));
+        Flow.get(getView().getContext()).set(new ComposerPath(circle.getCircleId()));
     }
 
     private void loadMore(TimelineRange range, final LoadMoreViewHolder loadMoreViewHolder) {
         loadMoreViewHolder.startLoading();
-        userAp.loadMore(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
+        circle.loadMore(range).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<TimelineRange<Bomb>>>() {
 
             @Override
             public void onCompleted() {

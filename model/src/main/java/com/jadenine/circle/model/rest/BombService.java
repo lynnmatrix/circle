@@ -14,7 +14,7 @@ public interface BombService {
     /**
      * Returns a collection of the most recent timeline messages under the specified ap.
      *
-     * @param ap
+     * @param circle
      * @param count (optional) Specifies the number of messages to try and retrieve, up to a maximum
      *              of 200. The value of count is best thought of as a limit to the number of messages
      *              to return because suspended or deleted content is removed after the count has
@@ -24,7 +24,7 @@ public interface BombService {
      * @param beforeId (optional) Returns results with an ID greater than (that is, older than) to the specified ID.
      */
     @POST("/bomb/list")
-    Observable<TimelineRangeResult<Bomb>> apTimeline(@Query("ap") String ap,
+    Observable<TimelineRangeResult<Bomb>> apTimeline(@Query("circle") String circle,
                                                      @Query("count") Integer count,
                                                      @Query("since_id") Long sinceId,
                                                      @Query("before_id") Long beforeId);

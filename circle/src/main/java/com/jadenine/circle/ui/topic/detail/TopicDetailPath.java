@@ -2,12 +2,11 @@ package com.jadenine.circle.ui.topic.detail;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
-import com.jadenine.circle.ui.HomeComponent;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.common.flow.Layout;
@@ -22,12 +21,10 @@ import flow.path.Path;
  */
 @Layout(R.layout.screen_topic_detail)
 public class TopicDetailPath extends Path implements ScreenComponentFactory{
-    private final String ap;
     private final Long groupId;
     private final Path parentPath;
 
-    public TopicDetailPath(@NotNull String ap, @NotNull Long groupId, Path parentPath) {
-        this.ap = ap;
+    public TopicDetailPath(@NotNull Long groupId, Path parentPath) {
         this.groupId = groupId;
         this.parentPath = parentPath;
     }
@@ -42,7 +39,7 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
     public Object createComponent(Object... dependencies) {
         return DaggerTopicDetailPath_Component.builder()
                 .component((TopicListPath.Component)dependencies[0])
-                .module(new Module(ap, groupId))
+                .module(new Module(groupId))
                 .build();
     }
 
@@ -53,25 +50,23 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
 
     @dagger.Module
     static class Module{
-        private final String ap;
         private final Long groupId;
 
-        public Module(String ap, Long groupId) {
-            this.ap = ap;
+        public Module(Long groupId) {
             this.groupId = groupId;
         }
 
         @Provides
         @DaggerScope(TopicDetailPresenter.class)
-        Group<Bomb> provideBombGroup(UserAp userAp) {
-            return userAp.getTopic(groupId);
+        Group<Bomb> provideBombGroup(Circle circle) {
+            return circle.getTopic(groupId);
         }
 
         @DaggerScope(TopicDetailPresenter.class)
         @Provides
-        TopicDetailPresenter providePresenter(Account account, UserAp userAp, Group<Bomb> bombGroup, AvatarBinder
+        TopicDetailPresenter providePresenter(Account account, Circle circle, Group<Bomb> bombGroup, AvatarBinder
                 avatarBinder, ActivityOwner owner) {
-            return new TopicDetailPresenter(account, userAp, bombGroup, avatarBinder, owner);
+            return new TopicDetailPresenter(account, circle, bombGroup, avatarBinder, owner);
         }
     }
 }

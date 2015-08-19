@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.model.entity.CircleEntity;
 import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.state.TimelineType;
 
@@ -13,64 +14,50 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
- * Created by linym on 6/3/15.
+ * Created by linym on 8/19/15.
  */
-public class UserAp implements ApSource.Updatable<UserApEntity> {
+public class Circle{
 
-    private final UserApEntity entity;
+    private final CircleEntity entity;
     private final BaseTimeline<Bomb> timeline;
 
     @Inject
     BombComposer bombComposer;
 
-    public static UserAp build(UserApEntity userApEntity) {
-        return new UserAp(userApEntity);
-    }
-
-    public UserAp(UserApEntity entity) {
+    public Circle(CircleEntity entity) {
         this.entity = entity;
         DaggerService.getDomainComponent().inject(this);
-        BombLoader loader = new BombLoader(getAP(), Constants.PAGE_SIZE);
+        BombLoader loader = new BombLoader(getCircleId(), Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(loader);
 
-        this.timeline = new BaseTimeline<>(getAP(), TimelineType.TOPIC, loader);
+        this.timeline = new BaseTimeline<>(getCircleId(), TimelineType.TOPIC, loader);
     }
 
-    public UserApEntity getEntity() {
+    public CircleEntity getEntity() {
         return entity;
     }
 
-    public String getAP() {
-        return entity.getAP();
+    public String getCircleId() {
+        return entity.getCircleId();
     }
 
-    public String getUser() {
-        return entity.getUser();
+    public String getName() {
+        return entity.getName();
     }
 
-    public String getSSID() {
-        return entity.getSSID();
-    }
-
-    @Override
-    public void merge(UserApEntity userApEntity) {
-        if(userApEntity.getTimestamp() - entity.getTimestamp() > 0) {
-            entity.setSSID(userApEntity.getSSID());
-            entity.save();
+    public void merge(CircleEntity circleEntity) {
+        if(circleEntity.getTimestamp() - entity.getTimestamp() > 0) {
+            entity.setName(circleEntity.getName());
         }
     }
 
     @Override
     public String toString(){
-        return TextUtils.isEmpty(getSSID())?getAP(): getSSID();
+        return TextUtils.isEmpty(getName())? getCircleId(): getName();
     }
 
-    public Observable<List<UserAp>> connect(Account account) {
-        return account.addUserAp(this);
-    }
 
     public Observable<List<TimelineRange<Bomb>>> refresh() {
         return timeline.refresh();

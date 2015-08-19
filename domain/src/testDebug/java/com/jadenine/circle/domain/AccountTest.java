@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.entity.ApEntity;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.UserApEntity;
 
@@ -46,17 +47,17 @@ public class AccountTest {
 
     @Test
     public void testAddUserAp() throws Exception {
-        assertNotNull(account.getUserAps());
-        Assert.assertTrue(account.getUserAps().isEmpty());
+        assertNotNull(account.getCircles());
+        Assert.assertTrue(account.getCircles().isEmpty());
 
-        final UserAp ap = new UserAp(new UserApEntity(DEVICE_ID, "mac", "ssid"));
+        final ApEntity ap = new ApEntity("mac", "ssid");
 
-        account.addUserAp(ap).subscribe(new Observer<List<UserAp>>() {
+        account.addAp(ap).subscribe(new Observer<List<Circle>>() {
             @Override
             public void onCompleted() {
-                Assert.assertEquals(1, account.getUserAps().size());
+                Assert.assertEquals(1, account.getCircles().size());
 
-                Assert.assertEquals(ap, account.getUserAps().get(0));
+                Assert.assertEquals(ap, account.getCircles().get(0));
             }
 
             @Override
@@ -65,7 +66,7 @@ public class AccountTest {
             }
 
             @Override
-            public void onNext(List<UserAp> userAps) {
+            public void onNext(List<Circle> userAps) {
 
             }
         });
@@ -76,7 +77,7 @@ public class AccountTest {
     public void testListAPs() throws Exception {
 
         final CountDownLatch latch = new CountDownLatch(1);
-        account.listAPs().subscribe(new Observer<List<UserAp>>() {
+        account.listCircles().subscribe(new Observer<List<Circle>>() {
             @Override
             public void onCompleted() {
                 latch.countDown();
@@ -89,14 +90,14 @@ public class AccountTest {
             }
 
             @Override
-            public void onNext(List<UserAp> userAps) {
+            public void onNext(List<Circle> userAps) {
 
             }
         });
 
         Assert.assertTrue(latch.await(100, TimeUnit.SECONDS));
 
-        assertFalse(account.getUserAps().isEmpty());
+        assertFalse(account.getCircles().isEmpty());
     }
 
     @Test

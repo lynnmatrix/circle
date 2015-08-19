@@ -11,8 +11,8 @@ import com.google.gson.JsonSyntaxException;
 import com.jadenine.circle.BuildConfig;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.domain.dagger.DaggerDomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainComponentProduction;
 import com.jadenine.circle.domain.dagger.DomainModule;
@@ -140,7 +140,7 @@ public class CircleApplication extends Application {
 
             private void updateUserApUnRead(CustomNotification customNotification) {
                 Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
-                UserAp userAp = account.getUserAp(bomb.getAp());
+                Circle userAp = account.getCircle(bomb.getCircle());
                 Group<Bomb> topic = userAp.getTopic(bomb.getGroupId());
                 Long lastRead = null;
                 if(null != topic) {
@@ -156,7 +156,7 @@ public class CircleApplication extends Application {
             private void updateChatUnread(CustomNotification customNotification) {
                 DirectMessageEntity chatMessage = gson.fromJson(customNotification
                         .data, DirectMessageEntity.class);
-                Group<DirectMessageEntity> chat = account.getChat(chatMessage.getAp(), Long
+                Group<DirectMessageEntity> chat = account.getChat(chatMessage.getCircle(), Long
                         .valueOf(chatMessage.getTopicId()), chatMessage.getRootUser(),
                         chatMessage.getGroupId());
 

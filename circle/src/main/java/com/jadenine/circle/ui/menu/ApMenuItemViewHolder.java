@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.domain.Circle;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,8 +26,8 @@ class ApMenuItemViewHolder extends RecyclerView.ViewHolder{
         ButterKnife.inject(this, itemView);
     }
 
-    void bind(UserAp userAp) {
-        ssidView.setText(userAp.getSSID());
-        readView.setVisibility(userAp.hasUnread()?View.VISIBLE:View.GONE);
+    void bind(Circle circle) {
+        ssidView.setText(circle.getName());
+        readView.setVisibility(circle.hasUnread()?View.VISIBLE:View.GONE);
     }
 }

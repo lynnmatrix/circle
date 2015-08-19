@@ -9,6 +9,7 @@ import com.jadenine.circle.domain.BuildConfig;
 import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
+import com.jadenine.circle.model.db.CircleDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.db.TimelineDBService;
@@ -16,6 +17,7 @@ import com.jadenine.circle.model.entity.GsonIgnore;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.BombService;
+import com.jadenine.circle.model.rest.CircleService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
@@ -88,6 +90,12 @@ public class DomainModule {
 
     @Provides
     @Singleton
+    CircleService provideCircleRestService(RestAdapter restAdapter) {
+        return restAdapter.create(CircleService.class);
+    }
+
+    @Provides
+    @Singleton
     DirectMessageService provideChatService(RestAdapter restAdapter) {
         return restAdapter.create(DirectMessageService.class);
     }
@@ -114,6 +122,12 @@ public class DomainModule {
     @Singleton
     ApDBService provideApDBService(){
         return new ApDBService();
+    }
+
+    @Provides
+    @Singleton
+    CircleDBService provideCircleDBService(){
+        return new CircleDBService();
     }
 
     @Provides

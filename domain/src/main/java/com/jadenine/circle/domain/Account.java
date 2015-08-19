@@ -1,6 +1,7 @@
 package com.jadenine.circle.domain;
 
 import com.jadenine.circle.domain.dagger.DaggerService;
+import com.jadenine.circle.model.entity.ApEntity;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.state.TimelineType;
@@ -21,7 +22,7 @@ public class Account {
 
     private final String deviceId;
 
-    private final ApSource apSource;
+    private final CircleSource circleSource;
 
     private final BaseTimeline<DirectMessageEntity> chatTimeline;
     private final BaseTimeline<Bomb> myTopicsTimeline;
@@ -40,7 +41,7 @@ public class Account {
         ChatLoader chatLoader = new ChatLoader(deviceId, Constants.PAGE_SIZE);
 
         this.chatTimeline = new BaseTimeline<>(TIME_LINE_MY_CHATS, TimelineType.CHAT, chatLoader);
-        this.apSource = new ApSource(deviceId);
+        this.circleSource = new CircleSource(deviceId);
 
         MyTopicLoader myTopicLoader = new MyTopicLoader(deviceId, Constants.PAGE_SIZE);
         DaggerService.getDomainComponent().inject(myTopicLoader);
@@ -55,33 +56,26 @@ public class Account {
         return deviceId;
     }
 
-    public List<UserAp> getUserAps(){
-        return apSource.getAps();
+    //<editor-fold desc="Circle ">
+    public List<Circle> getCircles(){
+        return circleSource.getCircles();
     }
 
-    public UserAp getUserAp(String ap) {
-        return apSource.getUserAp(ap);
+    public Circle getCircle(String circle) {
+        return circleSource.getCircle(circle);
     }
 
-    public Observable<List<UserAp>> listAPs() {
-        return apSource.list();
+    public Observable<List<Circle>> listCircles() {
+        return circleSource.listCircles();
     }
 
-    Observable<List<UserAp>> addUserAp(final UserAp userAp) {
-        return apSource.addUserAp(userAp);
+    public Observable<List<Circle>> addAp(final ApEntity ap) {
+        return circleSource.addAp(ap);
     }
-
-    public UserAp getDefaultAp() {
-        //TODO
-        UserAp ap = null;
-        if(getUserAps().size() > 0) {
-            ap = getUserAps().get(0);
-        }
-        return ap;
-    }
+    //</editor-fold>
 
     //<editor-fold desc="chat">
-    public Group<DirectMessageEntity> getChat(String ap, Long bombGroupId, String rootUser, Long
+    public Group<DirectMessageEntity> getChat(String circle, Long bombGroupId, String rootUser, Long
             rootMessageId) {
         if(null != rootMessageId) {
             return chatTimeline.getRange(rootMessageId).getGroup(rootMessageId);
@@ -92,7 +86,7 @@ public class Account {
                 List<DirectMessageEntity> messages = group.getEntities();
                 if(messages.size() > 0) {
                     DirectMessageEntity firstMessage = messages.get(0);
-                    if(firstMessage.getAp().equals(ap)
+                    if(firstMessage.getCircle().equals(circle)
                             && Long.valueOf(firstMessage.getTopicId()).equals(bombGroupId)
                             && firstMessage.getRootUser().equals(rootUser)){
                         return group;

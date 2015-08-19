@@ -2,7 +2,6 @@ package com.jadenine.circle.ui.menu;
 
 import android.content.Context;
 import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -51,7 +50,7 @@ public class ApMenuView extends NavigationView {
                 RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public boolean onItemClick(View view, int position) {
-                return presenter.onApSelected(position);
+                return presenter.onCircleSelected(position);
             }
         }));
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),

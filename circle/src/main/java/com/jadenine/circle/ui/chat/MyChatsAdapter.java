@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.chat.detail.ChatPath;
@@ -95,12 +95,12 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
             if(null != lastMessage) {
                 avatarView.setImageResource(avatarBinder.getAvatar(lastMessage.getFrom(),
                         lastMessage.getTopicId()));
-                UserAp userAp = account.getUserAp(lastMessage.getAp());
+                Circle circle = account.getCircle(lastMessage.getCircle());
                 String apDes;
-                if(null != userAp) {
-                    apDes = userAp.getSSID();
+                if(null != circle) {
+                    apDes = circle.getName();
                 } else {
-                    apDes = lastMessage.getAp();
+                    apDes = lastMessage.getCircle();
                 }
                 apView.setText(apDes);
                 contentView.setText(lastMessage.getContent());
@@ -108,7 +108,7 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ChatPath chatPath = new ChatPath(lastMessage.getAp(), Long.valueOf
+                        ChatPath chatPath = new ChatPath(lastMessage.getCircle(), Long.valueOf
                                 (lastMessage.getTopicId()), lastMessage.getRootUser(),
                                 lastMessage.getRootUser(), Long.valueOf(lastMessage
                                 .getRootMessageId()));

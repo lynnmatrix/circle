@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
-import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.common.mortar.ActivityOwner;
@@ -25,8 +25,8 @@ import rx.subscriptions.Subscriptions;
 class TopicComposerPresenter extends ComposerPresenter {
 
     private final long CONTENT_MAX_LENGTH = 256;
-    public TopicComposerPresenter(Account account, UserAp userAp, ActivityOwner owner) {
-        super(account, userAp, owner);
+    public TopicComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
+        super(account, circle, owner);
     }
 
     @Override
@@ -51,7 +51,7 @@ class TopicComposerPresenter extends ComposerPresenter {
         }
 
         //TODO reuse bomb
-        final Bomb bomb = new Bomb(userAp.getAP(), userAp.getUser());
+        final Bomb bomb = new Bomb(circle.getCircleId(), account.getDeviceId());
         bomb.setContent(content);
         if (null != imageUri) {
             InputStream inputStream = null;
@@ -62,7 +62,7 @@ class TopicComposerPresenter extends ComposerPresenter {
                 e.printStackTrace();
             }
 
-            sendSubscription = userAp.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
+            sendSubscription = circle.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
 
                 @Override
                 public void onCompleted() {

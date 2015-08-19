@@ -5,6 +5,7 @@ import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Constants;
 import com.jadenine.circle.model.db.ApDBService;
 import com.jadenine.circle.model.db.BombDBService;
+import com.jadenine.circle.model.db.CircleDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.db.TimelineDBService;
@@ -15,6 +16,7 @@ import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.BombService;
+import com.jadenine.circle.model.rest.CircleService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.jadenine.circle.model.rest.TimelineRangeResult;
@@ -31,6 +33,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import dagger.Provides;
+import retrofit.RestAdapter;
 import rx.Observable;
 
 import static org.mockito.Matchers.any;
@@ -152,6 +155,11 @@ public class TestDomainModule {
         return mockService;
     }
 
+    @Provides
+    @Singleton
+    CircleService provideCircleRestService() {
+        return mock(CircleService.class);
+    }
 
     @Provides
     @Singleton
@@ -179,7 +187,7 @@ public class TestDomainModule {
                 Matchers.isNull(Long.class)))
                 .thenReturn(Observable.just(new TimelineRangeResult<>(bombList, false, null)));
 
-        when(mockService.top(anyString())).thenReturn(Observable.<TimelineRangeResult<Bomb>>empty().just(new TimelineRangeResult<Bomb>(bombList, false, null)));
+        when(mockService.top(anyString())).thenReturn(Observable.just(new TimelineRangeResult<Bomb>(bombList, false, null)));
 
         return mockService;
     }
@@ -207,9 +215,15 @@ public class TestDomainModule {
     @Singleton
     ApDBService provideApDBService(){
         ApDBService mockService = mock(ApDBService.class);
-        when(mockService.listAps()).thenReturn(Observable.<List<UserApEntity>>just(new
+        when(mockService.listUserAps()).thenReturn(Observable.<List<UserApEntity>>just(new
                 ArrayList<UserApEntity>()));
         return mockService;
+    }
+
+    @Provides
+    @Singleton
+    CircleDBService provideCircleDBService(){
+        return mock(CircleDBService.class);
     }
 
     @Provides

@@ -9,15 +9,15 @@ import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
-import com.jadenine.circle.domain.UserAp;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
 import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidator;
-import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.ui.utils.ShareService;
+import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.circle.ui.widgets.TopicHeader;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.mortar.ActivityOwner;
@@ -40,7 +40,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
     private static final String BUNDLE_REPLY_TO = "reply_to";
 
     private final Account account;
-    private final UserAp userAp;
+    private final Circle circle;
     private final Group<Bomb> bombGroup;
     private final Bomb rootBomb;
 
@@ -52,9 +52,9 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
     private final ShareService shareService;
 
-    public TopicDetailPresenter(Account account, UserAp userAp, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
+    public TopicDetailPresenter(Account account, Circle circle, Group<Bomb> bombGroup, AvatarBinder avatarBinder, ActivityOwner owner) {
         this.account = account;
-        this.userAp = userAp;
+        this.circle = circle;
         this.bombGroup = bombGroup;
         this.rootBomb = bombGroup.getRoot();
         this.replyTo = rootBomb.getRootUser();
@@ -80,8 +80,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
                 () {
             @Override
             public void onClick() {
-                ChatPath chatPath = new ChatPath(userAp.getAP(), bombGroup.getGroupId(), userAp
-                        .getUser(), bombGroup.getRoot().getFrom());
+                ChatPath chatPath = new ChatPath(circle.getCircleId(), bombGroup.getGroupId(), account.getDeviceId(), bombGroup.getRoot().getFrom());
                 Flow.get(getView()).set(chatPath);
             }
         });
@@ -117,7 +116,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             getView().toolbar.getMenu().findItem(R.id.item_share_wechat).setVisible(false);
         }
 
-        getView().toolbar.setTitle(userAp.getSSID());
+        getView().toolbar.setTitle(circle.getName());
         ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
     }
 
@@ -168,7 +167,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
         SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, false);
 
-        final Bomb bomb = new Bomb(userAp.getAP(), userAp.getUser());
+        final Bomb bomb = new Bomb(circle.getCircleId(), account.getDeviceId());
         bomb.setContent(content);
         bomb.setTo(replyTo);
         bomb.setRootMessageId(rootBomb.getRootMessageId());
@@ -186,7 +185,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
-                userAp.refresh().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<TimelineRange<Bomb>>>() {
+                circle.refresh().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<TimelineRange<Bomb>>>() {
 
                     @Override
                     public void call(List<TimelineRange<Bomb>> ranges) {

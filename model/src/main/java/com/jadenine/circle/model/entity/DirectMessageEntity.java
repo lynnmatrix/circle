@@ -16,7 +16,7 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
     @PrimaryKey
     String messageId;
 
-    String ap;
+    String circle;
     String topicId;
 
     String rootMessageId;
@@ -32,19 +32,20 @@ public class DirectMessageEntity extends CircleBaseModel implements Identifiable
 
     DirectMessageEntity(){}
 
-    public DirectMessageEntity(@NonNull String ap, @NonNull String topicId, @NonNull String from, @NonNull String to) {
-        this.ap = ap;
+    public DirectMessageEntity(@NonNull String circle, @NonNull String topicId, @NonNull String from, @NonNull String to) {
+        this.circle = circle;
         this.topicId = topicId;
         this.from = from;
         this.to = to;
     }
 
+
     public String getMessageId() {
         return messageId;
     }
 
-    public String getAp() {
-        return ap;
+    public String getCircle() {
+        return circle;
     }
 
     public String getTopicId() {

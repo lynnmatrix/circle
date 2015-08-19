@@ -1,7 +1,6 @@
 package com.jadenine.circle.model.rest;
 
 import com.jadenine.circle.model.entity.ApEntity;
-import com.jadenine.circle.model.entity.CircleEntity;
 
 import retrofit.http.Body;
 import retrofit.http.POST;
@@ -13,8 +12,8 @@ import rx.Observable;
  */
 public interface CircleService {
     @POST("/circle/list")
-    Observable<TimelineRangeResult<CircleEntity>> listCircle(@Query("user") String user);
+    Observable<CircleResult> listCircle(@Query("user") String user);
 
     @POST("/circle/ap/add")
-    Observable<TimelineRangeResult<CircleEntity>> addAP(@Query("user") String user, @Body ApEntity ap);
+    Observable<CircleResult> addAP(@Query("user") String user, @Body ApEntity ap);
 }

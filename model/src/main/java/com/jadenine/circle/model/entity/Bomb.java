@@ -16,7 +16,7 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
 
     @PrimaryKey
     String messageId;
-    String ap;
+    String circle;
 
     String rootMessageId;
     String rootUser;
@@ -34,16 +34,17 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
 
     Bomb(){}
 
-    public Bomb(@NotNull String ap, @NonNull String from) {
-        this.ap = ap;
+    public Bomb(@NotNull String circle, @NonNull String from) {
+        this.circle = circle;
         this.from = from;
     }
 
-    public String getAp() {
-        return ap;
+    public String getCircle() {
+        return circle;
     }
-    public void setAp(String ap) {
-        this.ap = ap;
+
+    public void setCircle(String circle) {
+        this.circle = circle;
     }
 
     public void setMessageId(String messageId) {
@@ -120,6 +121,5 @@ public class Bomb extends CircleBaseModel implements IdentifiableEntity {
     public Long getGroupId() {
         return Long.valueOf(getRootMessageId());
     }
-
 
 }

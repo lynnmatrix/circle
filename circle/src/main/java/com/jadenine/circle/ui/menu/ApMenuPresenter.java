@@ -6,15 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.jadenine.circle.domain.Account;
-import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
-import com.jadenine.circle.model.entity.UserApEntity;
+import com.jadenine.circle.model.entity.ApEntity;
 import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.topic.top.TopPath;
 import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.jadenine.circle.utils.ApUtils;
-import com.jadenine.circle.utils.Device;
 import com.squareup.otto.Subscribe;
 import com.umeng.message.PushAgent;
 
@@ -34,9 +33,9 @@ import timber.log.Timber;
  * Created by linym on 7/22/15.
  */
 public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
-    private static final String BUNDLE_CURRENT_AP = "current_ap";
+    private static final String BUNDLE_CURRENT_CIRCLE = "current_circle";
     private final Account account;
-    private String currentAp;
+    private String currentCircle;
 
     public ApMenuPresenter(Account account) {
         this.account = account;
@@ -58,10 +57,10 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
         if(null != savedInstanceState) {
-            currentAp = savedInstanceState.getString(BUNDLE_CURRENT_AP);
+            currentCircle = savedInstanceState.getString(BUNDLE_CURRENT_CIRCLE);
         }
         if (!hasView()) return;
-        loadAPList();
+        loadCircles();
         openDefaultItemIfNeed();
     }
 
@@ -76,25 +75,25 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     @Override
     protected void onSave(Bundle outState) {
         super.onSave(outState);
-        outState.putString(BUNDLE_CURRENT_AP, currentAp);
+        outState.putString(BUNDLE_CURRENT_CIRCLE, currentCircle);
     }
 
-    public boolean onApSelected(int position) {
+    public boolean onCircleSelected(int position) {
         boolean validApPosition = position >= ApMenuAdapter.NON_AP_ITEM_COUNT;
         if(validApPosition) {
-            UserAp userAp = getAdapter().getAp(position);
+            Circle circle = getAdapter().getCircle(position);
             getAdapter().setSelected(position);
-            onApSelected(userAp);
+            onCircleSelected(circle);
         }
         return validApPosition;
     }
 
-    private void onApSelected(@NonNull UserAp userAp) {
-        if(null == userAp) {
+    private void onCircleSelected(@NonNull Circle circle) {
+        if(null == circle) {
             return;
         }
-        replaceWithPath(new TopicListPath(userAp.getAP()));
-        currentAp = userAp.getAP();
+        replaceWithPath(new TopicListPath(circle.getCircleId()));
+        currentCircle = circle.getCircleId();
     }
 
     private void replaceWithPath(@NonNull Path path) {
@@ -120,9 +119,9 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
 
     private boolean alreadyAdded(ApUtils.AP currentAp) {
         boolean currentAPAlreadyAdded = false;
-        List<UserAp> userApList = account.getUserAps();
-        for (UserAp userAp : userApList) {
-            if (currentAp.getBSSID().equals(userAp.getAP()) && userAp.getSSID().equals(currentAp.getSSID())) {
+        List<Circle> circleList = account.getCircles();
+        for (Circle circle : circleList) {
+            if (currentAp.getBSSID().equals(circle.getCircleId()) && circle.getName().equals(currentAp.getSSID())) {
                 currentAPAlreadyAdded = true;
                 break;
             }
@@ -135,10 +134,9 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             return;
         }
 
-        UserAp userAp = UserAp.build(new UserApEntity(Device.getDeviceId(getContext()), ap
-                .getBSSID(), ap.getSSID()));
+        ApEntity apEntity = new ApEntity(ap.getBSSID(), ap.getSSID());
 
-        userAp.connect(account).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<UserAp>>() {
+        account.addAp(apEntity).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Circle>>() {
             @Override
             public void onCompleted() {
             }
@@ -148,18 +146,18 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             }
 
             @Override
-            public void onNext(List<UserAp> userAps) {
+            public void onNext(List<Circle> circles) {
                 if (!hasView()) return;
-                getAdapter().setUserAps(userAps);
+                getAdapter().setCircles(circles);
 
-                addTag(userAps);
+                addTag(circles);
             }
         });
     }
 
-    void loadAPList() {
-        account.listAPs().observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List
-                <UserAp>>() {
+    void loadCircles() {
+        account.listCircles().observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List
+                <Circle>>() {
 
             @Override
             public void onCompleted() {
@@ -168,15 +166,15 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
             @Override
             public void onError(Throwable e) {
                 Timber.w(e, "Failed to load aps.");
-                getAdapter().setUserAps(account.getUserAps());
+                getAdapter().setCircles(account.getCircles());
             }
 
             @Override
-            public void onNext(List<UserAp> userApList) {
+            public void onNext(List<Circle> circles) {
                 if (!hasView()) return;
-                getAdapter().setUserAps(userApList);
+                getAdapter().setCircles(circles);
 
-                addTag(userApList);
+                addTag(circles);
 
                 ApUtils.AP ap = ApUtils.getConnectedAP(getContext());
                 addAPIfNot(ap);
@@ -184,13 +182,13 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         });
     }
 
-    private void addTag(final List<UserAp> userAps) {
+    private void addTag(final List<Circle> circles) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                List<UserAp> tmpUserAps = new ArrayList<>(userAps);
-                for (UserAp ap : tmpUserAps) {
-                    addTag(ap.getAP());
+                List<Circle> tmpCircles = new ArrayList<>(circles);
+                for (Circle circle : tmpCircles) {
+                    addTag(circle.getCircleId());
                 }
                 addTag(account.getDeviceId());
             }

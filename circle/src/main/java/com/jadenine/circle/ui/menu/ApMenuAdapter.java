@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
-import com.jadenine.circle.domain.UserAp;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.ui.HomeActivity;
 import com.jadenine.circle.ui.chat.MyChatPath;
@@ -32,7 +32,7 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int NON_AP_ITEM_COUNT = 4;
 
-    private List<UserAp> aps = new ArrayList<>();
+    private List<Circle> circles = new ArrayList<>();
     private int selectedPosition = -1;
 
     private final Account account;
@@ -108,7 +108,7 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .title_private_chat, account.hasUnreadChat(), new MyChatPath());
                 break;
             case TYPE_AP:
-                ((ApMenuItemViewHolder)holder).bind(getAp(position));
+                ((ApMenuItemViewHolder)holder).bind(getCircle(position));
                 holder.itemView.setSelected(selected);
                 break;
         }
@@ -116,20 +116,20 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return aps.size() + NON_AP_ITEM_COUNT;
+        return circles.size() + NON_AP_ITEM_COUNT;
     }
 
-    public UserAp getAp(int position) {
+    public Circle getCircle(int position) {
         if(position < NON_AP_ITEM_COUNT ) {
             throw new InvalidParameterException("Position must be larger than " + NON_AP_ITEM_COUNT);
         }
 
-        return aps.get(position - NON_AP_ITEM_COUNT);
+        return circles.get(position - NON_AP_ITEM_COUNT);
     }
 
-    public void setUserAps(List<UserAp> userAps) {
-        aps.clear();
-        aps.addAll(userAps);
+    public void setCircles(List<Circle> circles) {
+        this.circles.clear();
+        this.circles.addAll(circles);
         notifyDataSetChanged();
     }
 
