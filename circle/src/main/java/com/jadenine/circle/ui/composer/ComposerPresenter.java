@@ -19,6 +19,7 @@ import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.mortar.ActivityOwner;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import mortar.ViewPresenter;
 import rx.Subscription;
@@ -94,6 +95,8 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
                 imageUri = ImageCompressor.compress(getView().getContext(), imageUri, Constants
                         .COMPRESS_DST_WIDTH, Constants.COMPRESS_DST_HEIGHT);
             } catch (FileNotFoundException e) {
+                Timber.e(e, "Fail to compress image.");
+            } catch (IOException e) {
                 Timber.e(e, "Fail to compress image.");
             }
 

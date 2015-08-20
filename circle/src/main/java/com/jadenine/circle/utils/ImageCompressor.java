@@ -12,6 +12,7 @@ import android.os.Environment;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class ImageCompressor {
     public static final String TMP_UPLOAD_FILE_PREFIX = "tmp_upload_";
 
     public static Uri compress(Context context, Uri inputUri, int dstWidth, int dstHeight) throws
-            FileNotFoundException {
+            IOException {
 
         ContentResolver contentResolver = context.getContentResolver();
         InputStream inputStream = contentResolver.openInputStream(inputUri);
@@ -62,15 +63,11 @@ public class ImageCompressor {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth
                 () * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
 
+
         // save image
-        File pngDir = new File(Environment.getDownloadCacheDirectory(), UPLOAD_TEMP_DIR);
-        if (!pngDir.exists()) {
-            pngDir.mkdirs();
-        }
+        File outputDir = context.getCacheDir(); // context being the Activity pointer
+        File pngFile = File.createTempFile(TMP_UPLOAD_FILE_PREFIX, ".jpg", outputDir);
 
-        String fileName = TMP_UPLOAD_FILE_PREFIX + UUID.randomUUID() + ".jpg";
-
-        File pngFile = new File(pngDir, fileName);
         FileOutputStream out = new FileOutputStream(pngFile);
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
