@@ -47,7 +47,8 @@ public class  TimelineRange<T extends IdentifiableEntity> {
         this.groupList = new SortedCollection<>(new Comparator<Group<T>>() {
             @Override
             public int compare(Group<T> lhs, Group<T> rhs) {
-                return (int) (lhs.getGroupId() - rhs.getGroupId());
+                Long l_r = (lhs.getGroupId() - rhs.getGroupId());
+                return 0==l_r?0:l_r<0?-1:1;
             }
         });
 

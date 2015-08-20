@@ -133,7 +133,6 @@ public abstract class SectionedRecyclerViewAdapter<T extends IdentifiableEntity>
             if(visibleCount <= 0) {
                 break;
             }
-
             SectionedRecyclerViewAdapter.Section<T> section = new
                     SectionedRecyclerViewAdapter.Section<>(groupOffset, visibleCount, range
                     .hasMore(), range);
