@@ -9,13 +9,14 @@ import com.jadenine.circle.model.db.CircleDBService;
 import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.db.TimelineDBService;
+import com.jadenine.circle.model.entity.ApEntity;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.model.entity.CircleEntity;
 import com.jadenine.circle.model.entity.DirectMessageEntity;
 import com.jadenine.circle.model.entity.Image;
-import com.jadenine.circle.model.entity.UserApEntity;
-import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.BombService;
+import com.jadenine.circle.model.rest.CircleResult;
 import com.jadenine.circle.model.rest.CircleService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
@@ -33,7 +34,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import dagger.Provides;
-import retrofit.RestAdapter;
 import rx.Observable;
 
 import static org.mockito.Matchers.any;
@@ -55,8 +55,9 @@ public class TestDomainModule {
     private final String USER_AP_MAC = "test_ap";
     private final String USER_AP_SSID = "test_ssid";
 
-    private final UserApEntity userApEntity;
-    private final List<UserApEntity> apList = new LinkedList<>();
+    private final ApEntity apEntity;
+    private final List<CircleEntity> circleEntities = new LinkedList<>();
+    private final List<ApEntity> apList = new LinkedList<>();
 
     private final List<DirectMessageEntity> directMessageList= new LinkedList<>();
 
@@ -65,8 +66,12 @@ public class TestDomainModule {
     public TestDomainModule(String deviceId) {
         this.deviceId = deviceId;
 
-        userApEntity = new UserApEntity(deviceId, USER_AP_MAC, USER_AP_SSID);
-        apList.add(userApEntity);
+        apEntity = new ApEntity(USER_AP_MAC, USER_AP_SSID);
+        apList.add(apEntity);
+        CircleEntity circleEntity  = new CircleEntity();
+        circleEntity.setCircleId(apEntity.getMac());
+        circleEntity.setName(apEntity.getSSID());
+        circleEntities.add(circleEntity);
 
         directMessageList.add(genTestDirectMessage(4));//id:6
         directMessageList.add(genTestDirectMessage(3));//id:7
@@ -134,31 +139,30 @@ public class TestDomainModule {
 
     @Provides
     @Singleton
-    ApService provideApRestService() {
-        ApService mockService = mock(ApService.class);
-        when(mockService.listAPs(eq(deviceId))).thenReturn(Observable.just(new TimelineRangeResult<>
-                (apList, false, null)));
-
-        when(mockService.addAP(Matchers.<UserApEntity>any())).thenReturn(Observable.just(new TimelineRangeResult<>(apList, false, null)));
-
-        doAnswer(new Answer<Observable<TimelineRangeResult<UserApEntity>>>() {
-                        @Override
-            public Observable<TimelineRangeResult<UserApEntity>> answer(InvocationOnMock invocationOnMock)
-                                throws Throwable {
-                            UserApEntity anyApEntity = (UserApEntity) invocationOnMock.getArguments()[0];
-                            apList.add(anyApEntity);
-                            return Observable.just(new TimelineRangeResult<>(apList, false, null));
-            }
-        }).when(mockService).addAP(any(UserApEntity.class));
-
-
-        return mockService;
-    }
-
-    @Provides
-    @Singleton
     CircleService provideCircleRestService() {
-        return mock(CircleService.class);
+
+        CircleService mockService = mock(CircleService.class);
+        when(mockService.listCircle(eq(deviceId))).thenReturn(Observable.just(new CircleResult
+                (circleEntities, apList)));
+
+//        when(mockService.addAP(anyString(), Matchers.<ApEntity>any())).thenReturn(Observable.just(new CircleResult(circleEntities, apList)));
+
+        doAnswer(new Answer<Observable<CircleResult>>() {
+            @Override
+            public Observable<CircleResult> answer(InvocationOnMock invocationOnMock)
+                    throws Throwable {
+                ApEntity anyApEntity = (ApEntity) invocationOnMock.getArguments()[0];
+
+                apList.add(anyApEntity);
+                CircleEntity circleEntity = new CircleEntity();
+                circleEntity.setCircleId(anyApEntity.getMac());
+                circleEntity.setName(anyApEntity.getSSID());
+                circleEntities.add(circleEntity);
+
+                return Observable.just(new CircleResult(circleEntities, apList));
+            }
+        }).when(mockService).addAP(anyString(), any(ApEntity.class));
+        return mockService;
     }
 
     @Provides
@@ -215,14 +219,17 @@ public class TestDomainModule {
     @Singleton
     ApDBService provideApDBService(){
         ApDBService mockService = mock(ApDBService.class);
-        when(mockService.listUserAps()).thenReturn(Observable.<List<UserApEntity>>just(new
-                ArrayList<UserApEntity>()));
+        when(mockService.listAps()).thenReturn(Observable.<List<ApEntity>>just(new
+                ArrayList<ApEntity>()));
         return mockService;
     }
 
     @Provides
     @Singleton
     CircleDBService provideCircleDBService(){
+        CircleDBService mockService = mock(CircleDBService.class);
+        when(mockService.listCircles()).thenReturn(Observable.<List<CircleEntity>>just(new
+                ArrayList<CircleEntity>()));
         return mock(CircleDBService.class);
     }
 

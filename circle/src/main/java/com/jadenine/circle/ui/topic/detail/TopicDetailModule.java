@@ -21,7 +21,7 @@ class TopicDetailModule {
 
     @Provides
     @DaggerScope(TopicDetailPresenter.class)
-    Circle provideUserAp(Account account, Group<Bomb> topic) {
+    Circle provideCircle(Account account, Group<Bomb> topic) {
         return account.getCircle(topic.getRoot().getCircle());
     }
 

@@ -12,6 +12,12 @@ public class CircleResult {
     private List<CircleEntity> circles;
     private List<ApEntity> aps;
 
+    public CircleResult(){}
+    public CircleResult(List<CircleEntity> circles, List<ApEntity> aps) {
+        this.circles = circles;
+        this.aps = aps;
+    }
+
     public List<CircleEntity> getCircles(){
         return circles;
     }

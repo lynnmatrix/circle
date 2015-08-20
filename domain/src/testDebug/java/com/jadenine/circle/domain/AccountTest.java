@@ -3,7 +3,6 @@ package com.jadenine.circle.domain;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.ApEntity;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.model.entity.UserApEntity;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -46,7 +45,7 @@ public class AccountTest {
     }
 
     @Test
-    public void testAddUserAp() throws Exception {
+    public void testAddAp() throws Exception {
         assertNotNull(account.getCircles());
         Assert.assertTrue(account.getCircles().isEmpty());
 
@@ -66,7 +65,7 @@ public class AccountTest {
             }
 
             @Override
-            public void onNext(List<Circle> userAps) {
+            public void onNext(List<Circle> circles) {
 
             }
         });
@@ -90,7 +89,7 @@ public class AccountTest {
             }
 
             @Override
-            public void onNext(List<Circle> userAps) {
+            public void onNext(List<Circle> circles) {
 
             }
         });

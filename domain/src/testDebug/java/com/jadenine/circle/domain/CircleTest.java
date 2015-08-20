@@ -42,7 +42,7 @@ public class CircleTest {
             }
 
             @Override
-            public void onNext(List<Circle> userAps) {
+            public void onNext(List<Circle> circles) {
 
             }
         });

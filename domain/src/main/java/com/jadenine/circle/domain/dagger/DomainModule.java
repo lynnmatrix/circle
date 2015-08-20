@@ -14,7 +14,6 @@ import com.jadenine.circle.model.db.DirectMessageDBService;
 import com.jadenine.circle.model.db.TimelineCursorDBService;
 import com.jadenine.circle.model.db.TimelineDBService;
 import com.jadenine.circle.model.entity.GsonIgnore;
-import com.jadenine.circle.model.rest.ApService;
 import com.jadenine.circle.model.rest.AzureBlobUploader;
 import com.jadenine.circle.model.rest.BombService;
 import com.jadenine.circle.model.rest.CircleService;
@@ -80,12 +79,6 @@ public class DomainModule {
                 .setConverter(new GsonConverter(gson))
                 .build();
         return restAdapter;
-    }
-
-    @Provides
-    @Singleton
-    ApService provideApRestService(RestAdapter restAdapter) {
-        return restAdapter.create(ApService.class);
     }
 
     @Provides

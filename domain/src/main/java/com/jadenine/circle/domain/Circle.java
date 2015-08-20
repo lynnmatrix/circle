@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.jadenine.circle.domain.dagger.DaggerService;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.model.entity.CircleEntity;
-import com.jadenine.circle.model.entity.UserApEntity;
 import com.jadenine.circle.model.state.TimelineType;
 
 import java.io.InputStream;

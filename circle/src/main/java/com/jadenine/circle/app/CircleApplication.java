@@ -120,7 +120,7 @@ public class CircleApplication extends Application {
                         CustomNotification customNotification = gson.fromJson(uMessage.custom, CustomNotification.class);
 
                         if (CUSTOM_NOTIFICATION_TYPE_TOPIC.equalsIgnoreCase(customNotification.type)) {
-                            updateUserApUnRead(customNotification);
+                            updateCircleUnRead(customNotification);
                         } else if(CUSTOM_NOTIFICATION_TYPE_CHAT.equalsIgnoreCase(customNotification.type)) {
                             updateChatUnread(customNotification);
                         }
@@ -138,18 +138,18 @@ public class CircleApplication extends Application {
                 Timber.i("dealWithCustomMessage " + msg.custom);
             }
 
-            private void updateUserApUnRead(CustomNotification customNotification) {
+            private void updateCircleUnRead(CustomNotification customNotification) {
                 Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
-                Circle userAp = account.getCircle(bomb.getCircle());
-                Group<Bomb> topic = userAp.getTopic(bomb.getGroupId());
+                Circle circle = account.getCircle(bomb.getCircle());
+                Group<Bomb> topic = circle.getTopic(bomb.getGroupId());
                 Long lastRead = null;
                 if(null != topic) {
                     Bomb latestBomb = topic.getLatest();
                     lastRead = latestBomb.getId();
                 }
-                if(null != userAp && (null == lastRead || bomb.getId() <
+                if(null != circle && (null == lastRead || bomb.getId() <
                         lastRead)) {
-                    userAp.setHasUnread(true);
+                    circle.setHasUnread(true);
                 }
             }
 

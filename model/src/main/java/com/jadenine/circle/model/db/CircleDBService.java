@@ -17,10 +17,10 @@ public class CircleDBService {
         return Observable.create(new Observable.OnSubscribe<List<CircleEntity>>() {
             @Override
             public void call(Subscriber<? super List<CircleEntity>> subscriber) {
-                List<CircleEntity> userApEntities = new Select().from(CircleEntity.class)
+                List<CircleEntity> circleEntities = new Select().from(CircleEntity.class)
                         .queryList();
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onNext(userApEntities);
+                    subscriber.onNext(circleEntities);
                     subscriber.onCompleted();
                 }
             }

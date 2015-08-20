@@ -40,7 +40,7 @@ public class ComposerPath extends Path implements ScreenComponentFactory {
         class Module{
             @DaggerScope(ComposerPresenter.class)
             @Provides
-            Circle provideUserAp(Account account) {
+            Circle provideCircle(Account account) {
                 return account.getCircle(circle);
             }
 
