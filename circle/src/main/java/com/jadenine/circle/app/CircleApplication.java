@@ -101,6 +101,14 @@ public class CircleApplication extends Application {
                     sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
                     currentVersion = 2;
                 }
+                if(2 == currentVersion) {
+                    sqLiteDatabase.execSQL("drop table Bomb;");
+                    sqLiteDatabase.execSQL("drop table Timeline;");
+                    sqLiteDatabase.execSQL("drop table TimelineRangeCursor;");
+                    sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
+                    sqLiteDatabase.execSQL("drop table UserApEntity;");
+                    currentVersion = 3;
+                }
             }
         });
         refWatcher = installLeakCanary();

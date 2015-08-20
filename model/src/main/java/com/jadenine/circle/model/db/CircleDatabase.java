@@ -9,5 +9,5 @@ import com.raizlabs.android.dbflow.annotation.Database;
 public class CircleDatabase {
     public static final String NAME = "circle";
 
-    public static final int VERSION = 2;
+    public static final int VERSION = 3;
 }
