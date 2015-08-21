@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.jadenine.circle.BuildConfig;
-import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
@@ -41,7 +40,6 @@ import timber.log.Timber;
 /**
  * Created by linym on 6/6/15.
  */
-@DaggerScope(CircleApplication.class)
 public class CircleApplication extends Application {
     public static final String ROOT_SCOPE_NAME = "Root";
     public static final String CUSTOM_NOTIFICATION_TYPE_TOPIC = "topic";
@@ -96,12 +94,12 @@ public class CircleApplication extends Application {
             @Override
             public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
                 int currentVersion = oldVersion;
-                if(1 == currentVersion) {
+                if (1 == currentVersion) {
                     sqLiteDatabase.execSQL("drop table Bomb;");
                     sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
                     currentVersion = 2;
                 }
-                if(2 == currentVersion) {
+                if (2 == currentVersion) {
                     sqLiteDatabase.execSQL("drop table Bomb;");
                     sqLiteDatabase.execSQL("drop table Timeline;");
                     sqLiteDatabase.execSQL("drop table TimelineRangeCursor;");
@@ -118,22 +116,27 @@ public class CircleApplication extends Application {
         UmengMessageHandler messageHandler = new UmengMessageHandler(){
             @Override
             public Notification getNotification(Context context, UMessage uMessage) {
-                uMessage.title = getString(R.string.notification_title_new_topic);
-
-                Timber.tag("PUSH");
                 Timber.i("getNotification " + uMessage.custom);
 
                 if(!TextUtils.isEmpty(uMessage.custom)) {
                     try {
-                        CustomNotification customNotification = gson.fromJson(uMessage.custom, CustomNotification.class);
+                        CustomNotificationType customNotification = gson.fromJson(uMessage.custom, CustomNotificationType.class);
 
                         if (CUSTOM_NOTIFICATION_TYPE_TOPIC.equalsIgnoreCase(customNotification.type)) {
-                            updateCircleUnRead(customNotification);
+                            Bomb bomb = gson.fromJson(uMessage.custom, CustomNotificationDataTopic.class).data;
+                            updateCircleUnRead(bomb);
+                            Circle circle = account.getCircle(bomb.getCircle());
+                            uMessage.title = circle.getName();
                         } else if(CUSTOM_NOTIFICATION_TYPE_CHAT.equalsIgnoreCase(customNotification.type)) {
-                            updateChatUnread(customNotification);
+                            DirectMessageEntity chatMessage = gson.fromJson(uMessage.custom, CustomNotificationDataChat.class).data;
+                            updateChatUnread(chatMessage);
+                            Circle circle = account.getCircle(chatMessage.getCircle());
+                            uMessage.title = circle.getName();
                         }
                     } catch (JsonSyntaxException e) {
                         Timber.e(e, uMessage.custom);
+                    } catch (Throwable t) {
+                        Timber.e(t, "wtf");
                     }
                 }
 
@@ -142,12 +145,10 @@ public class CircleApplication extends Application {
 
             @Override
             public void dealWithCustomMessage(final Context context, final UMessage msg) {
-                Timber.tag("PUSH");
-                Timber.i("dealWithCustomMessage " + msg.custom);
+                Timber.d("dealWithCustomMessage " + msg.custom);
             }
 
-            private void updateCircleUnRead(CustomNotification customNotification) {
-                Bomb bomb = gson.fromJson(customNotification.data, Bomb.class);
+            private void updateCircleUnRead(Bomb bomb) {
                 Circle circle = account.getCircle(bomb.getCircle());
                 Group<Bomb> topic = circle.getTopic(bomb.getGroupId());
                 Long lastRead = null;
@@ -161,9 +162,7 @@ public class CircleApplication extends Application {
                 }
             }
 
-            private void updateChatUnread(CustomNotification customNotification) {
-                DirectMessageEntity chatMessage = gson.fromJson(customNotification
-                        .data, DirectMessageEntity.class);
+            private void updateChatUnread(DirectMessageEntity chatMessage) {
                 Group<DirectMessageEntity> chat = account.getChat(chatMessage.getCircle(), Long
                         .valueOf(chatMessage.getTopicId()), chatMessage.getRootUser(),
                         chatMessage.getGroupId());
@@ -234,8 +233,13 @@ public class CircleApplication extends Application {
         Context provideAppContext(){return appContext;}
     }
 
-    private static class CustomNotification {
+    private static class CustomNotificationType {
         public String type;
-        public String data;
+    }
+    private static class CustomNotificationDataTopic {
+        public Bomb data;
+    }
+    private static class CustomNotificationDataChat {
+        public DirectMessageEntity data;
     }
 }

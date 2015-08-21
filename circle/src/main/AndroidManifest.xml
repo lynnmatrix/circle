@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
     android:allowBackup="true"
@@ -71,11 +72,12 @@
         </activity>
 
         <!--umeng message-->
+        <!-- 监听通知点击或者忽略处理的广播 -->
         <receiver
             android:name="com.umeng.message.NotificationProxyBroadcastReceiver"
-            android:process=":push"
             android:exported="false" >
         </receiver>
+        <!-- 监听开机运行、网络连接变化、卸载的广播 -->
         <receiver
             android:name="com.umeng.message.SystemReceiver"
             android:process=":push" >
@@ -90,6 +92,7 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <!-- 监听消息到达的广播 -->
         <receiver
             android:name="com.umeng.message.MessageReceiver"
             android:process=":push" >
@@ -97,6 +100,7 @@
                 <action android:name="org.agoo.android.intent.action.RECEIVE" />
             </intent-filter>
         </receiver>
+        <!-- 监听宿主选举的广播 -->
         <receiver
             android:name="com.umeng.message.ElectionReceiver"
             android:process=":push" >
@@ -105,6 +109,7 @@
                 <category android:name="umeng" />
             </intent-filter>
         </receiver>
+        <!-- 监听注册的广播 -->
         <receiver
             android:name="com.umeng.message.RegistrationReceiver"
             android:exported="false" >
@@ -118,6 +123,7 @@
             </intent-filter>
         </receiver>
 
+        <!-- Umeng的长连服务，用来建立推送的长连接的 -->
         <service
             android:name="com.umeng.message.UmengService"
             android:label="PushService"
@@ -135,9 +141,11 @@
             </intent-filter>
         </service>
 
+        <!-- Umeng的消息接收服务 -->
         <service android:name="com.umeng.message.UmengIntentService"
                  android:process=":push" />
 
+        <!-- Umeng的消息路由服务 -->
         <service
             android:name="com.umeng.message.UmengMessageIntentReceiverService"
             android:process=":push"
