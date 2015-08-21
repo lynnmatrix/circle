@@ -57,6 +57,7 @@ public class CircleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         if(BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
@@ -110,6 +111,8 @@ public class CircleApplication extends Application {
             }
         });
         refWatcher = installLeakCanary();
+
+        Timber.w("onCreate %s", this);
     }
 
     private void registerUmengMessageHandler() {
@@ -150,6 +153,10 @@ public class CircleApplication extends Application {
 
             private void updateCircleUnRead(Bomb bomb) {
                 Circle circle = account.getCircle(bomb.getCircle());
+                if(null == circle){
+                    Timber.w("Cant find circle %s in NotificationService", bomb.getCircle());
+                    return;
+                }
                 Group<Bomb> topic = circle.getTopic(bomb.getGroupId());
                 Long lastRead = null;
                 if(null != topic) {
@@ -167,6 +174,10 @@ public class CircleApplication extends Application {
                         .valueOf(chatMessage.getTopicId()), chatMessage.getRootUser(),
                         chatMessage.getGroupId());
 
+                if(null == chat) {
+                    Timber.w("Cant find chat %s in NotificationService", chatMessage.getCircle());
+                    return;
+                }
                 Long lastRead = null;
                 if(null != chat) {
                     DirectMessageEntity latestMessage = chat.getLatest();
@@ -180,7 +191,7 @@ public class CircleApplication extends Application {
         };
 
         PushAgent pushAgent = PushAgent.getInstance(this);
-        pushAgent.setNotificaitonOnForeground(false);
+//        pushAgent.setNotificaitonOnForeground(false);
         pushAgent.setMessageHandler(messageHandler);
     }
 

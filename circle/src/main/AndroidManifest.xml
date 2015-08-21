@@ -79,8 +79,7 @@
         </receiver>
         <!-- 监听开机运行、网络连接变化、卸载的广播 -->
         <receiver
-            android:name="com.umeng.message.SystemReceiver"
-            android:process=":push" >
+            android:name="com.umeng.message.SystemReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -94,16 +93,14 @@
         </receiver>
         <!-- 监听消息到达的广播 -->
         <receiver
-            android:name="com.umeng.message.MessageReceiver"
-            android:process=":push" >
+            android:name="com.umeng.message.MessageReceiver" >
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.RECEIVE" />
             </intent-filter>
         </receiver>
         <!-- 监听宿主选举的广播 -->
         <receiver
-            android:name="com.umeng.message.ElectionReceiver"
-            android:process=":push" >
+            android:name="com.umeng.message.ElectionReceiver">
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.ELECTION_RESULT_V4" />
                 <category android:name="umeng" />
@@ -127,8 +124,7 @@
         <service
             android:name="com.umeng.message.UmengService"
             android:label="PushService"
-            android:exported="true"
-            android:process=":push" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.jadenine.circle.intent.action.START" />
             </intent-filter>
@@ -142,13 +138,11 @@
         </service>
 
         <!-- Umeng的消息接收服务 -->
-        <service android:name="com.umeng.message.UmengIntentService"
-                 android:process=":push" />
+        <service android:name="com.umeng.message.UmengIntentService" />
 
         <!-- Umeng的消息路由服务 -->
         <service
             android:name="com.umeng.message.UmengMessageIntentReceiverService"
-            android:process=":push"
             android:exported="true" >
             <intent-filter>
                 <action android:name="org.android.agoo.client.MessageReceiverService" />
