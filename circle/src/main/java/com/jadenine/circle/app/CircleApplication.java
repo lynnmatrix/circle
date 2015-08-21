@@ -96,16 +96,16 @@ public class CircleApplication extends Application {
             public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
                 int currentVersion = oldVersion;
                 if (1 == currentVersion) {
-                    sqLiteDatabase.execSQL("drop table Bomb;");
-                    sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
+                    sqLiteDatabase.execSQL("drop table if exists Bomb;");
+                    sqLiteDatabase.execSQL("drop table if exists DirectMessageEntity;");
                     currentVersion = 2;
                 }
                 if (2 == currentVersion) {
-                    sqLiteDatabase.execSQL("drop table Bomb;");
-                    sqLiteDatabase.execSQL("drop table Timeline;");
-                    sqLiteDatabase.execSQL("drop table TimelineRangeCursor;");
-                    sqLiteDatabase.execSQL("drop table DirectMessageEntity;");
-                    sqLiteDatabase.execSQL("drop table UserApEntity;");
+                    sqLiteDatabase.execSQL("drop table if exists Bomb ;");
+                    sqLiteDatabase.execSQL("drop table if exists Timeline;");
+                    sqLiteDatabase.execSQL("drop table if exists TimelineRangeCursor;");
+                    sqLiteDatabase.execSQL("drop table if exists DirectMessageEntity;");
+                    sqLiteDatabase.execSQL("drop table if exists UserApEntity;");
                     currentVersion = 3;
                 }
             }
