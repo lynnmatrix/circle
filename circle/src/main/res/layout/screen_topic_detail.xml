@@ -15,9 +15,10 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingBottom="?attr/actionBarSize"/>
+        android:layout_weight="1"/>
 
-    <include layout="@layout/toolbar_reply"/>
+    <include layout="@layout/toolbar_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </com.jadenine.circle.ui.topic.detail.TopicDetailView>

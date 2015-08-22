@@ -141,7 +141,7 @@ public class TopicHeader extends LinearLayout {
                 TextView textView = new TextView(getContext());
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams
                         .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
+                textView.setTextAppearance(getContext(), R.style.TextAppearance_AppCompat_Body2);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                 textView.setText(line);
                 textView.setSingleLine(true);

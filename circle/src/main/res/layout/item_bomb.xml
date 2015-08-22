@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
         <TextView
             android:id="@+id/date"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
     </LinearLayout>
 
