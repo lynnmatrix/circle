@@ -46,13 +46,6 @@ public class DrawerMenuView extends NavigationView {
         menuView.setHasFixedSize(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         menuView.setLayoutManager(linearLayoutManager);
-        menuView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new
-                RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position) {
-                return presenter.onCircleSelected(position);
-            }
-        }));
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getContext(),
                 LinearLayoutManager.VERTICAL);
         menuView.addItemDecoration(decoration);

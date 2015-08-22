@@ -92,6 +92,7 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         boolean selected = selectedPosition == position;
+        holder.itemView.setSelected(selected);
         switch (holder.getItemViewType()) {
             case TYPE_HEADER:
                 break;
@@ -109,7 +110,6 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case TYPE_AP:
                 ((MenuCircleItemViewHolder)holder).bind(getCircle(position));
-                holder.itemView.setSelected(selected);
                 break;
         }
     }

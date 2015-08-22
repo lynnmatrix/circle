@@ -33,9 +33,7 @@ import timber.log.Timber;
  * Created by linym on 7/22/15.
  */
 public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
-    private static final String BUNDLE_CURRENT_CIRCLE = "current_circle";
     private final Account account;
-    private String currentCircle;
 
     public DrawerMenuPresenter(Account account) {
         this.account = account;
@@ -56,9 +54,6 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
     @Override
     public void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
-        if(null != savedInstanceState) {
-            currentCircle = savedInstanceState.getString(BUNDLE_CURRENT_CIRCLE);
-        }
         if (!hasView()) return;
         loadCircles();
         openDefaultItemIfNeed();
@@ -75,25 +70,6 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
     @Override
     protected void onSave(Bundle outState) {
         super.onSave(outState);
-        outState.putString(BUNDLE_CURRENT_CIRCLE, currentCircle);
-    }
-
-    public boolean onCircleSelected(int position) {
-        boolean validApPosition = position >= DrawerMenuAdapter.NON_AP_ITEM_COUNT;
-        if(validApPosition) {
-            Circle circle = getAdapter().getCircle(position);
-            getAdapter().setSelected(position);
-            onCircleSelected(circle);
-        }
-        return validApPosition;
-    }
-
-    private void onCircleSelected(@NonNull Circle circle) {
-        if(null == circle) {
-            return;
-        }
-        replaceWithPath(new TopicListPath(circle.getCircleId()));
-        currentCircle = circle.getCircleId();
     }
 
     private void replaceWithPath(@NonNull Path path) {
