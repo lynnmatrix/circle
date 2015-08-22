@@ -2,10 +2,14 @@ package com.jadenine.circle.ui.avatar;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.StyleSpan;
 
 import com.jadenine.circle.R;
 
@@ -33,12 +37,16 @@ public class AvatarBinder {
         String replyType = context.getString(R.string.reply_type_public);
 
         Drawable avatarDrawable = context.getResources().getDrawable(avatarResId);
-        avatarDrawable.setBounds(0, 0, (int)textSize, (int)textSize);
+        avatarDrawable.setBounds(0, 0, (int) textSize, (int) textSize);
 
         ImageSpan toAvatarSpan = new ImageSpan(avatarDrawable);
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(replyType + "  ");
         builder.setSpan(toAvatarSpan, 1, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(context.getResources().getColor(R.color.secondary_text));
+
+        builder.setSpan(fcs, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         return builder;
     }

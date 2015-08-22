@@ -3,8 +3,11 @@ package com.jadenine.circle.ui.widgets;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -141,7 +144,7 @@ public class TopicHeader extends LinearLayout {
                 TextView textView = new TextView(getContext());
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams
                         .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextAppearance(getContext(), R.style.TextAppearance_AppCompat_Body2);
+                textView.setTextAppearance(getContext(), R.style.TextAppearance_AppCompat_Body1);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                 textView.setText(line);
                 textView.setSingleLine(true);
@@ -152,20 +155,29 @@ public class TopicHeader extends LinearLayout {
     }
 
     private CharSequence buildComment(AvatarBinder avatarBinder, Bomb bomb, float textSize) {
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.secondary_text));
+
+        SpannableStringBuilder atSpannableStrBuilder = new SpannableStringBuilder("@");
+        atSpannableStrBuilder.setSpan(fcs, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        SpannableStringBuilder colonSpannableStrBuilder = new SpannableStringBuilder(": ");
+        colonSpannableStrBuilder.setSpan(fcs, 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         int fromResId = avatarBinder.getAvatar(bomb.getFrom(), bomb.getRootMessageId());
         CharSequence fromAvatar = avatarBinder.getAvatarSpan(getContext(), fromResId, textSize);
 
         SpannableStringBuilder commentBuilder = new SpannableStringBuilder();
         commentBuilder.append(fromAvatar);
-        if(!TextUtils.isEmpty(bomb.getTo())) {
+        if (!TextUtils.isEmpty(bomb.getTo())) {
             int toResId = avatarBinder.getAvatar(bomb.getTo(), bomb.getRootMessageId());
             CharSequence toAvatar = avatarBinder.getAvatarSpan(getContext(), toResId, textSize);
 
-            commentBuilder.append("@");
+            commentBuilder.append(atSpannableStrBuilder);
             commentBuilder.append(toAvatar);
         }
-        commentBuilder.append(": ");
+        commentBuilder.append(colonSpannableStrBuilder);
         commentBuilder.append(bomb.getContent());
+
         return commentBuilder;
     }
 
