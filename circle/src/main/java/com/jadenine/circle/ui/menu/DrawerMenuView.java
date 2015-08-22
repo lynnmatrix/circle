@@ -22,18 +22,18 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/22/15.
  */
-public class ApMenuView extends NavigationView {
+public class DrawerMenuView extends NavigationView {
 
     @InjectView(R.id.menu_view)
     RecyclerView menuView;
 
     @Inject
-    ApMenuPresenter presenter;
+    DrawerMenuPresenter presenter;
 
     @Inject
-    ApMenuAdapter adapter;
+    DrawerMenuAdapter adapter;
 
-    public ApMenuView(Context context, AttributeSet attrs) {
+    public DrawerMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -67,7 +67,7 @@ public class ApMenuView extends NavigationView {
         super.onDetachedFromWindow();
     }
 
-    ApMenuAdapter getAdapter() {
+    DrawerMenuAdapter getAdapter() {
         return adapter;
     }
 }

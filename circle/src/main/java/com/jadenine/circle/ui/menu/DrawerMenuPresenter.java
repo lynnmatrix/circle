@@ -32,12 +32,12 @@ import timber.log.Timber;
 /**
  * Created by linym on 7/22/15.
  */
-public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
+public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
     private static final String BUNDLE_CURRENT_CIRCLE = "current_circle";
     private final Account account;
     private String currentCircle;
 
-    public ApMenuPresenter(Account account) {
+    public DrawerMenuPresenter(Account account) {
         this.account = account;
     }
 
@@ -79,7 +79,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
     }
 
     public boolean onCircleSelected(int position) {
-        boolean validApPosition = position >= ApMenuAdapter.NON_AP_ITEM_COUNT;
+        boolean validApPosition = position >= DrawerMenuAdapter.NON_AP_ITEM_COUNT;
         if(validApPosition) {
             Circle circle = getAdapter().getCircle(position);
             getAdapter().setSelected(position);
@@ -113,7 +113,7 @@ public class ApMenuPresenter extends ViewPresenter<ApMenuView>{
         return getView().getContext();
     }
 
-    private ApMenuAdapter getAdapter(){
+    private DrawerMenuAdapter getAdapter(){
         return getView().getAdapter();
     }
 

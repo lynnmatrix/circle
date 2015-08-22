@@ -9,7 +9,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
-import com.jadenine.circle.ui.menu.ApMenuView;
+import com.jadenine.circle.ui.menu.DrawerMenuView;
 import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -26,7 +26,7 @@ public class HomeActivity extends MortarActivity {
     DrawerLayout drawerLayout;
 
     @InjectView(R.id.nav_view)
-    ApMenuView navigationView;
+    DrawerMenuView navigationView;
 
     @InjectView(R.id.container)
     MortarPathContainerView pathContainerView;

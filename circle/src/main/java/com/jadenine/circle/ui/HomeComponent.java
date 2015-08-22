@@ -2,7 +2,7 @@ package com.jadenine.circle.ui;
 
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.ui.menu.ApMenuView;
+import com.jadenine.circle.ui.menu.DrawerMenuView;
 import com.jadenine.common.mortar.ActivityOwner;
 
 /**
@@ -18,5 +18,5 @@ public interface HomeComponent  extends UiComponent{
     DrawerHandler drawerHander();
 
     void inject(HomeActivity homeActivity);
-    void inject(ApMenuView apMenuView);
+    void inject(DrawerMenuView drawerMenuView);
 }

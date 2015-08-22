@@ -14,14 +14,14 @@ import butterknife.InjectView;
 /**
  * Created by linym on 7/22/15.
  */
-class ApMenuItemViewHolder extends RecyclerView.ViewHolder{
+class MenuCircleItemViewHolder extends RecyclerView.ViewHolder{
     @InjectView(R.id.ap_ssid)
     TextView ssidView;
 
     @InjectView(R.id.read)
     ImageView readView;
 
-    public ApMenuItemViewHolder(View itemView) {
+    public MenuCircleItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
     }

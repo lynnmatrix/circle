@@ -18,7 +18,7 @@ import flow.path.Path;
 /**
  * Created by linym on 8/5/15.
  */
-class ItemViewHolder extends RecyclerView.ViewHolder {
+class MenuNormalItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.icon)
     ImageView iconView;
     @InjectView(R.id.title)
@@ -27,7 +27,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.read)
     ImageView readView;
 
-    public ItemViewHolder(View itemView) {
+    public MenuNormalItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
     }

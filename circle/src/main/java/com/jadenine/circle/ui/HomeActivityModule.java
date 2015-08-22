@@ -10,7 +10,7 @@ import android.util.TypedValue;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.mortar.DaggerScope;
-import com.jadenine.circle.ui.menu.ApMenuPresenter;
+import com.jadenine.circle.ui.menu.DrawerMenuPresenter;
 import com.jadenine.common.mortar.ActivityOwner;
 
 import dagger.Provides;
@@ -29,8 +29,8 @@ class HomeActivityModule {
 
     @DaggerScope(HomeActivity.class)
     @Provides
-    ApMenuPresenter provideMenuPresenter(Account account) {
-        return new ApMenuPresenter(account);
+    DrawerMenuPresenter provideMenuPresenter(Account account) {
+        return new DrawerMenuPresenter(account);
     }
 
     @DaggerScope(HomeActivity.class)

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 /**
  * Created by linym on 7/22/15.
  */
-class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_HEADER = 0;
     private final int TYPE_AP = 1;
     private final int TYPE_MY_CHAT = 2;
@@ -38,7 +38,7 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Account account;
 
     @Inject @DaggerScope(HomeActivity.class)
-    public ApMenuAdapter(Account account) {
+    public DrawerMenuAdapter(Account account) {
         this.account = account;
     }
 
@@ -73,14 +73,14 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TYPE_MY_TOPICS:
             case TYPE_MY_CHAT:
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                        .item_navigation_menu, parent, false);
+                        .menu_item_normal, parent, false);
 
-                viewHolder = new ItemViewHolder(itemView);
+                viewHolder = new MenuNormalItemViewHolder(itemView);
                 break;
             case TYPE_AP:
                 View apView = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                        .item_ap_menu, parent, false);
-                viewHolder = new ApMenuItemViewHolder(apView);
+                        .menu_item_circle, parent, false);
+                viewHolder = new MenuCircleItemViewHolder(apView);
                 break;
             default:
                 viewHolder = null;
@@ -96,19 +96,19 @@ class ApMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TYPE_HEADER:
                 break;
             case TYPE_TOP_TOPICS:
-                ((ItemViewHolder)holder).bind(R.drawable.ic_fire, R.string
+                ((MenuNormalItemViewHolder)holder).bind(R.drawable.ic_fire, R.string
                         .title_top_topics,false, new TopPath());
                 break;
             case TYPE_MY_TOPICS:
-                ((ItemViewHolder)holder).bind(R.drawable.ic_person_outline, R.string
+                ((MenuNormalItemViewHolder)holder).bind(R.drawable.ic_person_outline, R.string
                         .title_my_topic, account.hasUnreadChat(), new MyTopicPath());
                 break;
             case TYPE_MY_CHAT:
-                ((ItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string
+                ((MenuNormalItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string
                         .title_private_chat, account.hasUnreadChat(), new MyChatPath());
                 break;
             case TYPE_AP:
-                ((ApMenuItemViewHolder)holder).bind(getCircle(position));
+                ((MenuCircleItemViewHolder)holder).bind(getCircle(position));
                 holder.itemView.setSelected(selected);
                 break;
         }
