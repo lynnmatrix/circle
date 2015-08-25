@@ -20,11 +20,14 @@ import com.jadenine.circle.model.rest.CircleService;
 import com.jadenine.circle.model.rest.DirectMessageService;
 import com.jadenine.circle.model.rest.ImageService;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
+import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
+import javax.net.ssl.SSLSocketFactory;
 
 import dagger.Provides;
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -42,7 +45,10 @@ public class DomainModule {
 
     private final String deviceId;
 
-    public DomainModule(String deviceId) {
+    private final SSLSocketFactory socketFactory;
+
+    public DomainModule(SSLSocketFactory socketFactory, String deviceId) {
+        this.socketFactory = socketFactory;
         this.deviceId = deviceId;
     }
 
@@ -71,9 +77,12 @@ public class DomainModule {
 
     @Provides
     @Singleton
-    public RestAdapter provideRestAdapter(Gson gson){
+    public RestAdapter provideRestAdapter(Gson gson) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setSslSocketFactory(socketFactory);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
+                .setClient(new OkClient(okHttpClient))
                 .setLogLevel(LOG_LEVEL)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))

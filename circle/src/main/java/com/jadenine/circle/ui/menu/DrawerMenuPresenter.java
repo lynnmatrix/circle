@@ -10,7 +10,6 @@ import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.model.entity.ApEntity;
-import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.topic.top.TopPath;
 import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.jadenine.circle.utils.ApUtils;
