@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
+import com.jadenine.circle.eventbus.BusProvider;
+import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.ui.DrawerHandler;
 import com.jadenine.circle.ui.utils.AutoLoadMoreListener;
 import com.jadenine.circle.ui.utils.RecyclerItemClickListener;
@@ -98,6 +100,7 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
             @Override
             public void onClick(View v) {
                 drawerHandler.openDrawer(GravityCompat.START);
+                BusProvider.post(new EventProducer.DrawerOpenEvent());
             }
         });
     }

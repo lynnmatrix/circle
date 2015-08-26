@@ -84,6 +84,11 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
         addAPIfNot(event.getAP());
     }
 
+    @Subscribe
+    public void onDrawerOpen(EventProducer.DrawerOpenEvent event) {
+        loadCircles();
+    }
+
     private Context getContext() {
         return getView().getContext();
     }

@@ -16,4 +16,6 @@ public class EventProducer {
             return ap;
         }
     }
+    public static class DrawerOpenEvent{}
+
 }
