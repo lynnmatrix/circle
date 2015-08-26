@@ -76,14 +76,6 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             getView().replyEditor.setSelection(content.length());
         }
 
-        getView().getBombAdapter().setOnAvatarClickListener(new TopicHeader.OnAvatarClickListener
-                () {
-            @Override
-            public void onClick() {
-                ChatPath chatPath = new ChatPath(circle.getCircleId(), bombGroup.getGroupId(), account.getDeviceId(), bombGroup.getRoot().getFrom());
-                Flow.get(getView()).set(chatPath);
-            }
-        });
         getView().getBombAdapter().setOnBombItemClick(new BombListAdapter.OnBombItemClickListener
                 () {
             @Override

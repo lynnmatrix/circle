@@ -62,7 +62,7 @@ public class TopicHeader extends LinearLayout {
     private OnAvatarClickListener avatarClickListener;
 
     public interface OnAvatarClickListener{
-        void onClick();
+        void onClick(Context context);
     }
 
     public TopicHeader(Context context, AttributeSet attrs) {
@@ -188,7 +188,7 @@ public class TopicHeader extends LinearLayout {
     @OnClick(R.id.avatar)
     public void onAvatarClicked(){
         if(null != avatarClickListener) {
-            avatarClickListener.onClick();
+            avatarClickListener.onClick(getContext());
         }
     }
 }

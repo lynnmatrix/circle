@@ -1,16 +1,24 @@
 package com.jadenine.circle.ui.topic.detail;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
+import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.mortar.DaggerScope;
 import com.jadenine.circle.mortar.ScreenComponentFactory;
 import com.jadenine.circle.ui.HomeComponent;
+import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.chat.detail.ChatPath;
+import com.jadenine.circle.ui.widgets.TopicHeader;
 import com.jadenine.common.flow.Layout;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 
 import dagger.Provides;
+import flow.Flow;
 import flow.path.Path;
 
 /**
@@ -50,6 +58,22 @@ public class TopTopicDetailPath extends Path implements ScreenComponentFactory {
         @DaggerScope(TopicDetailPresenter.class)
         Group<Bomb> provideBombGroup(Account account) {
             return account.getTopTopic(groupId);
+        }
+
+
+        @Provides
+        @DaggerScope(TopicDetailPresenter.class)
+        BombListAdapter provideAdapter(final Account account, final Circle circle, final Group<Bomb> bombGroup, Drawable errorDrawable, AvatarBinder binder) {
+            BombListAdapter adapter = new BombListAdapter(errorDrawable, binder);
+            adapter.setOnAvatarClickListener(new TopicHeader.OnAvatarClickListener
+                    () {
+                @Override
+                public void onClick(Context context) {
+                    ChatPath chatPath = new ChatPath(circle.getCircleId(), bombGroup.getGroupId(), account.getDeviceId(), bombGroup.getRoot().getFrom());
+                    Flow.get(context).set(chatPath);
+                }
+            });
+            return adapter;
         }
     }
 }

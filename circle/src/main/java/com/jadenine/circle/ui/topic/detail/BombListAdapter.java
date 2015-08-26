@@ -31,8 +31,6 @@ class BombListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TopicHeader.OnAvatarClickListener onAvatarClickListener;
     private OnBombItemClickListener onBombItemClick;
 
-    @Inject
-    @Singleton
     public BombListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder) {
         this.errorDrawable = errorDrawable;
         this.avatarBinder = avatarBinder;

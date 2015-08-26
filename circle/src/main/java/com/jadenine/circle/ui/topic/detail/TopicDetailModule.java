@@ -16,9 +16,6 @@ import dagger.Provides;
 @dagger.Module
 class TopicDetailModule {
 
-    public TopicDetailModule() {
-    }
-
     @Provides
     @DaggerScope(TopicDetailPresenter.class)
     Circle provideCircle(Account account, Group<Bomb> topic) {
