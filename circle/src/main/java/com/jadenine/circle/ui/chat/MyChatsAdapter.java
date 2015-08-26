@@ -78,8 +78,8 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
         @InjectView(R.id.avatar)
         ImageView avatarView;
 
-        @InjectView(R.id.ap)
-        TextView apView;
+        @InjectView(R.id.circle)
+        TextView circleView;
 
         @InjectView(R.id.content)
         TextView contentView;
@@ -89,7 +89,7 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
             ButterKnife.inject(this, itemView);
         }
 
-        public void bind(Group<DirectMessageEntity> chat, Account account, AvatarBinder
+        public void bind(Group<DirectMessageEntity> chat, final Account account, AvatarBinder
                 avatarBinder) {
             final DirectMessageEntity lastMessage = chat.getLatest();
             if(null != lastMessage) {
@@ -102,15 +102,23 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
                 } else {
                     apDes = lastMessage.getCircle();
                 }
-                apView.setText(apDes);
+                circleView.setText(apDes);
                 contentView.setText(lastMessage.getContent());
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String rootFrom = lastMessage.getFrom();
+                        String rootTo = lastMessage.getTo();
+
+                        if(!account.getDeviceId().equalsIgnoreCase(lastMessage.getFrom())) {
+                            rootFrom = lastMessage.getTo();
+                            rootTo = lastMessage.getFrom();
+                        }
+
                         ChatPath chatPath = new ChatPath(lastMessage.getCircle(), Long.valueOf
-                                (lastMessage.getTopicId()), lastMessage.getRootUser(),
-                                lastMessage.getRootUser(), Long.valueOf(lastMessage
+                                (lastMessage.getTopicId()), rootFrom,
+                                rootTo, Long.valueOf(lastMessage
                                 .getRootMessageId()));
                         Flow.get(v).set(chatPath);
                     }

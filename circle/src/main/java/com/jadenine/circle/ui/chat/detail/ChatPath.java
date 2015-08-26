@@ -21,20 +21,20 @@ import flow.path.Path;
  */
 @Layout(R.layout.screen_chat)
 public class ChatPath extends Path implements ScreenComponentFactory {
-    private final String ap;
-    private final Long bombGroupId;
+    private final String circle;
+    private final Long topicId;
     private final String rootUser;
     private final String rootTo;
     private final Long rootMessageId;
 
-    public ChatPath(String ap, Long bombGroupId, String rootUser, String rootTo) {
-        this(ap, bombGroupId, rootUser, rootTo, null);
+    public ChatPath(String circle, Long topicId, String rootUser, String rootTo) {
+        this(circle, topicId, rootUser, rootTo, null);
     }
 
-    public ChatPath(String ap, Long bombGroupId, String rootUser, String rootTo, Long
+    public ChatPath(String circle, Long topicId, String rootUser, String rootTo, Long
             rootMessageId) {
-        this.ap = ap;
-        this.bombGroupId = bombGroupId;
+        this.circle = circle;
+        this.topicId = topicId;
         this.rootUser = rootUser;
         this.rootTo = rootTo;
         this.rootMessageId = rootMessageId;
@@ -59,7 +59,7 @@ public class ChatPath extends Path implements ScreenComponentFactory {
         @Provides
         @Nullable
         Group<DirectMessageEntity> provideChatGroup(Account account) {
-            return account.getChat(ap, bombGroupId, rootUser, rootMessageId);
+            return account.getChat(circle, topicId, rootUser, rootMessageId);
         }
 
         @DaggerScope(ChatPath.class)
@@ -72,7 +72,7 @@ public class ChatPath extends Path implements ScreenComponentFactory {
                 from = rootTo;
                 to = rootUser;
             }
-            return new ChatPresenter(account, ap, String.valueOf(bombGroupId), from, to,
+            return new ChatPresenter(account, circle, String.valueOf(topicId), from, to,
                     chatGroup, avatarBinder, owner);
         }
     }

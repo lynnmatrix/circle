@@ -59,7 +59,6 @@ public class SimplePathContainer extends PathContainer {
             traversalState.saveViewState(fromView);
         }
 
-
         if (fromView == null || direction == REPLACE) {
             containerView.removeAllViews();
             containerView.addView(newView);

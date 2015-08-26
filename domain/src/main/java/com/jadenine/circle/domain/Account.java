@@ -75,7 +75,7 @@ public class Account {
     //</editor-fold>
 
     //<editor-fold desc="chat">
-    public Group<DirectMessageEntity> getChat(String circle, Long bombGroupId, String rootUser, Long
+    public Group<DirectMessageEntity> getChat(String circle, Long topicId, String rootUser, Long
             rootMessageId) {
         if(null != rootMessageId) {
             return chatTimeline.getRange(rootMessageId).getGroup(rootMessageId);
@@ -87,7 +87,7 @@ public class Account {
                 if(messages.size() > 0) {
                     DirectMessageEntity firstMessage = messages.get(0);
                     if(firstMessage.getCircle().equals(circle)
-                            && Long.valueOf(firstMessage.getTopicId()).equals(bombGroupId)
+                            && Long.valueOf(firstMessage.getTopicId()).equals(topicId)
                             && firstMessage.getRootUser().equals(rootUser)){
                         return group;
                     }
