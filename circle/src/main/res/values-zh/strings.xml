@@ -23,5 +23,7 @@
     <string name="error_load_more">加载失败</string>
     <string name="title_my_topic">我的话题</string>
     <string name="title_top_topics">十大</string>
+    <string name="notification_title_message">私信</string>
+    <string name="notification_title_topic">号外</string>
 
 </resources>

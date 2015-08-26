@@ -22,4 +22,6 @@
     <string name="error_load_more">Failed to load more</string>
     <string name="title_my_topic" >My topics</string>
     <string name="title_top_topics">Top10</string>
+    <string name="notification_title_message">New Message</string>
+    <string name="notification_title_topic" >New Topic</string>
 </resources>

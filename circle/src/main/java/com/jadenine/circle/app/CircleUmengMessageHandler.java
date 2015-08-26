@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.Group;
@@ -33,8 +34,7 @@ class CircleUmengMessageHandler extends UmengMessageHandler {
 
     @Override
     public Notification getNotification(Context context, UMessage uMessage) {
-        Timber.i("getNotification " + uMessage.custom);
-
+        uMessage.title = context.getResources().getString(R.string.notification_title_topic);
         if(!TextUtils.isEmpty(uMessage.custom)) {
             try {
                 CustomNotificationType customNotification = gson.fromJson(uMessage.custom, CustomNotificationType.class);
@@ -43,12 +43,15 @@ class CircleUmengMessageHandler extends UmengMessageHandler {
                     Bomb bomb = gson.fromJson(uMessage.custom, CustomNotificationDataTopic.class).data;
                     updateCircleUnRead(bomb);
                     Circle circle = account.getCircle(bomb.getCircle());
-                    uMessage.title = circle.getName();
+                    if(null != circle) {
+                        uMessage.title = circle.getName();
+                    } else {
+                        Timber.w("No circle found with id %s", bomb.getCircle());
+                    }
                 } else if(CUSTOM_NOTIFICATION_TYPE_CHAT.equalsIgnoreCase(customNotification.type)) {
+                    uMessage.title = context.getResources().getString(R.string.notification_title_message);
                     DirectMessageEntity chatMessage = gson.fromJson(uMessage.custom, CustomNotificationDataChat.class).data;
                     updateChatUnread(chatMessage);
-                    Circle circle = account.getCircle(chatMessage.getCircle());
-                    uMessage.title = circle.getName();
                 }
             } catch (JsonSyntaxException e) {
                 Timber.e(e, uMessage.custom);
