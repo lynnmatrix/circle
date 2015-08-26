@@ -10,6 +10,7 @@ import com.raizlabs.android.dbflow.annotation.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import rx.Observable;
@@ -63,7 +64,10 @@ public class TopBoard {
                     final Long groupId = bomb.getGroupId();
                     Group<Bomb> topic = groupedBomb.get(groupId);
                     if (null == topic) {
-                        topic = new Group<>(groupId);
+                        topic = getTopic(groupId);
+                        if (null == topic) {
+                            topic = new Group<>(groupId);
+                        }
                         groupedBomb.put(groupId, topic);
                     }
                     topic.addEntity(bomb);

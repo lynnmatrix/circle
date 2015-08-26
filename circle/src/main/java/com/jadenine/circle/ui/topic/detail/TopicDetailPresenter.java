@@ -31,6 +31,7 @@ import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import timber.log.Timber;
 
 /**
  * Created by linym on 7/24/15.
@@ -177,13 +178,18 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
-                circle.refresh().observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<TimelineRange<Bomb>>>() {
+
+                Action1 afterRefreshAction = new Action1<List<TimelineRange<Bomb>>>() {
 
                     @Override
                     public void call(List<TimelineRange<Bomb>> ranges) {
                         loadMessages();
                     }
-                });
+                };
+
+                account.refreshTop().observeOn(AndroidSchedulers.mainThread()).subscribe(afterRefreshAction);
+                account.refreshMyTopics().observeOn(AndroidSchedulers.mainThread()).subscribe(afterRefreshAction);
+                circle.refresh().observeOn(AndroidSchedulers.mainThread()).subscribe(afterRefreshAction);
             }
 
             @Override

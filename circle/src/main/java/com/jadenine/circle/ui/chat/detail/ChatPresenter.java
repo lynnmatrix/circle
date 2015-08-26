@@ -122,7 +122,6 @@ class ChatPresenter extends ViewPresenter<ChatView> {
 
                     @Override
                     public void call(List<TimelineRange<DirectMessageEntity>> timelineRanges) {
-
                         loadMessages();
                     }
                 });
