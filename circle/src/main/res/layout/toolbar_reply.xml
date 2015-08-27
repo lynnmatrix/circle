@@ -8,7 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/background_light"
-    app:popupTheme="@style/ThemeOverlay.AppCompat"
     tools:showIn="@layout/screen_bomb_group">
 
     <LinearLayout
