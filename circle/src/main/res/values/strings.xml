@@ -10,7 +10,9 @@
     <string name="message_send_success">Message sent.</string>
     <string name="message_send_fail">Fail to send message</string>
     <string name="share">Share</string>
-    <string name="share_wechat">Share to WeChat </string>
+    <string name="share_to_wechat">Wechat</string>
+    <string name="share_to_moment">Moment</string>
+    <string name="share_to_other">Other</string>
     <string name="wifi_scan">Wifi Scanner</string>
     <string name="share_message_description">df</string>
     <string name="share_link" translatable="false">http://jadenine.com/circle/home_mobile.html</string>

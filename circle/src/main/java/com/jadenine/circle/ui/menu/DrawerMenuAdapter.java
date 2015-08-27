@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import flow.Flow;
+
 /**
  * Created by linym on 7/22/15.
  */
@@ -29,8 +31,9 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_MY_CHAT = 2;
     private final int TYPE_MY_TOPICS = 3;
     private final int TYPE_TOP_TOPICS = 4;
+    private final int TYPE_SHARE = 5;
 
-    public static final int NON_AP_ITEM_COUNT = 4;
+    public static final int NON_AP_ITEM_COUNT = 5;
 
     private List<Circle> circles = new ArrayList<>();
     private int selectedPosition = -1;
@@ -53,6 +56,8 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             type = TYPE_MY_TOPICS;
         } else if(3 == position) {
             type = TYPE_MY_CHAT;
+        } else if(4 == position) {
+            type = TYPE_SHARE;
         } else {
             type = TYPE_AP;
         }
@@ -71,12 +76,19 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case TYPE_TOP_TOPICS:
             case TYPE_MY_TOPICS:
-            case TYPE_MY_CHAT:
+            case TYPE_MY_CHAT: {
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
                         .menu_item_normal, parent, false);
 
                 viewHolder = new MenuNormalItemViewHolder(itemView);
                 break;
+            }
+            case TYPE_SHARE: {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
+                        .menu_item_normal, parent, false);
+                viewHolder = new MenuShareItemViewHolder(itemView);
+                break;
+            }
             case TYPE_AP:
                 View apView = LayoutInflater.from(parent.getContext()).inflate(R.layout
                         .menu_item_circle, parent, false);
@@ -102,11 +114,15 @@ class DrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case TYPE_MY_TOPICS:
                 ((MenuNormalItemViewHolder)holder).bind(R.drawable.ic_person_outline, R.string
-                        .title_my_topic, account.hasUnreadChat(), new MyTopicPath());
+                        .title_my_topic, 
+                        account.hasUnreadChat(), new MyTopicPath());
                 break;
             case TYPE_MY_CHAT:
                 ((MenuNormalItemViewHolder)holder).bind(R.drawable.checkbox_private, R.string
                         .title_private_chat, account.hasUnreadChat(), new MyChatPath());
+                break;
+            case TYPE_SHARE:
+                ((MenuShareItemViewHolder)holder).bind(R.drawable.ic_share_black, R.string.share);
                 break;
             case TYPE_AP:
                 ((MenuCircleItemViewHolder)holder).bind(getCircle(position));

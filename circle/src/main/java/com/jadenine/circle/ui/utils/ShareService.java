@@ -28,13 +28,6 @@ public class ShareService {
 
     public boolean start(Context context) {
         this.context = context;
-        if (null == wechatApi) {
-            wechatApi = WXAPIFactory.createWXAPI(getContext(), WX_APP_ID, false);
-        }
-        // WXAppSupportAPI为0表示没有安装微信
-        if (!wechatApi.registerApp(WX_APP_ID) || wechatApi.getWXAppSupportAPI() == 0) {
-            wechatApi = null;
-        }
 
         return weChatAvailable();
     }
