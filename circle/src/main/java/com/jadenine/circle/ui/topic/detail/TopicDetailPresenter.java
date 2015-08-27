@@ -14,11 +14,9 @@ import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.chat.detail.ChatPath;
 import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.ShareService;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
-import com.jadenine.circle.ui.widgets.TopicHeader;
 import com.jadenine.circle.utils.ToolbarColorizer;
 import com.jadenine.common.mortar.ActivityOwner;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -26,12 +24,10 @@ import com.raizlabs.android.dbflow.annotation.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-import flow.Flow;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import timber.log.Timber;
 
 /**
  * Created by linym on 7/24/15.
@@ -90,7 +86,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
         loadMessages();
 
-        getView().toolbar.inflateMenu(R.menu.drawer);
+        getView().toolbar.inflateMenu(R.menu.share);
         getView().toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

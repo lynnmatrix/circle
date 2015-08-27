@@ -2,12 +2,16 @@ package com.jadenine.circle.ui.topic;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
+import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.ComposerPath;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
+import com.jadenine.circle.ui.utils.ShareService;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
 import com.jadenine.circle.ui.widgets.RefreshableHomeView;
 import com.jadenine.circle.utils.ToolbarColorizer;
@@ -33,6 +37,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
     private final Circle circle;
 
     private final ActivityOwner activityOwner;
+    private final ShareService shareService;
 
     private Subscription refreshSubscription = Subscriptions.empty();{
         refreshSubscription.unsubscribe();
@@ -44,6 +49,7 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
     public TopicListPresenter(Circle circle, ActivityOwner owner) {
         this.circle = circle;
         this.activityOwner = owner;
+        this.shareService = new ShareService();
     }
 
     @Override
@@ -66,6 +72,24 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         super.onLoad(savedInstanceState);
 
         getView().getToolbar().setTitle(circle.getName());
+        getView().getToolbar().inflateMenu(R.menu.share);
+        getView().getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_share_wechat:
+                        shareService.shareToWeChatTimeline();
+                        return true;
+                    case R.id.item_share:
+                        shareService.share();
+                        return true;
+                }
+                return false;
+            }
+        });
+        if(!shareService.start(getView().getContext())){
+            getView().getToolbar().getMenu().findItem(R.id.item_share_wechat).setVisible(false);
+        }
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
     }
