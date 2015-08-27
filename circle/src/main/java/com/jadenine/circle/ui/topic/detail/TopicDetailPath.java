@@ -49,6 +49,23 @@ public class TopicDetailPath extends Path implements ScreenComponentFactory{
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o instanceof TopicDetailPath) {
+            TopicDetailPath other = (TopicDetailPath) o;
+            return groupId == other.groupId;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return groupId.hashCode();
+    }
+
     @DaggerScope(TopicDetailPresenter.class)
     @dagger.Component(dependencies = TopicListPath.Component.class, modules = Module.class)
     public interface Component extends TopicDetailComponent{

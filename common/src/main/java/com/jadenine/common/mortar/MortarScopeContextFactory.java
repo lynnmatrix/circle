@@ -21,7 +21,7 @@ public class MortarScopeContextFactory implements PathContextFactory {
     public Context setUpContext(Path path, Context parentContext) {
 
         //TODO get scope name of path
-        String scopeName = path.toString();
+        String scopeName = path.getClass() + String.valueOf(path.hashCode());
         MortarScope scope = screenScoper.getScreenScope(parentContext, scopeName, path);
 
         Timber.d(MortarScopeContextFactory.class.getCanonicalName(), "MortarContextFactory - " +

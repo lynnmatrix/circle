@@ -45,6 +45,23 @@ public class TopicListPath extends Path implements ScreenComponentFactory {
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o instanceof TopicListPath) {
+            TopicListPath other = (TopicListPath) o;
+            return getCircle().equals(other.getCircle());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return circle.hashCode();
+    }
+
     @DaggerScope(TopicListPath.class)
     @dagger.Component(dependencies = HomeComponent.class, modules = Module.class)
     public interface Component extends UiComponent{
