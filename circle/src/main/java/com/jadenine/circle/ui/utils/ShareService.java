@@ -98,7 +98,7 @@ public class ShareService {
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.message = weChatMessage;
-        req.transaction = buildTransaction("circle");
+        req.transaction = buildTransaction(String.valueOf(System.currentTimeMillis()));
         req.scene = scene;
 
         return req;

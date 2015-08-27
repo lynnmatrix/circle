@@ -103,6 +103,12 @@ public class RefreshableHomeView extends LinearLayout implements HandlesBack {
                 BusProvider.post(new EventProducer.DrawerOpenEvent());
             }
         });
+        toolbar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
     }
 
     @Override
