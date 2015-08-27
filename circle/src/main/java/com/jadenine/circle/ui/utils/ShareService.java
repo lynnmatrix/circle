@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream;
  * Created by linym on 8/10/15.
  */
 public class ShareService {
-    private static final boolean ENABLE = false;
+    private static final boolean ENABLE = true;
     private static final String WX_APP_ID = "wx22640278e820fdc8";//"wx26c018eb07d642cc"; //"wx4f4bf98ef21aba6b";//
 
     private IWXAPI wechatApi = null;
