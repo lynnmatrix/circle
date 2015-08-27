@@ -10,6 +10,7 @@ import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.eventbus.BusProvider;
 import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.circle.model.entity.ApEntity;
+import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.topic.top.TopPath;
 import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.jadenine.circle.utils.ApUtils;
@@ -55,14 +56,19 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
         super.onLoad(savedInstanceState);
         if (!hasView()) return;
         loadCircles();
-        openDefaultItemIfNeed();
     }
 
     private void openDefaultItemIfNeed() {
         History history = Flow.get(getContext()).getHistory();
         Path top = history.top();
         if(top instanceof WelcomePath) {
-            replaceWithPath(new TopPath());
+            ApUtils.AP connectedAP = ApUtils.getConnectedAP(getContext());
+            if(null != connectedAP) {
+                Circle circle = account.getCircleByAp(connectedAP.getBSSID());
+                replaceWithPath(new TopicListPath(circle.getCircleId()));
+            } else {
+                replaceWithPath(new TopPath());
+            }
         }
     }
 
@@ -101,7 +107,7 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
         boolean currentAPAlreadyAdded = false;
         List<Circle> circleList = account.getCircles();
         for (Circle circle : circleList) {
-            if (currentAp.getBSSID().equals(circle.getCircleId()) && circle.getName().equals(currentAp.getSSID())) {
+            if (currentAp.getBSSID().equals(circle.getCircleId())) {
                 currentAPAlreadyAdded = true;
                 break;
             }
@@ -141,12 +147,14 @@ public class DrawerMenuPresenter extends ViewPresenter<DrawerMenuView>{
 
             @Override
             public void onCompleted() {
+                openDefaultItemIfNeed();
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.w(e, "Failed to load aps.");
                 getAdapter().setCircles(account.getCircles());
+                openDefaultItemIfNeed();
             }
 
             @Override

@@ -64,7 +64,7 @@ public class CircleSource {
         return result;
     }
 
-    private ApEntity getAp(String mac) {
+    ApEntity getAp(String mac) {
         ApEntity result = null;
         ArrayList<ApEntity> localAps = new ArrayList<>(aps);
         for(ApEntity ap : localAps) {

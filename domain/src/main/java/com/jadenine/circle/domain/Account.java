@@ -72,6 +72,19 @@ public class Account {
     public Observable<List<Circle>> addAp(final ApEntity ap) {
         return circleSource.addAp(ap);
     }
+
+    ApEntity getAp(String bssid) {
+        return circleSource.getAp(bssid);
+    }
+
+    public Circle getCircleByAp(String bssid) {
+        ApEntity ap = getAp(bssid);
+        Circle circle = null;
+        if(null != ap) {
+            circle = getCircle(ap.getCircle());
+        }
+        return circle;
+    }
     //</editor-fold>
 
     //<editor-fold desc="chat">
@@ -176,5 +189,6 @@ public class Account {
     public Group<Bomb> getTopTopic(Long groupId) {
         return topBoard.getTopic(groupId);
     }
+
     //</editor-fold>
 }

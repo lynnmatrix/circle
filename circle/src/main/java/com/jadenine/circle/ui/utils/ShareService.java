@@ -90,8 +90,7 @@ public class ShareService {
         webPage.webpageUrl = getContext().getString(R.string.share_link);
         WXMediaMessage weChatMessage = new WXMediaMessage(webPage);
         weChatMessage.title = getString(R.string.app_name);
-        weChatMessage.description = getContext().getString(R.string.share_message_description,
-                getContext().getString(R.string.app_name), getString(R.string.share_link));
+        weChatMessage.description = getContext().getString(R.string.share_message_description, getContext().getString(R.string.app_name), getContext().getString(R.string.share_link));
 
         Bitmap thumb = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap
                 .ic_launcher);
