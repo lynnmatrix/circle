@@ -13,7 +13,7 @@
     <string name="share_wechat">Share to WeChat </string>
     <string name="wifi_scan">Wifi Scanner</string>
     <string name="share_message_description">df</string>
-    <string name="share_link">www.jadenine.com/app/circle.apk</string>
+    <string name="share_link" translatable="false">http://jadenine.com/circle/home_mobile.html</string>
     <string name="reply_type_public" translatable="false">\@</string>
     <string name="reply_type_private">whisper to </string>
     <string name="action_add_image">Pick image</string>
