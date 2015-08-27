@@ -14,16 +14,20 @@ import com.jadenine.common.mortar.ActivityOwner;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import flow.Flow;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.Subscriptions;
+import timber.log.Timber;
 
 /**
  * Created by linym on 7/23/15.
  */
 class TopicComposerPresenter extends ComposerPresenter {
+
+    private final AtomicBoolean sending = new AtomicBoolean(false);
 
     public TopicComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
         super(account, circle, owner);
@@ -35,9 +39,10 @@ class TopicComposerPresenter extends ComposerPresenter {
             return;
         }
 
-        if (!sendSubscription.isUnsubscribed()) {
+        if (sending.get() || !sendSubscription.isUnsubscribed()) {
             return;
         }
+        sending.set(true);
 
         //TODO reuse bomb
         final Bomb bomb = new Bomb(circle.getCircleId(), account.getDeviceId());
@@ -60,7 +65,10 @@ class TopicComposerPresenter extends ComposerPresenter {
 
                 @Override
                 public void onError(Throwable e) {
-                    e.printStackTrace();
+                    Timber.e(e, "Fail to upload image.");
+                    sendSubscription = Subscriptions.empty();
+                    sendSubscription.unsubscribe();
+                    sending.set(false);
                     if (!hasView()) {
                         return;
                     }
@@ -84,6 +92,9 @@ class TopicComposerPresenter extends ComposerPresenter {
 
             @Override
             public void onCompleted() {
+                sendSubscription = Subscriptions.empty();
+                sendSubscription.unsubscribe();
+                sending.set(false);
                 if (!hasView()) {
                     return;
                 }
@@ -91,20 +102,19 @@ class TopicComposerPresenter extends ComposerPresenter {
                         .LENGTH_SHORT).show();
                 SoftKeyboardToggler.toggleInputMethod(getView().editor, false);
                 Flow.get(getView().getContext()).goBack();
-                sendSubscription = Subscriptions.empty();
-                sendSubscription.unsubscribe();
             }
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Timber.e(e, "fail to publish new message.");
+                sendSubscription = Subscriptions.empty();
+                sendSubscription.unsubscribe();
+                sending.set(false);
                 if (!hasView()) {
                     return;
                 }
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
-                sendSubscription = Subscriptions.empty();
-                sendSubscription.unsubscribe();
             }
 
             @Override
