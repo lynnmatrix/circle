@@ -92,6 +92,7 @@ public class TopicHeader extends LinearLayout {
 
         dateView.setText(getFormattedTime(rootBomb.getTimestamp()));
         contentView.setText(rootBomb.getContent());
+        contentView.setMaxLines(Integer.MAX_VALUE);
         messageCountView.setText("" + commentCount);
         if(null != rootBomb.getImages() && rootBomb.getImages().length() > 0) {
             imageView.setVisibility(View.VISIBLE);
@@ -110,9 +111,11 @@ public class TopicHeader extends LinearLayout {
         commentsView.setVisibility(GONE);
         commentsView.removeAllViews();
         commentFlagView.setEnabled(false);
+
     }
 
     public void bindTopicWithComments(Group<Bomb> topic, AvatarBinder avatarBinder) {
+        contentView.setMaxLines(3);
         List<Bomb> bombs = topic.getEntities();
 
         boolean hasComments = bombs.size() > 1;

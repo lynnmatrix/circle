@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="Content.........................................................."
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:ellipsize="end"/>
 
         <com.jadenine.circle.ui.widgets.AspectRatioImageView
             android:id="@+id/content_image"
