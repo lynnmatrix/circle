@@ -14,10 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
-import com.jadenine.circle.ui.widgets.TouchImageView;
 import com.squareup.picasso.Picasso;
-
-import org.mockito.internal.util.io.IOUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -138,7 +135,10 @@ public class ImageActivity extends Activity {
                     } catch (FileNotFoundException e) {
                         success = false;
                     } finally {
-                        IOUtil.closeQuietly(out);
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                        }
                     }
                     if(success) {
                         DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
