@@ -28,9 +28,9 @@ import flow.path.Path;
 @Layout(R.layout.screen_topic_detail)
 public class TopicDetailPath extends Path implements ScreenComponentFactory{
     private final Long groupId;
-    private final Path parentPath;
+    private final TopicListPath parentPath;
 
-    public TopicDetailPath(@NotNull Long groupId, Path parentPath) {
+    public TopicDetailPath(@NotNull Long groupId, TopicListPath parentPath) {
         this.groupId = groupId;
         this.parentPath = parentPath;
     }
