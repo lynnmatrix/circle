@@ -20,6 +20,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.image.ImagePath;
 import com.jadenine.circle.ui.utils.TimeFormatUtils;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +31,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -79,7 +81,7 @@ public class TopicHeader extends LinearLayout {
         ButterKnife.inject(this);
     }
 
-    public void bind(Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
+    public void bind(final Bomb rootBomb, int commentCount, Drawable errorDrawable, AvatarBinder avatarBinder) {
         if(null == rootBomb) {
             Timber.wtf("Try to bind topic without root.");
             return;
@@ -93,9 +95,15 @@ public class TopicHeader extends LinearLayout {
         messageCountView.setText("" + commentCount);
         if(null != rootBomb.getImages() && rootBomb.getImages().length() > 0) {
             imageView.setVisibility(View.VISIBLE);
-            Uri imageUri = Uri.parse(rootBomb.getImages());
+            final Uri imageUri = Uri.parse(rootBomb.getImages());
             Picasso.with(imageView.getContext()).load(imageUri).centerCrop().error(errorDrawable)
                     .resize(440, 220).onlyScaleDown().into(imageView);
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Flow.get(getContext()).set(new ImagePath(rootBomb.getImages()));
+                }
+            });
         } else {
             imageView.setVisibility(View.GONE);
         }

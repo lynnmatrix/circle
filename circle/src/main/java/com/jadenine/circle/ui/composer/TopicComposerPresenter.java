@@ -1,7 +1,6 @@
 package com.jadenine.circle.ui.composer;
 
 import android.content.ContentResolver;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
