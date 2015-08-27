@@ -41,7 +41,10 @@ class CircleUmengMessageHandler extends UmengMessageHandler {
 
                 if (CUSTOM_NOTIFICATION_TYPE_TOPIC.equalsIgnoreCase(customNotification.type)) {
                     Bomb bomb = gson.fromJson(uMessage.custom, CustomNotificationDataTopic.class).data;
-                    updateCircleUnRead(bomb);
+                    try {
+                        updateCircleUnRead(bomb);
+                    } catch (IllegalStateException ignore) {
+                    }
                     Circle circle = account.getCircle(bomb.getCircle());
                     if(null != circle) {
                         uMessage.title = circle.getName();

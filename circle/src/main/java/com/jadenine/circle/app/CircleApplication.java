@@ -77,6 +77,7 @@ public class CircleApplication extends Application {
         PushAgent pushAgent = PushAgent.getInstance(this);
 //        pushAgent.setNotificaitonOnForeground(false);
         pushAgent.setMessageHandler(new CircleUmengMessageHandler(account, gson));
+        pushAgent.setNotificationClickHandler(new CircleUmengNotificationClickHandler(account, gson));
     }
 
     @Override

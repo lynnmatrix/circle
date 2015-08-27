@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -9,7 +10,9 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.app.CircleApplication;
 import com.jadenine.circle.mortar.DaggerService;
 import com.jadenine.circle.mortar.MortarPathContainerView;
+import com.jadenine.circle.ui.chat.MyChatPath;
 import com.jadenine.circle.ui.menu.DrawerMenuView;
+import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.welcome.WelcomePath;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -18,9 +21,13 @@ import javax.inject.Inject;
 
 import butterknife.InjectView;
 import flow.Flow;
+import flow.History;
 
 @Container(R.layout.activity_home)
 public class HomeActivity extends MortarActivity {
+    private static final String ARGUMENT_CIRCLE_ID = "circleID";
+    private static final String INTENT_ACTION_OPEN_CIRCLE = "OPEN_CIRCLE";
+    private static final String INTENT_ACTION_OPEN_CHAT = "OPEN_CHAT";
 
     @InjectView(R.id.nav_drawer)
     DrawerLayout drawerLayout;
@@ -46,6 +53,16 @@ public class HomeActivity extends MortarActivity {
         DaggerService.<HomeComponent>getDaggerComponent(this).inject(this);
 
         presenter.takeView(this);
+
+        if (savedInstanceState == null) {
+            handleNotificationIntent(getIntent());
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleNotificationIntent(intent);
     }
 
     @Override
@@ -101,5 +118,50 @@ public class HomeActivity extends MortarActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public static Intent getOpenCircleIntent(Context context, String circleId) {
+        Intent i = new Intent(context, HomeActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra(ARGUMENT_CIRCLE_ID, circleId);
+        i.setAction(INTENT_ACTION_OPEN_CIRCLE);
+        return i;
+    }
+
+    public static Intent getOpenChatIntent(Context context) {
+        Intent i = new Intent(context, HomeActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setAction(INTENT_ACTION_OPEN_CHAT);
+        return i;
+    }
+
+    private void handleNotificationIntent(Intent intent) {
+        String action = intent.getAction();
+        if (INTENT_ACTION_OPEN_CIRCLE.equals(action)) {
+            String circleId = intent.getStringExtra(ARGUMENT_CIRCLE_ID);
+            if (circleId != null) {
+                handleSwitchToCircle(circleId);
+            }
+        } else if (INTENT_ACTION_OPEN_CHAT.equals(action)) {
+            handleSwitchToChat();
+        }
+    }
+
+    private void handleSwitchToCircle(String circleId) {
+        History.Builder historyBuilder = Flow.get(this).getHistory().buildUpon();
+        historyBuilder.pop();
+        historyBuilder.push(new TopicListPath(circleId));
+
+        Flow.get(this).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
+    }
+
+    private void handleSwitchToChat() {
+        History.Builder historyBuilder = Flow.get(this).getHistory().buildUpon();
+        historyBuilder.pop();
+        historyBuilder.push(new MyChatPath());
+
+        Flow.get(this).setHistory(historyBuilder.build(), Flow.Direction.REPLACE);
     }
 }
