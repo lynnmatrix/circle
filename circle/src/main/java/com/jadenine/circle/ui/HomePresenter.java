@@ -1,25 +1,14 @@
 package com.jadenine.circle.ui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 
-import com.jadenine.circle.R;
-import com.jadenine.circle.ui.scanner.WifiPath;
+import com.jadenine.circle.eventbus.BusProvider;
+import com.jadenine.circle.eventbus.EventProducer;
 import com.jadenine.common.mortar.ActivityOwner;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
 
-import java.io.ByteArrayOutputStream;
-
-import flow.Flow;
 import mortar.Presenter;
 import mortar.bundler.BundleService;
 
@@ -31,6 +20,32 @@ class HomePresenter extends Presenter<HomeActivity> implements DrawerHandler, Ac
     @Override
     protected BundleService extractBundleService(HomeActivity activity) {
         return BundleService.getBundleService(activity);
+    }
+
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
+        super.onLoad(savedInstanceState);
+        getView().drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                BusProvider.post(new EventProducer.DrawerOpenEvent());
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     @Override
