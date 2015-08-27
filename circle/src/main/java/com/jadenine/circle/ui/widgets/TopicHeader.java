@@ -115,6 +115,8 @@ public class TopicHeader extends LinearLayout {
 
     public void bindTopicWithComments(Group<Bomb> topic, AvatarBinder avatarBinder) {
         contentView.setMaxLines(3);
+        imageView.setClickable(false);
+
         List<Bomb> bombs = topic.getEntities();
 
         boolean hasComments = bombs.size() > 1;

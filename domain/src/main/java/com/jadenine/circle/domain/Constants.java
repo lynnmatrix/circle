@@ -8,7 +8,7 @@ public class Constants {
     public static final int CAPABILITY = 2000;
     public static final String ENDPOINT_LOCAL = "http://192.168.9.117:8080";
     public static final String ENDPOINT_AZURE = "https://circle.jadenine.com.cn:443";//circle.chinacloudsites.cn
-    public static final int COMPRESS_DST_WIDTH = 1024;
-    public static final int COMPRESS_DST_HEIGHT = 512;
+    public static final int COMPRESS_DST_WIDTH = 1920;
+    public static final int COMPRESS_DST_HEIGHT = 1920;
     public static final int TOP_K = 10;
 }

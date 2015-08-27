@@ -155,7 +155,7 @@ public class BaseTimeline<T extends IdentifiableEntity>{
             @Override
             public Observable<List<TimelineRange<T>>> call(TimelineRange<T> ts) {
 
-                if (refreshRange != ts) {
+                 if (refreshRange != ts) {
                     if(emptyRange) {
                         rangeList.remove(refreshRange);
                     }
