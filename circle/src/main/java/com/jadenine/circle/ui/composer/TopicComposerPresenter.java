@@ -8,6 +8,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Account;
 import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.model.entity.Bomb;
+import com.jadenine.circle.ui.utils.ContentValidator;
 import com.jadenine.circle.ui.utils.SoftKeyboardToggler;
 import com.jadenine.common.mortar.ActivityOwner;
 
@@ -24,26 +25,14 @@ import rx.subscriptions.Subscriptions;
  */
 class TopicComposerPresenter extends ComposerPresenter {
 
-    private final long CONTENT_MAX_LENGTH = 256;
     public TopicComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
         super(account, circle, owner);
     }
 
     @Override
     void send(String content) {
-        if (TextUtils.isEmpty(content) ) {
-            Toast.makeText(getView().getContext(), R.string.message_invalid_empty, Toast
-                    .LENGTH_SHORT).show();
+        if (!ContentValidator.validate(getView().getContext(), content)) {
             return;
-        }
-
-        if (content.length() > CONTENT_MAX_LENGTH) {
-            if (TextUtils.isEmpty(content) ) {
-                Toast.makeText(getView().getContext(), getView().getContext().getString(R.string
-                        .message_invalid_size, CONTENT_MAX_LENGTH), Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
         }
 
         if (!sendSubscription.isUnsubscribed()) {

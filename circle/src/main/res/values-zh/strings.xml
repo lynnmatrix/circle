@@ -13,7 +13,6 @@
     <string name="app_name">到此一游</string>
     <string name="message_edit_hint">说点什么</string>
     <string name="message_invalid_empty">发送失败：内容不可空！</string>
-    <string name="message_invalid_size">发送失败：最长%d个字！</string>
     <string name="message_send_fail">发送失败</string>
     <string name="message_send_success">发送成功</string>
     <string name="title_activity_ap">到此一游</string>

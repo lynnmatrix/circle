@@ -44,6 +44,7 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     protected Subscription sendSubscription = Subscriptions.empty();{
         sendSubscription.unsubscribe();
     }
+
     public ComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
         this.account = account;
         this.circle = circle;
