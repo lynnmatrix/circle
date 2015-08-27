@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by linym on 6/17/15.
@@ -168,7 +169,13 @@ public class Account {
     //<editor-fold desc="publisher">
 
     public Observable<DirectMessageEntity> publish(DirectMessageEntity chatMessage) {
-        return chatComposer.send(chatMessage);
+        return chatComposer.send(chatMessage).flatMap(new Func1<DirectMessageEntity, Observable<DirectMessageEntity>>() {
+            @Override
+            public Observable<DirectMessageEntity> call(DirectMessageEntity directMessageEntity) {
+                chatTimeline.addPublished(directMessageEntity);
+                return Observable.just(directMessageEntity);
+            }
+        });
     }
 
     public Observable<Bomb> publish(final Bomb bomb) {

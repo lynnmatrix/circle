@@ -31,7 +31,7 @@ import rx.functions.Action1;
 class ChatPresenter extends ViewPresenter<ChatView> {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
 
-    private String ap;
+    private String circle;
     private String topicId;
     private String from, to;
 
@@ -42,10 +42,10 @@ class ChatPresenter extends ViewPresenter<ChatView> {
 
     private final ActivityOwner activityOwner;
 
-    public ChatPresenter(Account account, String ap, @NotNull String topicId, @NotNull String
+    public ChatPresenter(Account account, String circle, @NotNull String topicId, @NotNull String
             from, @NotNull String to, @Nullable Group<DirectMessageEntity> chatGroup,  AvatarBinder avatarBinder, ActivityOwner owner) {
         this.account = account;
-        this.ap = ap;
+        this.circle = circle;
         this.topicId = topicId;
         this.from = from;
         this.to = to;
@@ -81,6 +81,9 @@ class ChatPresenter extends ViewPresenter<ChatView> {
 
     void loadMessages() {
         if (hasView()) {
+            if(null == chatGroup) {
+                chatGroup = account.getChat(circle, Long.valueOf(topicId), from, null);
+            }
             List<DirectMessageEntity> chatMessages = Collections.emptyList();
             if (null != chatGroup) {
                 chatMessages = chatGroup.getEntities();
@@ -99,7 +102,7 @@ class ChatPresenter extends ViewPresenter<ChatView> {
 
         SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, false);
 
-        final DirectMessageEntity chatMessage = new DirectMessageEntity(ap, topicId, from, to);
+        final DirectMessageEntity chatMessage = new DirectMessageEntity(circle, topicId, from, to);
 
         chatMessage.setContent(content);
         if (null != chatGroup) {
