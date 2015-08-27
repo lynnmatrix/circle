@@ -150,12 +150,14 @@ public class TopicHeader extends LinearLayout {
                 }
             }
 
+            int commentColor = getResources().getColor(R.color.primary_text);
+            float commentDP = getResources().getDimension(R.dimen.topic_comment_text_size);
             for(CharSequence line : lines) {
                 TextView textView = new TextView(getContext());
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams
                         .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextAppearance(getContext(), R.style.TextAppearance_AppCompat_Body1);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+                textView.setTextColor(commentColor);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, commentDP);
                 textView.setText(line);
                 textView.setSingleLine(true);
                 textView.setEllipsize(TextUtils.TruncateAt.END);

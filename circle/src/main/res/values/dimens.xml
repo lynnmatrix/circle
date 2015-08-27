@@ -7,5 +7,13 @@
     <dimen name="load_more_circle_small">7dp</dimen>
     <dimen name="load_more_circle_thickness">2dp</dimen>
     <dimen name="load_more_size">32dp</dimen>
-    <dimen name="topic_comment_text_size">16sp</dimen>
+
+    <dimen name="topic_row_padding">4dp</dimen>
+    <dimen name="topic_avatar_left_padding">8dp</dimen>
+    <dimen name="topic_item_padding">10dp</dimen>
+    <dimen name="topic_content_text_size">17sp</dimen>
+    <dimen name="topic_comment_text_size">15sp</dimen>
+    <dimen name="topic_info_text_size">14sp</dimen>
+    <dimen name="topic_image_margin">10dp</dimen>
+    <dimen name="topic_comment_padding">4dp</dimen>
 </resources>

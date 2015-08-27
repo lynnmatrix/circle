@@ -4,7 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:background="?attr/itemBackground">
@@ -13,7 +12,7 @@
         android:id="@+id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/topic_item_padding"
         android:src="@drawable/ic_avatar_1"/>
 
     <LinearLayout
@@ -21,7 +20,10 @@
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
         android:orientation="vertical"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingTop="@dimen/topic_item_padding"
+        android:paddingBottom="@dimen/topic_item_padding"
+        android:paddingRight="@dimen/topic_item_padding"
+        android:paddingLeft="0dp">
 
         <TextView
             android:id="@+id/content"
@@ -29,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="Large Text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textSize="@dimen/topic_comment_text_size"
+            android:textColor="@color/primary_text" />
 
         <TextView
             android:id="@+id/date"
@@ -37,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="Small Text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+            android:textSize="@dimen/topic_info_text_size"
+            android:textColor="@color/secondary_text"/>
 
     </LinearLayout>
 
