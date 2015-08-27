@@ -144,7 +144,16 @@ public class Account {
     //<editor-fold desc="my topics">
 
     public Observable<List<TimelineRange<Bomb>>> refreshMyTopics(){
-        return myTopicsTimeline.refresh();
+        if(getCircles().isEmpty()) {
+            return listCircles().zipWith(myTopicsTimeline.refresh(), new Func2<List<Circle>, List<TimelineRange<Bomb>>, List<TimelineRange<Bomb>>>() {
+                @Override
+                public List<TimelineRange<Bomb>> call(List<Circle> circles, List<TimelineRange<Bomb>> timelineRanges) {
+                    return timelineRanges;
+                }
+            });
+        } else {
+            return myTopicsTimeline.refresh();
+        }
     }
 
     public Observable<List<TimelineRange<Bomb>>> loadMoreMyTopics(){
