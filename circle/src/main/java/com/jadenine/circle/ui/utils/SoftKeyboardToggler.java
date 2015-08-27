@@ -12,7 +12,11 @@ public class SoftKeyboardToggler {
      * 隐藏键盘和去掉焦点
      */
     public static void toggleInputMethod(View focusView, boolean show) {
-        if(null == focusView) {
+        toggleInputMethod(focusView,show,true);
+    }
+
+    public static void toggleInputMethod(View focusView, boolean show, boolean immediately) {
+        if (null == focusView) {
             return;
         }
         InputMethodManager inputManager = (InputMethodManager) focusView.getContext()
@@ -20,7 +24,11 @@ public class SoftKeyboardToggler {
         if (inputManager.isActive() && focusView != null) {
             if (show) {
                 if (focusView.requestFocus()) {
-                    inputManager.showSoftInput(focusView, InputMethodManager.SHOW_IMPLICIT);
+                    if(immediately){
+                        inputManager.showSoftInput(focusView, InputMethodManager.SHOW_IMPLICIT);
+                    }else {
+                        inputManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                    }
                 }
             } else {
                 inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),

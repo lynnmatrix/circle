@@ -30,7 +30,7 @@ import timber.log.Timber;
  * Created by linym on 6/9/15.
  */
 abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements PreferenceManager
-        .OnActivityResultListener{
+        .OnActivityResultListener {
     private static final String BUNDLE_TYPED_CONTENT = "editor_content";
     private static final int PICK_IMAGE = 1;
 
@@ -41,7 +41,9 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
 
     private final ActivityOwner activityOwner;
 
-    protected Subscription sendSubscription = Subscriptions.empty();{
+    protected Subscription sendSubscription = Subscriptions.empty();
+
+    {
         sendSubscription.unsubscribe();
     }
 
@@ -54,15 +56,15 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
     @Override
     protected void onLoad(Bundle savedInstanceState) {
         super.onLoad(savedInstanceState);
-        if(!hasView()){
+        if (!hasView()) {
             return;
         }
 
-        if(null != savedInstanceState) {
+        if (null != savedInstanceState) {
             String content = savedInstanceState.getString(BUNDLE_TYPED_CONTENT, "");
             getView().editor.setText(content);
         }
-        SoftKeyboardToggler.toggleInputMethod(getView().editor, true);
+        SoftKeyboardToggler.toggleInputMethod(getView().editor, true, false);
 
         ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
         getView().toolbar.setTitle(R.string.title_activity_topic_composer);
@@ -87,7 +89,7 @@ abstract class ComposerPresenter extends ViewPresenter<ComposerView> implements 
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(PICK_IMAGE == requestCode && resultCode == Activity.RESULT_OK) {
+        if (PICK_IMAGE == requestCode && resultCode == Activity.RESULT_OK) {
             ContentResolver contentResolver = getView().getContext().getContentResolver();
 
             imageUri = data.getData();
