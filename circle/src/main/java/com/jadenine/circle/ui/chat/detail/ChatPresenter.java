@@ -65,6 +65,8 @@ class ChatPresenter extends ViewPresenter<ChatView> {
             getView().replyEditor.setText(content);
             getView().replyEditor.setSelection(content.length());
         }
+        SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, true, false);
+
         ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
 
         getView().replyEditor.setHint(avatarBinder.getAtAvatarSpan(getView().getContext(),

@@ -72,6 +72,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
             getView().replyEditor.setText(content);
             getView().replyEditor.setSelection(content.length());
         }
+        SoftKeyboardToggler.toggleInputMethod(getView().replyEditor, true, false);
 
         getView().getBombAdapter().setOnBombItemClick(new BombListAdapter.OnBombItemClickListener
                 () {
@@ -101,7 +102,7 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
                 return false;
             }
         });
-        if(!shareService.start(getView().getContext())){
+        if (!shareService.start(getView().getContext())) {
             getView().toolbar.getMenu().findItem(R.id.item_share_wechat).setVisible(false);
         }
 
