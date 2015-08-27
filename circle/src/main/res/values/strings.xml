@@ -24,4 +24,7 @@
     <string name="title_top_topics">Top10</string>
     <string name="notification_title_message">New Message</string>
     <string name="notification_title_topic" >New Topic</string>
+    <string name="dialog_save_image_message">Save picture to local?</string>
+    <string name="save_image_success">Picture stored in the \"download\" folder</string>
+    <string name="save_image_fail">Fail to save picture</string>
 </resources>

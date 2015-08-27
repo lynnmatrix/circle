@@ -23,5 +23,8 @@
     <string name="title_top_topics">十大</string>
     <string name="notification_title_message">私信</string>
     <string name="notification_title_topic">号外</string>
+    <string name="dialog_save_image_message">保存图片到本地？</string>
+    <string name="save_image_success">图片已保存在download文件夹</string>
+    <string name="save_image_fail">保存图片失败</string>
 
 </resources>
