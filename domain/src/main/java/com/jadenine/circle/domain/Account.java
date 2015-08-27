@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.Func1;
+import rx.functions.Func2;
 
 /**
  * Created by linym on 6/17/15.
@@ -186,7 +187,16 @@ public class Account {
 
     //<editor-fold desc="top">
     public Observable<ArrayList<Group<Bomb>>> refreshTop(){
-        return topBoard.refresh();
+        if(getCircles().isEmpty()) {
+            return listCircles().zipWith(topBoard.refresh(), new Func2<List<Circle>, ArrayList<Group<Bomb>>, ArrayList<Group<Bomb>>>() {
+                @Override
+                public ArrayList<Group<Bomb>> call(List<Circle> circles, ArrayList<Group<Bomb>> groups) {
+                    return groups;
+                }
+            });
+        } else {
+            return topBoard.refresh();
+        }
     }
 
     public List<Group<Bomb>> getTops(){
