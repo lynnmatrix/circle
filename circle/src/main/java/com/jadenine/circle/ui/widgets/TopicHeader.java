@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -20,7 +19,7 @@ import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.image.ImagePath;
+import com.jadenine.circle.ui.image.ImageActivity;
 import com.jadenine.circle.ui.utils.TimeFormatUtils;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +30,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -102,7 +100,8 @@ public class TopicHeader extends LinearLayout {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Flow.get(getContext()).set(new ImagePath(rootBomb.getImages()));
+//                    Flow.get(getContext()).set(new ImagePath(rootBomb.getImages()));
+                    ImageActivity.actionOpenFullImage(getContext(), rootBomb.getImages());
                 }
             });
         } else {

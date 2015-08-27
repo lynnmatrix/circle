@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import com.jadenine.circle.R;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
-import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
+import com.jadenine.circle.ui.utils.SectionedRecyclerViewAdapter;
 import com.jadenine.circle.ui.widgets.TopicHeader;
 
 import java.util.Collections;
@@ -24,7 +24,6 @@ public class TopicListAdapter extends SectionedRecyclerViewAdapter
     private List<Group<Bomb>> bombGroups = Collections.emptyList();
     protected final Drawable errorDrawable;
     protected final AvatarBinder avatarBinder;
-
     private final OnTopicClickListener onTopicClickListener;
 
     public TopicListAdapter(Drawable errorDrawable, AvatarBinder avatarBinder, OnTopicClickListener listener) {

@@ -7,10 +7,7 @@ import android.view.View;
 import com.jadenine.circle.domain.Group;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.avatar.AvatarBinder;
-import com.jadenine.circle.ui.topic.detail.TopicDetailPath;
 import com.jadenine.circle.ui.widgets.TopicHeader;
-
-import flow.Flow;
 
 /**
  * Created by linym on 7/22/15.
@@ -18,6 +15,7 @@ import flow.Flow;
 class TopicItemViewHolder extends RecyclerView.ViewHolder {
 
     private final TopicHeader topicHeader;
+
     public TopicItemViewHolder(TopicHeader topicHeader) {
         super(topicHeader);
         this.topicHeader = topicHeader;
@@ -31,6 +29,7 @@ class TopicItemViewHolder extends RecyclerView.ViewHolder {
         topicHeader.bind(rootBomb, topic.getCount() - 1, errorDrawable, avatarBinder);
 
         topicHeader.bindTopicWithComments(topic, avatarBinder);
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

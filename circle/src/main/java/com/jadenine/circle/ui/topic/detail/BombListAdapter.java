@@ -14,9 +14,6 @@ import com.jadenine.circle.ui.widgets.TopicHeader;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * Created by linym on 7/24/15.
  */

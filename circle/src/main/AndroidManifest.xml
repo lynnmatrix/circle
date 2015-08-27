@@ -50,6 +50,11 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name=".ui.image.ImageActivity"
+            android:exported="false"/>
+
         <receiver
             android:name=".app.ConnectedApReceiver"
             android:enabled="true"
