@@ -46,7 +46,7 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ItemMyChatViewHolder)holder).bind(chatGroups.get(position), account, avatarBinder);
+        ((ItemMyChatViewHolder) holder).bind(chatGroups.get(position), account, avatarBinder);
     }
 
     @Override
@@ -71,6 +71,11 @@ class MyChatsAdapter extends SectionedRecyclerViewAdapter.ItemAdapter<DirectMess
     @Override
     public Group<DirectMessageEntity> getItem(int position) {
         return getChat(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).getGroupId();
     }
 
     static class ItemMyChatViewHolder extends RecyclerView.ViewHolder{
