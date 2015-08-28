@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.jadenine.circle.R;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,6 +86,20 @@ public class ImageActivity extends Activity {
         if(null != mImageUri) {
             Picasso.with(this).load(mImageUri).into(imageView);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart("full_image");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+        MobclickAgent.onPageEnd("full_image");
     }
 
     private void showSaveImageDialog() {
