@@ -1,5 +1,6 @@
 package com.jadenine.circle.ui.topic;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import com.jadenine.circle.domain.Circle;
 import com.jadenine.circle.domain.TimelineRange;
 import com.jadenine.circle.model.entity.Bomb;
 import com.jadenine.circle.ui.composer.ComposerPath;
+import com.jadenine.circle.ui.share.ShareDialogFragment;
 import com.jadenine.circle.ui.utils.SectionedLoadMoreRecyclerAdapter;
 import com.jadenine.circle.ui.utils.ShareService;
 import com.jadenine.circle.ui.widgets.LoadMoreViewHolder;
@@ -72,6 +74,20 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         super.onLoad(savedInstanceState);
 
         getView().getToolbar().setTitle(circle.getName());
+        getView().getToolbar().inflateMenu(R.menu.share);
+        getView().getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.share_item:
+                        ShareDialogFragment dialogFragment = new ShareDialogFragment();
+                        dialogFragment.show(activityOwner.getActivity().getFragmentManager(),
+                                            "share");
+                        return true;
+                }
+                return false;
+            }
+        });
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
     }

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/item_share_wechat"
-        android:title="@string/share_to_wechat"
-        android:icon="@drawable/ic_share_black"/>
-
-    <item
-        android:id="@+id/item_share"
+        android:id="@+id/share_item"
         android:title="@string/share"
+        app:showAsAction="always"
         android:icon="@drawable/ic_share_black"/>
 
 </menu>

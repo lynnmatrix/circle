@@ -28,7 +28,11 @@ public class ShareService {
 
     public boolean start(Context context) {
         this.context = context;
-
+        wechatApi = WXAPIFactory.createWXAPI(context, null);
+        // WXAppSupportAPI为0表示没有安装微信
+        if(!wechatApi.registerApp(WX_APP_ID) || wechatApi.getWXAppSupportAPI() == 0) {
+            wechatApi = null;
+        }
         return weChatAvailable();
     }
 
@@ -46,23 +50,22 @@ public class ShareService {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
 
-        Bitmap bt = BitmapFactory.decodeResource(context.getResources(), R.drawable.starry_night);
-        final Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver
-                (), bt, null, null));
-
         String shareDescription = context.getString(R.string.share_message_description, context
                 .getString(R.string.app_name), context.getString(R.string.share_link));
 
-        shareIntent.setType("image*//*");
+        shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareDescription);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
 
         context.startActivity(shareIntent);
     }
 
     public void shareToWeChatTimeline(){
         shareToWeChat(SendMessageToWX.Req.WXSceneTimeline);
+    }
+
+    public void shareToWeChatSession() {
+        shareToWeChat(SendMessageToWX.Req.WXSceneSession);
     }
 
     public void shareToWeChat(int scene) {

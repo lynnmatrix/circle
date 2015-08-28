@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="share">告诉小伙伴这货</string>
-    <string name="share_to_wechat">微信</string>
+    <string name="share">推荐给好友</string>
+    <string name="share_to_wechat">微信好友</string>
     <string name="wifi_scan">周边Wifi</string>
     <string name="share_message_description">Android机小伙伴有福啦！邀请你抢先体验“到此一游”！悄悄告诉你周围正在发生的那些事,<xliff:g id="APPNAME">%s</xliff:g>。\n<xliff:g id="WEBSITE">%s</xliff:g></string>
     <string name="reply_type_private">私信</string>
@@ -25,7 +25,7 @@
     <string name="dialog_save_image_message">保存图片到本地？</string>
     <string name="save_image_success">图片已保存在download文件夹</string>
     <string name="save_image_fail">保存图片失败</string>
-    <string name="share_to_moment">朋友圈</string>
+    <string name="share_to_moment">微信朋友圈</string>
     <string name="share_to_other">其他</string>
 
 </resources>
