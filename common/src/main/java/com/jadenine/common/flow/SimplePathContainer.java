@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -66,6 +68,7 @@ public class SimplePathContainer extends PathContainer {
             callback.onTraversalCompleted();
         } else {
             containerView.addView(newView);
+
             final View finalFromView = fromView;
             PathUtils.waitForMeasure(newView, new PathUtils.OnMeasuredCallback() {
                 @Override public void onMeasured(View view, int width, int height) {
@@ -81,6 +84,13 @@ public class SimplePathContainer extends PathContainer {
         }
 
         traversalState.restoreViewState(newView);
+
+        MobclickAgent.onPageStart(to.getClass().getSimpleName());
+        Path from = traversalState.fromPath();
+        if(null != from) {
+            MobclickAgent.onPageEnd(from.getClass().getSimpleName());
+        }
+
     }
 
     protected int getLayout(Path path) {
