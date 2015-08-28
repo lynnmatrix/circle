@@ -14,6 +14,7 @@ import com.jadenine.circle.ui.chat.MyChatPath;
 import com.jadenine.circle.ui.menu.DrawerMenuView;
 import com.jadenine.circle.ui.topic.TopicListPath;
 import com.jadenine.circle.ui.welcome.WelcomePath;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -63,6 +64,18 @@ public class HomeActivity extends MortarActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleNotificationIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
