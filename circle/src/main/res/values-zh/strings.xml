@@ -27,5 +27,7 @@
     <string name="save_image_fail">保存图片失败</string>
     <string name="share_to_moment">微信朋友圈</string>
     <string name="share_to_other">其他</string>
+    <string name="hint_wait_publish">请稍等 ...</string>
+    <string name="hint_publishing">发送中 ...</string>
 
 </resources>

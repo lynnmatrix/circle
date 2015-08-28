@@ -1,6 +1,8 @@
 package com.jadenine.circle.ui.composer;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.widget.Toast;
 
 import com.jadenine.circle.R;
@@ -28,6 +30,8 @@ class TopicComposerPresenter extends ComposerPresenter {
 
     private final AtomicBoolean sending = new AtomicBoolean(false);
 
+    ProgressDialog ringProgressDialog;
+
     public TopicComposerPresenter(Account account, Circle circle, ActivityOwner owner) {
         super(account, circle, owner);
     }
@@ -42,6 +46,11 @@ class TopicComposerPresenter extends ComposerPresenter {
             return;
         }
         sending.set(true);
+        Context context = getView().getContext();
+        if(null == ringProgressDialog) {
+            ringProgressDialog = ProgressDialog.show(context, context.getString(R.string.hint_wait_publish), context.getString(R.string.hint_publishing), true);
+            ringProgressDialog.setCancelable(false);
+        }
 
         //TODO reuse bomb
         final Bomb bomb = new Bomb(circle.getCircleId(), account.getDeviceId());
@@ -55,7 +64,7 @@ class TopicComposerPresenter extends ComposerPresenter {
                 e.printStackTrace();
             }
 
-            sendSubscription = circle.uploadImage(inputStream, mimeType).subscribe(new Observer<String>() {
+            sendSubscription = circle.uploadImage(inputStream, mimeType).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
 
                 @Override
                 public void onCompleted() {
@@ -70,6 +79,10 @@ class TopicComposerPresenter extends ComposerPresenter {
                     sending.set(false);
                     if (!hasView()) {
                         return;
+                    }
+                    if(null != ringProgressDialog) {
+                        ringProgressDialog.dismiss();
+                        ringProgressDialog = null;
                     }
                     Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                             .LENGTH_SHORT).show();
@@ -97,6 +110,10 @@ class TopicComposerPresenter extends ComposerPresenter {
                 if (!hasView()) {
                     return;
                 }
+                if(null != ringProgressDialog) {
+                    ringProgressDialog.dismiss();
+                    ringProgressDialog = null;
+                }
                 Toast.makeText(getView().getContext(), R.string.message_send_success, Toast
                         .LENGTH_SHORT).show();
                 SoftKeyboardToggler.toggleInputMethod(getView().editor, false);
@@ -111,6 +128,10 @@ class TopicComposerPresenter extends ComposerPresenter {
                 sending.set(false);
                 if (!hasView()) {
                     return;
+                }
+                if(null != ringProgressDialog) {
+                    ringProgressDialog.dismiss();
+                    ringProgressDialog = null;
                 }
                 Toast.makeText(getView().getContext(), R.string.message_send_fail, Toast
                         .LENGTH_LONG).show();
