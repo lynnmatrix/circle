@@ -87,25 +87,6 @@ class TopicDetailPresenter extends ViewPresenter<TopicDetailView> {
 
         loadMessages();
 
-        getView().toolbar.inflateMenu(R.menu.share);
-        getView().toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item_share_wechat:
-                        shareService.shareToWeChatTimeline();
-                        return true;
-                    case R.id.item_share:
-                        shareService.share();
-                        return true;
-                }
-                return false;
-            }
-        });
-        if (!shareService.start(getView().getContext())) {
-            getView().toolbar.getMenu().findItem(R.id.item_share_wechat).setVisible(false);
-        }
-
         getView().toolbar.setTitle(circle.getName());
         ToolbarColorizer.colorizeToolbar(getView().toolbar, Color.WHITE, activityOwner.getActivity());
     }

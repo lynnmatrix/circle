@@ -72,24 +72,6 @@ public class TopicListPresenter extends ViewPresenter<TopicListView> implements 
         super.onLoad(savedInstanceState);
 
         getView().getToolbar().setTitle(circle.getName());
-        getView().getToolbar().inflateMenu(R.menu.share);
-        getView().getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item_share_wechat:
-                        shareService.shareToWeChatTimeline();
-                        return true;
-                    case R.id.item_share:
-                        shareService.share();
-                        return true;
-                }
-                return false;
-            }
-        });
-        if(!shareService.start(getView().getContext())){
-            getView().getToolbar().getMenu().findItem(R.id.item_share_wechat).setVisible(false);
-        }
 
         ToolbarColorizer.colorizeToolbar(getView().getToolbar(), Color.WHITE, activityOwner.getActivity());
     }
